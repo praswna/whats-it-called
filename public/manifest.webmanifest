@@ -1,0 +1,17 @@
+{
+  "name": "이거 뭐라고 하지",
+  "short_name": "뭐라고하지",
+  "description": "기능은 아는데 이름을 모를 때 찾아보는 UI/UX·개발 용어 사전",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f5f2",
+  "theme_color": "#0f6e68",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
