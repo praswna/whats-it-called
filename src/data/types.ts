@@ -1,6 +1,6 @@
 export type CategoryId =
   | "pointer" | "touch" | "control" | "text" | "feedback" | "overlay" | "nav"
-  | "motion" | "desktop" | "a11y" | "perf" | "data" | "devflow";
+  | "image" | "video" | "gallery" | "motion" | "desktop" | "a11y" | "perf" | "data" | "devflow";
 
 export interface Category {
   id: CategoryId;

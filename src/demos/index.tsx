@@ -3,6 +3,7 @@ import { HoverCardDemo, TooltipDemo, ScrubbyDemo, PopupSliderDemo, SpringMenuDem
 import { ToastDemo, SkeletonDemo, ProgressDemo, OptimisticDemo, TogglesDemo, InlineEditDemo, DebounceThrottleDemo } from "./feedback";
 import { FocusTrapDemo, BottomSheetDemo, AccordionDemo, InfiniteScrollDemo, VirtualListDemo, CommandPaletteDemo, EasingDemo } from "./layout";
 import { BeforeAfterDemo, OnionSkinDemo, SideBySideDemo, HoldCompareDemo, LoupeDemo, PixelDiffDemo } from "./compare";
+import { ObjectFitDemo, BlurUpDemo, VideoPlayerDemo, GalleryLayoutDemo, FilmstripDemo } from "./media";
 import { terms } from "../data/terms";
 
 const commandNames = terms.map((t) => `${t.name} (${t.en})`);
@@ -37,4 +38,9 @@ export const demos: Record<string, ComponentType> = {
   holdCompare: HoldCompareDemo,
   loupe: LoupeDemo,
   pixelDiff: PixelDiffDemo,
+  objectFit: ObjectFitDemo,
+  blurUp: BlurUpDemo,
+  videoPlayer: VideoPlayerDemo,
+  galleryLayout: GalleryLayoutDemo,
+  filmstrip: FilmstripDemo,
 };
