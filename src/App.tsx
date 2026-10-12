@@ -14,7 +14,11 @@ function readHash(): string | null {
   return byId.has(h) ? h : null;
 }
 
-const WIDE = "(min-width: 1100px)";
+// 이 폭 이상이면 카드 옆에 떠 있는 창으로, 그보다 좁으면 목록 자리에 한 페이지로 보여 준다
+const FLOAT = "(min-width: 760px)";
+const POP_W = 560;
+
+type Place = { top: number; left: number; side: "right" | "left" | "below"; arrow: number };
 
 function useMedia(query: string): boolean {
   const [on, setOn] = useState(() => window.matchMedia(query).matches);
@@ -30,11 +34,16 @@ function useMedia(query: string): boolean {
 export default function App() {
   const [query, setQuery] = useState("");
   const [openId, setOpenId] = useState<string | null>(readHash);
-  const wide = useMedia(WIDE);
+  const floating = useMedia(FLOAT);
   const still = useMedia("(prefers-reduced-motion: reduce)");
   const searchRef = useRef<HTMLInputElement>(null);
   const topRef = useRef<HTMLElement>(null);
   const paneRef = useRef<HTMLElement>(null);
+  const popRef = useRef<HTMLDivElement>(null);
+  const appRef = useRef<HTMLDivElement>(null);
+  // 떠 있는 창이 붙는 카드 (창 안에서 다른 용어로 넘어가도 창 자리는 그대로)
+  const [anchorId, setAnchorId] = useState<string | null>(openId);
+  const [place, setPlace] = useState<Place | null>(null);
   const openRef = useRef(openId);
   const listScroll = useRef(0);
 
@@ -67,13 +76,79 @@ export default function App() {
   useLayoutEffect(() => {
     const was = prevOpen.current; prevOpen.current = openId;
     if (was === openId) return;
-    if (wide) {
+    if (floating) {
       paneRef.current?.scrollTo(0, 0);
-      if (openId) document.getElementById(`card-${openId}`)?.scrollIntoView({ block: "nearest" });
     } else {
       window.scrollTo(0, openId ? 0 : listScroll.current);
     }
-  }, [openId, wide]);
+  }, [openId, floating]);
+
+  // 떠 있는 창 자리 잡기: 카드 오른쪽에 자리가 있으면 오른쪽, 없으면 왼쪽, 둘 다 없으면 카드 아래
+  const measure = () => {
+    const card = anchorId ? document.getElementById(`card-${anchorId}`) : null;
+    const pop = popRef.current, app = appRef.current;
+    if (!card || !pop || !app) { setPlace(null); return; }
+    const r = card.getBoundingClientRect();
+    const a = app.getBoundingClientRect();
+    const vw = document.documentElement.clientWidth, vh = window.innerHeight;
+    const topH = topRef.current?.offsetHeight ?? 0;
+    const w = Math.min(POP_W, vw - 32), h = pop.offsetHeight, gap = 14;
+    let side: Place["side"], left: number, top: number, arrow: number;
+    if (vw - r.right - 16 >= w + gap) { side = "right"; left = r.right + gap; }
+    else if (r.left - 16 >= w + gap) { side = "left"; left = r.left - gap - w; }
+    else { side = "below"; left = Math.min(Math.max(16, r.left + r.width / 2 - w / 2), vw - 16 - w); }
+    if (side === "below") {
+      top = r.bottom + gap;
+      arrow = r.left + r.width / 2 - left;
+    } else {
+      // 카드 위쪽에 맞추되, 화면 안에 다 들어오도록 위아래를 조정
+      top = Math.max(topH + 12, Math.min(r.top - 8, vh - 16 - h));
+      arrow = Math.min(Math.max(24, r.top + Math.min(r.height, 120) / 2 - top), h - 24);
+    }
+    setPlace({ side, left: left - a.left, top: top - a.top, arrow });
+  };
+  // 창이 화면 아래로 넘치면 보이도록 조금 내린다 (카드를 새로 눌렀을 때만)
+  useEffect(() => {
+    if (!place || !popRef.current) return;
+    const b = popRef.current.getBoundingClientRect();
+    const over = b.bottom - window.innerHeight + 16;
+    if (over > 0) window.scrollBy({ top: Math.min(over, b.top - (topRef.current?.offsetHeight ?? 0) - 12), behavior: "smooth" });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [anchorId, place === null]);
+  useLayoutEffect(() => {
+    if (!floating || !openId) { setPlace(null); return; }
+    measure();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [floating, openId, anchorId]);
+  useEffect(() => {
+    if (!floating || !openId) return;
+    const onResize = () => measure();
+    window.addEventListener("resize", onResize);
+    // 예시를 만지다 창 높이가 바뀌어도 자리를 다시 잡는다
+    const ro = new ResizeObserver(() => measure());
+    if (popRef.current) ro.observe(popRef.current);
+    return () => { window.removeEventListener("resize", onResize); ro.disconnect(); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [floating, openId, anchorId]);
+  // 주소로 바로 들어왔을 때: 그 카드를 화면 가운데로 가져온 뒤 창을 붙인다
+  useEffect(() => {
+    if (openId && floating) {
+      document.getElementById(`card-${openId}`)?.scrollIntoView({ block: "center" });
+      requestAnimationFrame(measure);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  // 창 바깥(다른 카드 말고)을 누르면 닫는다
+  useEffect(() => {
+    if (!floating || !openId) return;
+    const onDown = (e: PointerEvent) => {
+      const t = e.target as Element | null;
+      if (!t || popRef.current?.contains(t) || t.closest(".card")) return;
+      close();
+    };
+    document.addEventListener("pointerdown", onDown);
+    return () => document.removeEventListener("pointerdown", onDown);
+  });
 
   // 고정된 머리말 높이를 CSS 에 알려 준다 (옆 목록·상세 패널이 그 아래에 붙도록)
   useLayoutEffect(() => {
@@ -89,8 +164,17 @@ export default function App() {
     show(id);
   };
   const close = () => {
+    const was = openRef.current;
     history.pushState(null, "", `${location.pathname}${location.search}`);
     show(null);
+    if (floating && anchorId) document.getElementById(`card-${anchorId}`)?.focus({ preventScroll: true });
+    else if (was) document.getElementById(`card-${was}`)?.focus({ preventScroll: true });
+  };
+  // 카드를 누르면 그 카드 옆에 창을 띄운다. 열린 카드를 다시 누르면 닫는다
+  const openFromCard = (id: string) => {
+    if (id === openId && floating) { close(); return; }
+    setAnchorId(id);
+    open(id);
   };
 
   useEffect(() => {
@@ -110,11 +194,60 @@ export default function App() {
 
   const goCategory = (id: CategoryId) => {
     const jump = () => document.getElementById(`cat-${id}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
-    if (current && !wide) { close(); requestAnimationFrame(jump); } else jump();
+    if (current) { close(); requestAnimationFrame(jump); } else jump();
   };
 
+  const detail = current && (
+    <article className="detail-body" key={current.id}>
+      <div className="detail-top">
+        <button type="button" className="link" onClick={close}>{floating ? "✕ 닫기" : "← 목록으로"}</button>
+        <span className="muted tabular detail-pos">{idx >= 0 ? `${idx + 1} / ${ordered.length}` : ""}</span>
+      </div>
+      <p className="eyebrow">{catName(current.category)}</p>
+      <h2 className="detail-name">{current.name}</h2>
+      <p className="detail-en mono">{current.en}</p>
+      {current.aliases.length > 0 && (
+        <p className="aliases">{current.aliases.map((a) => <span key={a} className="chip">{a}</span>)}</p>
+      )}
+      <p className="detail-summary">{current.summary}</p>
+      <p className="detail-desc">{current.description}</p>
+      {current.demo && demos[current.demo] && (
+        <section className="demo">
+          <h3>직접 해 보기</h3>
+          <DemoHost demoKey={current.demo} />
+        </section>
+      )}
+      <section>
+        <h3>이런 곳에서 봤을 거예요</h3>
+        <ul className="examples">{current.examples.map((e) => <li key={e}>{e}</li>)}</ul>
+      </section>
+      {current.related.length > 0 && (
+        <section>
+          <h3>같이 보면 좋은 말</h3>
+          <p className="related">
+            {current.related.map((id) => byId.get(id)).filter((t): t is Term => !!t).map((t) => (
+              <button type="button" key={t.id} className="chip link-chip" onClick={() => open(t.id)}>{t.name} <span className="mono muted">{t.en}</span></button>
+            ))}
+          </p>
+        </section>
+      )}
+      <nav className="pager" aria-label="이전·다음 용어">
+        {prev ? (
+          <button type="button" className="pager-btn" onClick={() => open(prev.id)}>
+            <span className="muted">← 이전</span><b>{prev.name}</b>
+          </button>
+        ) : <span />}
+        {next ? (
+          <button type="button" className="pager-btn end" onClick={() => open(next.id)}>
+            <span className="muted">다음 →</span><b>{next.name}</b>
+          </button>
+        ) : <span />}
+      </nav>
+    </article>
+  );
+
   return (
-    <div className="app">
+    <div className="app" ref={appRef}>
       <header className="top" ref={topRef}>
         <div className="brand">
           <h1><a href="./" onClick={(e) => { e.preventDefault(); if (current) close(); setQuery(""); window.scrollTo(0, 0); }}>이거 뭐라고 하지</a></h1>
@@ -122,13 +255,13 @@ export default function App() {
         </div>
         <div className="search">
           <input ref={searchRef} id="q" type="search" value={query}
-            onChange={(e) => { setQuery(e.target.value); if (current && !wide) close(); }}
+            onChange={(e) => { setQuery(e.target.value); if (current && !floating) close(); }}
             placeholder="동작을 말로 적어 보세요. 예: 누르고 끌면, 회색 뼈대, 되돌리기" autoComplete="off" />
           {!query && <kbd aria-hidden="true">/</kbd>}
         </div>
       </header>
 
-      <div className={`body ${current ? "has-detail" : ""}`}>
+      <div className={`body ${current && !floating ? "has-detail" : ""}`}>
         <nav className="side" aria-label="카테고리">
           <ul>
             {categories.map((c) => {
@@ -162,64 +295,30 @@ export default function App() {
                   <p className="muted">{c.blurb}</p>
                 </header>
                 <div className="grid">
-                  {list.map((t) => <TermCard key={t.id} term={t} active={t.id === openId} still={still} onOpen={open} />)}
+                  {list.map((t) => <TermCard key={t.id} term={t} active={t.id === openId} still={still} onOpen={openFromCard} />)}
                 </div>
               </section>
             );
           })}
         </main>
 
-        {current && (
+        {current && !floating && (
           <aside className="detail" ref={paneRef} aria-label={`${current.name} 설명`}>
-            <article className="detail-body" key={current.id}>
-              <div className="detail-top">
-                <button type="button" className="link" onClick={close}>{wide ? "✕ 닫기" : "← 목록으로"}</button>
-                <span className="muted tabular detail-pos">{idx >= 0 ? `${idx + 1} / ${ordered.length}` : ""}</span>
-              </div>
-              <p className="eyebrow">{catName(current.category)}</p>
-              <h2 className="detail-name">{current.name}</h2>
-              <p className="detail-en mono">{current.en}</p>
-              {current.aliases.length > 0 && (
-                <p className="aliases">{current.aliases.map((a) => <span key={a} className="chip">{a}</span>)}</p>
-              )}
-              <p className="detail-summary">{current.summary}</p>
-              <p className="detail-desc">{current.description}</p>
-              {current.demo && demos[current.demo] && (
-                <section className="demo">
-                  <h3>직접 해 보기</h3>
-                  <DemoHost demoKey={current.demo} />
-                </section>
-              )}
-              <section>
-                <h3>이런 곳에서 봤을 거예요</h3>
-                <ul className="examples">{current.examples.map((e) => <li key={e}>{e}</li>)}</ul>
-              </section>
-              {current.related.length > 0 && (
-                <section>
-                  <h3>같이 보면 좋은 말</h3>
-                  <p className="related">
-                    {current.related.map((id) => byId.get(id)).filter((t): t is Term => !!t).map((t) => (
-                      <button type="button" key={t.id} className="chip link-chip" onClick={() => open(t.id)}>{t.name} <span className="mono muted">{t.en}</span></button>
-                    ))}
-                  </p>
-                </section>
-              )}
-              <nav className="pager" aria-label="이전·다음 용어">
-                {prev ? (
-                  <button type="button" className="pager-btn" onClick={() => open(prev.id)}>
-                    <span className="muted">← 이전</span><b>{prev.name}</b>
-                  </button>
-                ) : <span />}
-                {next ? (
-                  <button type="button" className="pager-btn end" onClick={() => open(next.id)}>
-                    <span className="muted">다음 →</span><b>{next.name}</b>
-                  </button>
-                ) : <span />}
-              </nav>
-            </article>
+            {detail}
           </aside>
         )}
       </div>
+
+      {current && floating && (
+        <div ref={popRef} role="dialog" aria-label={`${current.name} 설명`}
+          className={`pop pop-${place?.side ?? "right"}`}
+          style={{ top: place?.top ?? 0, left: place?.left ?? 0, visibility: place ? "visible" : "hidden", ["--arrow" as string]: `${place?.arrow ?? 24}px` }}>
+          <span className="pop-arrow" aria-hidden="true" />
+          <aside className="detail" ref={paneRef}>
+            {detail}
+          </aside>
+        </div>
+      )}
 
       <footer className="foot">
         <span>검색은 설명과 예시 안의 말도 찾습니다. 항목 링크: 주소 끝에 #용어-id</span>

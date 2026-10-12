@@ -82,7 +82,7 @@ a { color: var(--accent); }
 .empty { padding: 40px 0; max-width: 520px; }
 .empty p { color: var(--muted); margin-top: 6px; }
 
-/* ── 상세: 넓은 화면은 목록 오른쪽 패널, 좁은 화면은 목록 대신 한 페이지 ── */
+/* ── 상세: 넓은 화면은 카드 옆에 떠 있는 창, 좁은 화면은 목록 대신 한 페이지 ── */
 .detail { min-width: 0; background: var(--surface); }
 .detail-body { padding: 22px 26px 30px; max-width: 760px; }
 .detail-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
@@ -95,13 +95,20 @@ a { color: var(--accent); }
 .pager-btn.end { align-items: flex-end; text-align: right; }
 .pager-btn:hover { border-color: var(--accent); }
 .pager-btn span { font-size: 12px; }
-@media (min-width: 1100px) {
-  .body.has-detail { grid-template-columns: 220px minmax(0, 1fr) minmax(440px, 42%); }
-  .detail { position: sticky; top: var(--top-h, 104px); align-self: start; height: calc(100vh - var(--top-h, 104px)); overflow-y: auto; overscroll-behavior: contain; border-left: 1px solid var(--line); }
-}
-@media (max-width: 1099.98px) {
+/* 넓은 화면: 누른 카드 옆에 떠 있는 창 */
+.app { position: relative; }
+.pop { position: absolute; z-index: 4; width: min(560px, calc(100vw - 32px)); animation: pop-in 140ms ease-out; }
+.pop .detail { max-height: calc(100vh - var(--top-h, 104px) - 28px); overflow-y: auto; overscroll-behavior: contain; border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); }
+.pop .detail-body { padding: 18px 22px 24px; }
+.pop .detail-name { font-size: 24px; }
+.pop-arrow { position: absolute; width: 14px; height: 14px; background: var(--surface); border: 1px solid var(--line); transform: rotate(45deg); }
+.pop-right .pop-arrow { left: -7px; top: calc(var(--arrow) - 7px); border-right: none; border-top: none; }
+.pop-left .pop-arrow { right: -7px; top: calc(var(--arrow) - 7px); border-left: none; border-bottom: none; }
+.pop-below .pop-arrow { top: -7px; left: calc(var(--arrow) - 7px); border-right: none; border-bottom: none; }
+@keyframes pop-in { from { opacity: 0; transform: translateY(4px) scale(0.98); } to { opacity: 1; transform: none; } }
+/* 좁은 화면: 목록 대신 한 페이지 */
+@media (max-width: 759.98px) {
   .body.has-detail .main { display: none; }
-  .detail { border-radius: 0; }
   .detail-body { margin: 0 auto; }
 }
 .eyebrow { font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
