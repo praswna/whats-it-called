@@ -1,0 +1,159 @@
+/* 데스크톱 앱 데모 (dk-) */
+
+/* 공통 가짜 데스크톱 */
+.dk-desk { position: relative; width: 100%; max-width: 460px; border-radius: 10px; border: 1px solid var(--line); overflow: hidden; display: flex; flex-direction: column; background: var(--surface-2); user-select: none; -webkit-user-select: none; }
+.dk-desk:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.dk-desk.dk-ready { box-shadow: 0 0 0 2px var(--accent); }
+.dk-screen { position: relative; flex: 1; min-height: 0; overflow: hidden; background: linear-gradient(140deg, var(--accent-soft), var(--surface-2) 60%, var(--warm-soft)); }
+.dk-wall { position: absolute; inset: 0; }
+.dk-taskbar { height: 30px; flex: none; display: flex; align-items: center; gap: 4px; padding: 0 6px; background: var(--surface); border-top: 1px solid var(--line); }
+.dk-start { width: 22px; text-align: center; color: var(--accent); font-size: 14px; }
+.dk-tasks { flex: 1; display: flex; gap: 3px; min-width: 0; overflow: hidden; }
+.dk-task { width: 30px; height: 24px; border: none; border-radius: 5px; background: transparent; cursor: pointer; font-size: 14px; padding: 0; position: relative; }
+.dk-task:hover { background: var(--surface-2); }
+.dk-task.on { background: var(--accent-soft); }
+.dk-task.on::after { content: ""; position: absolute; left: 9px; right: 9px; bottom: 1px; height: 2px; border-radius: 2px; background: var(--accent); }
+.dk-tray { display: flex; align-items: center; gap: 2px; padding-left: 6px; border-left: 1px solid var(--line); }
+.dk-tray-icon { width: 22px; height: 22px; display: inline-grid; place-items: center; font-size: 12px; border-radius: 4px; }
+.dk-tray-btn { border: none; background: transparent; cursor: pointer; padding: 0; }
+.dk-tray-btn:hover, .dk-tray-btn.on { background: var(--accent-soft); }
+.dk-clock { font-size: 11px; color: var(--muted); padding: 0 2px 0 4px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* 창 */
+.dk-win { position: absolute; display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--line); border-radius: 7px; box-shadow: 0 3px 12px rgba(0, 0, 0, 0.14); overflow: hidden; min-width: 0; }
+.dk-win.active { border-color: var(--accent); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22); }
+.dk-win.dk-pinned { outline: 2px dashed var(--warm); outline-offset: -2px; }
+.dk-win.dk-moving { opacity: 0.92; }
+.dk-titlebar { flex: none; height: 24px; display: flex; align-items: center; gap: 5px; padding: 0 3px 0 7px; background: var(--surface-2); font-size: 12px; min-width: 0; }
+.dk-win.active .dk-titlebar { background: var(--accent-soft); }
+.dk-grab { cursor: grab; touch-action: none; }
+.dk-grab:active { cursor: grabbing; }
+.dk-ticon { font-size: 11px; }
+.dk-ttext { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600; }
+.dk-tctrls { display: flex; gap: 1px; flex: none; }
+.dk-tbtn { width: 22px; height: 20px; border: none; background: transparent; border-radius: 4px; cursor: pointer; font-size: 11px; padding: 0; color: var(--fg); display: inline-grid; place-items: center; opacity: 0.75; }
+.dk-tbtn:hover { background: var(--surface); opacity: 1; }
+.dk-tbtn.on { background: var(--warm-soft); opacity: 1; }
+.dk-tbtn.dk-close:hover { background: var(--danger); color: var(--accent-fg); }
+.dk-wbody { flex: 1; min-height: 0; padding: 7px 8px; position: relative; overflow: hidden; }
+.dk-lines { display: flex; flex-direction: column; gap: 6px; padding-top: 2px; }
+.dk-lines i { display: block; height: 6px; border-radius: 3px; background: var(--surface-2); }
+.dk-small { font-size: 11px; line-height: 1.5; margin: 0; }
+.dk-status { font-size: 13px; min-height: 1.6em; }
+.dk-toggle.on { background: var(--accent-soft); border-color: var(--accent); font-weight: 600; }
+.dk-toggle.on::before { content: "✓ "; }
+
+/* 오버레이 */
+.dk-game { position: absolute; inset: 0; background: radial-gradient(circle at 30% 30%, #2c3e66, #0f1426); overflow: hidden; }
+.dk-game::before { content: ""; position: absolute; inset: 0; background-image: radial-gradient(1px 1px at 20% 30%, #fff, transparent), radial-gradient(1px 1px at 70% 20%, #fff, transparent), radial-gradient(1px 1px at 40% 80%, #fff, transparent), radial-gradient(1px 1px at 85% 65%, #fff, transparent); }
+.dk-score { position: absolute; right: 8px; bottom: 6px; color: #fff; font-size: 12px; opacity: 0.8; }
+.dk-target { position: absolute; width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50%; border: none; cursor: crosshair; padding: 0; background: radial-gradient(circle, #ff5a5a 0 22%, #fff 23% 45%, #ff5a5a 46% 70%, #fff 71%); transition: left 0.25s, top 0.25s; }
+.dk-hud { position: absolute; inset: 0; z-index: 200; border: 2px solid rgba(255, 80, 80, 0.85); border-radius: 0; background: rgba(120, 200, 255, 0.08); }
+.dk-hud.through { pointer-events: none; background: transparent; }
+.dk-hud-fps { position: absolute; left: 6px; top: 28px; color: #7dff9c; background: rgba(0, 0, 0, 0.55); font-size: 11px; padding: 1px 6px; border-radius: 4px; }
+.dk-hud-rec { position: absolute; right: 6px; top: 28px; color: #fff; background: rgba(200, 30, 30, 0.8); font-size: 11px; padding: 1px 6px; border-radius: 4px; }
+.dk-hud-tag { position: absolute; left: 50%; top: 28px; transform: translateX(-50%); color: #fff; background: rgba(0, 0, 0, 0.45); font-size: 11px; padding: 1px 8px; border-radius: 999px; white-space: nowrap; }
+
+/* 트레이 */
+.dk-deskicon { position: absolute; left: 8px; top: 10px; width: 58px; display: flex; flex-direction: column; align-items: center; gap: 2px; border: none; background: transparent; border-radius: 6px; padding: 4px 2px; cursor: pointer; font-size: 11px; color: var(--fg); }
+.dk-deskicon span { font-size: 22px; line-height: 1; }
+.dk-deskicon:hover { background: rgba(127, 127, 127, 0.15); }
+.dk-settings { display: flex; flex-direction: column; gap: 6px; font-size: 12px; }
+.dk-settings label { display: flex; align-items: center; gap: 6px; cursor: pointer; line-height: 1.35; }
+.dk-settings input { accent-color: var(--accent); margin: 0; flex: none; }
+.dk-menu { position: absolute; right: 6px; bottom: 6px; z-index: 300; display: flex; flex-direction: column; min-width: 150px; padding: 4px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); }
+.dk-menu button { text-align: left; border: none; background: transparent; padding: 5px 8px; border-radius: 5px; font-size: 12px; cursor: pointer; display: flex; align-items: center; }
+.dk-menu button:hover, .dk-menu button:focus-visible { background: var(--accent-soft); }
+.dk-check { width: 16px; color: var(--accent); font-weight: 700; }
+.dk-balloon { position: absolute; right: 6px; bottom: 6px; z-index: 250; max-width: 210px; font-size: 12px; padding: 8px 10px; background: var(--surface); border: 1px solid var(--accent); border-radius: 8px; box-shadow: var(--shadow); animation: dk-pop 0.2s ease-out; }
+.dk-boot { position: absolute; inset: 0; z-index: 400; display: grid; place-items: center; background: #0f1312; color: #cfd6d3; font-size: 13px; }
+@keyframes dk-pop { from { transform: translateY(8px); opacity: 0; } }
+
+/* 전역 단축키 */
+.dk-capture { position: absolute; inset: 0; z-index: 300; background: rgba(0, 0, 0, 0.35); display: grid; place-items: center; animation: dk-fade 0.15s; }
+.dk-capture span { color: #fff; font-size: 12px; border: 2px dashed #fff; padding: 22px 18px; border-radius: 4px; background: rgba(255, 255, 255, 0.08); }
+@keyframes dk-fade { from { opacity: 0; } }
+
+/* 단축키 녹화 */
+.dk-recorder { width: 100%; max-width: 360px; padding: 10px 12px; font-size: 16px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); text-align: center; cursor: pointer; }
+.dk-recorder:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px var(--accent-soft); }
+.dk-keyinfo { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; align-items: center; font-size: 13px; max-width: 360px; }
+.dk-keyinfo b { word-break: break-all; }
+.dk-mods { gap: 4px; }
+.dk-kbd { font-family: var(--font-mono); font-size: 11px; padding: 1px 6px; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; background: var(--surface); color: var(--muted); }
+.dk-kbd.on { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
+.dk-menu-list { list-style: none; margin: 0; padding: 4px; max-width: 280px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; font-size: 13px; }
+.dk-menu-list li { display: flex; justify-content: space-between; gap: 12px; padding: 3px 8px; border-radius: 5px; transition: background 0.2s; }
+.dk-menu-list li.on { background: var(--accent); color: var(--accent-fg); }
+.dk-menu-list li.on .muted { color: inherit; }
+
+/* 도킹 */
+.dk-app { position: relative; width: 100%; max-width: 460px; height: 220px; display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--surface); }
+.dk-appbar { flex: none; height: 26px; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0 10px; font-size: 12px; background: var(--surface-2); border-bottom: 1px solid var(--line); white-space: nowrap; overflow: hidden; }
+.dk-appbody { position: relative; flex: 1; min-height: 0; display: grid; }
+.dk-lay-float .dk-appbody { grid-template-areas: "c"; }
+.dk-lay-left .dk-appbody { grid-template-columns: 34% 1fr; grid-template-areas: "p c"; }
+.dk-lay-right .dk-appbody { grid-template-columns: 1fr 34%; grid-template-areas: "c p"; }
+.dk-lay-bottom .dk-appbody { grid-template-rows: 1fr 40%; grid-template-areas: "c" "p"; }
+.dk-canvas { grid-area: c; background-size: cover; background-position: center; min-width: 0; min-height: 0; }
+.dk-panel { grid-area: p; display: flex; flex-direction: column; background: var(--surface); min-width: 0; min-height: 0; overflow: hidden; }
+.dk-lay-left .dk-panel { border-right: 1px solid var(--line); }
+.dk-lay-right .dk-panel { border-left: 1px solid var(--line); }
+.dk-lay-bottom .dk-panel { border-top: 1px solid var(--line); }
+.dk-panel.floating { position: absolute; z-index: 20; border: 1px solid var(--accent); border-radius: 7px; box-shadow: var(--shadow); }
+.dk-panel.dragging { opacity: 0.88; z-index: 30; }
+.dk-panel-head { flex: none; height: 24px; display: flex; align-items: center; gap: 6px; padding: 0 8px; font-size: 12px; font-weight: 600; background: var(--accent-soft); cursor: grab; touch-action: none; white-space: nowrap; }
+.dk-panel-head:active { cursor: grabbing; }
+.dk-layers { list-style: none; margin: 0; padding: 4px 8px; font-size: 12px; display: flex; flex-direction: column; gap: 2px; }
+.dk-lay-bottom .dk-layers { flex-direction: row; gap: 12px; flex-wrap: wrap; }
+.dk-dock-preview { position: absolute; z-index: 15; background: color-mix(in srgb, var(--accent) 30%, transparent); border: 2px solid var(--accent); pointer-events: none; }
+.dk-dock-preview.left { left: 0; top: 0; bottom: 0; width: 34%; }
+.dk-dock-preview.right { right: 0; top: 0; bottom: 0; width: 34%; }
+.dk-dock-preview.bottom { left: 0; right: 0; bottom: 0; height: 40%; }
+.dk-dock-mark { position: absolute; z-index: 25; width: 26px; height: 26px; display: grid; place-items: center; font-size: 12px; border-radius: 6px; background: var(--surface); color: var(--accent); border: 1px solid var(--accent); box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); pointer-events: none; }
+.dk-dock-mark.on { background: var(--accent); color: var(--accent-fg); }
+.dk-dock-mark.left { left: 6px; top: 50%; margin-top: -13px; }
+.dk-dock-mark.right { right: 6px; top: 50%; margin-top: -13px; }
+.dk-dock-mark.bottom { bottom: 6px; left: 50%; margin-left: -13px; }
+
+/* 창 스냅 */
+.dk-snap-preview { position: absolute; z-index: 5; border-radius: 6px; background: color-mix(in srgb, var(--accent) 22%, transparent); border: 2px solid var(--accent); transition: all 0.12s; pointer-events: none; }
+.dk-photo { position: absolute; inset: 0; background-size: cover; background-position: center; }
+
+/* 퀵 룩 */
+.dk-explorer { position: relative; width: 100%; max-width: 420px; height: 205px; }
+.dk-files { list-style: none; margin: -3px -4px; padding: 2px; font-size: 13px; outline: none; border-radius: 5px; }
+.dk-files:focus-visible { box-shadow: inset 0 0 0 2px var(--accent); }
+.dk-files li { display: flex; align-items: center; gap: 8px; padding: 4px 8px; border-radius: 5px; cursor: default; }
+.dk-files li.on { background: var(--surface-2); }
+.dk-files:focus li.on { background: var(--accent); color: var(--accent-fg); }
+.dk-files:focus li.on .muted { color: inherit; }
+.dk-fname { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dk-ql { position: absolute; inset: 10px 14px; z-index: 10; display: flex; flex-direction: column; background: color-mix(in srgb, var(--surface) 96%, transparent); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--shadow); overflow: hidden; animation: dk-zoom 0.16s ease-out; }
+@keyframes dk-zoom { from { transform: scale(0.9); opacity: 0; } }
+.dk-ql-head { flex: none; display: flex; align-items: center; justify-content: space-between; padding: 3px 4px 3px 10px; font-size: 12px; border-bottom: 1px solid var(--line); }
+.dk-ql-body { flex: 1; min-height: 0; display: grid; place-items: center; padding: 8px; }
+.dk-ql-body img { max-width: 100%; max-height: 100%; border-radius: 4px; display: block; }
+.dk-ql-text { margin: 0; font-family: var(--font-mono); font-size: 12px; white-space: pre-wrap; align-self: start; justify-self: start; }
+.dk-ql-audio { display: flex; align-items: center; gap: 8px; width: 100%; font-size: 12px; }
+.dk-wave { flex: 1; display: flex; align-items: center; gap: 2px; height: 36px; }
+.dk-wave i { flex: 1; background: var(--accent); border-radius: 1px; }
+.dk-ql-pdf { width: 70%; max-width: 160px; aspect-ratio: 3 / 4; max-height: 100%; background: var(--surface); border: 1px solid var(--line); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12); padding: 8px; font-size: 11px; display: flex; flex-direction: column; gap: 6px; }
+
+/* DPI */
+.dk-monitor { position: relative; width: 100%; max-width: 420px; height: 190px; padding: 10px; border: 6px solid var(--fg); border-radius: 8px; background: linear-gradient(140deg, var(--accent-soft), var(--surface-2)); overflow: hidden; }
+.dk-dpiwin { --dk-s: 1; width: calc(130px * var(--dk-s)); height: calc(84px * var(--dk-s)); background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12); }
+.dk-dpi-title { height: calc(18px * var(--dk-s)); display: flex; align-items: center; gap: calc(4px * var(--dk-s)); padding: 0 calc(4px * var(--dk-s)); background: var(--surface-2); font-size: calc(11px * var(--dk-s)); font-weight: 600; line-height: 1; }
+.dk-dpi-body { flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: calc(3px * var(--dk-s)); padding: calc(6px * var(--dk-s)) calc(8px * var(--dk-s)); font-size: calc(11px * var(--dk-s)); line-height: 1.3; }
+.dk-dpi-btn { background: var(--accent); color: var(--accent-fg); padding: calc(1px * var(--dk-s)) calc(10px * var(--dk-s)); }
+.dk-dpicanvas { display: block; image-rendering: auto; }
+.dk-icons { display: flex; gap: 18px; flex-wrap: wrap; align-items: flex-end; }
+.dk-icons figure { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 12px; text-align: center; line-height: 1.35; }
+.dk-bmp { image-rendering: auto; }
+.dk-icon-pair { display: flex; align-items: flex-end; gap: 8px; }
+.dk-zoom { display: block; image-rendering: pixelated; border: 1px dashed var(--line); line-height: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .dk-target, .dk-snap-preview, .dk-menu-list li { transition: none; }
+  .dk-balloon, .dk-capture, .dk-ql { animation: none; }
+}

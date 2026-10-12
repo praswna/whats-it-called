@@ -1,0 +1,205 @@
+/* 시뮬레이션 데모 (sim-) */
+.sim-seg { flex-wrap: wrap; max-width: 100%; }
+.sim-switch { gap: 8px; }
+.sim-small { font-size: 12px; }
+.sim-good { color: var(--accent); font-weight: 600; }
+.sim-bad { color: var(--danger); font-weight: 600; }
+.sim-big { font-size: 22px; font-weight: 700; }
+.sim-done { text-decoration: line-through; color: var(--muted); }
+.sim-meter { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; font-size: 13px; }
+.sim-input { min-width: 0; flex: none; box-sizing: border-box; padding: 7px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); font: inherit; font-size: 14px; }
+.row > .sim-input { flex: 1 1 140px; }
+.sim-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.sim-screen { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; min-height: 64px; max-width: 480px; min-width: 0; }
+.sim-wrong { border-color: var(--danger); box-shadow: 0 0 0 2px color-mix(in srgb, var(--danger) 25%, transparent); }
+
+/* 기록 줄 */
+.sim-log { font-size: 13px; gap: 4px; max-width: 480px; }
+.sim-log li { padding: 3px 8px; border-radius: 6px; background: var(--surface); border-left: 3px solid var(--line); }
+.sim-log-hit { border-left-color: var(--danger) !important; }
+.sim-log-miss { border-left-color: var(--accent) !important; }
+.sim-log-re { border-left-color: var(--warm) !important; }
+
+/* 지연 로딩 */
+.sim-lazy-box { height: 210px; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 8px; border-radius: 10px; background: var(--surface); border: 1px solid var(--line); max-width: 480px; overscroll-behavior: contain; }
+.sim-lazy-card { display: flex; flex-direction: column; gap: 2px; font-size: 12px; }
+.sim-lazy-card img, .sim-lazy-ph { width: 100%; aspect-ratio: 5 / 3; border-radius: 6px; object-fit: cover; display: block; }
+.sim-lazy-ph { display: grid; place-items: center; background: var(--surface-2); color: var(--muted); font-size: 12px; }
+.sim-lazy-ph.loading { background: linear-gradient(90deg, var(--surface-2) 30%, var(--accent-soft) 50%, var(--surface-2) 70%); background-size: 300% 100%; animation: sim-shimmer 1s linear infinite; color: var(--accent); }
+@keyframes sim-shimmer { from { background-position: 100% 0; } to { background-position: 0 0; } }
+
+/* 프리페치 · 라우팅 목록 줄 */
+.sim-linkrow { display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface-2); color: var(--fg); font: inherit; font-size: 14px; cursor: pointer; text-align: left; }
+.sim-linkrow:hover { border-color: var(--accent); }
+.sim-tag { font-size: 11px; padding: 1px 7px; border-radius: 999px; background: var(--surface); color: var(--muted); white-space: nowrap; }
+.sim-tag.loading { color: var(--warm); background: var(--warm-soft); }
+.sim-tag.ready { color: var(--accent); background: var(--accent-soft); }
+.sim-article { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
+
+/* 캐싱 */
+.sim-weather { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 8px; }
+
+/* 막대 */
+.sim-bars { display: flex; flex-direction: column; gap: 4px; max-width: 480px; font-size: 13px; }
+.sim-bar-label { display: flex; justify-content: space-between; gap: 8px; }
+.sim-bar { height: 10px; border-radius: 5px; background: var(--surface-2); overflow: hidden; }
+.sim-bar-fill { height: 100%; background: var(--accent); border-radius: 5px; transition: width 200ms ease-out; }
+.sim-bar-fill.warm { background: var(--warm); }
+.sim-bar-fill.danger { background: var(--danger); }
+
+/* 멱등성 */
+.sim-pay { align-items: flex-start; }
+
+/* 폴링 · SSE · 웹소켓 */
+.sim-wire { display: flex; align-items: stretch; gap: 6px; max-width: 480px; }
+.sim-node { flex: none; width: 62px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 11px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 6px 2px; position: relative; }
+.sim-node > span[aria-hidden] { font-size: 20px; }
+.sim-badge { position: absolute; top: -6px; right: -6px; min-width: 18px; height: 18px; border-radius: 9px; background: var(--warm); color: var(--accent-fg); font-size: 11px; display: grid; place-items: center; padding: 0 4px; }
+.sim-lanes { position: relative; flex: 1; min-width: 0; height: 92px; border-radius: 10px; background: var(--surface-2); overflow: hidden; }
+.sim-lanes::before { content: ""; position: absolute; left: 8px; right: 8px; top: 50%; border-top: 1px dashed var(--line); }
+.sim-lanes.open { background: linear-gradient(var(--surface-2), var(--surface-2)) padding-box; box-shadow: inset 0 0 0 2px var(--accent); }
+.sim-lanes.open::before { border-top: 3px solid var(--accent-soft); }
+.sim-pipe-label { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); text-align: center; font-size: 10px; color: var(--accent); background: var(--surface-2); width: max-content; margin: 0 auto; padding: 0 4px; }
+.sim-msg { position: absolute; left: 0; white-space: nowrap; font-size: 11px; padding: 2px 7px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); animation-timing-function: linear; animation-fill-mode: forwards; }
+.sim-msg.up { top: 8px; animation-name: sim-fly-r; }
+.sim-msg.down { bottom: 8px; animation-name: sim-fly-l; }
+.sim-msg.news { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+.sim-msg.empty { color: var(--muted); }
+.sim-msg.send, .sim-msg.open { background: var(--warm-soft); color: var(--warm); border-color: var(--warm); }
+@keyframes sim-fly-r { from { left: 0; transform: translateX(0); } to { left: 100%; transform: translateX(-100%); } }
+@keyframes sim-fly-l { from { left: 100%; transform: translateX(-100%); } to { left: 0; transform: translateX(0); } }
+
+/* 기기 두 대 */
+.sim-devices { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; max-width: 480px; }
+.sim-device { min-width: 0; display: flex; flex-direction: column; gap: 6px; padding: 10px; border-radius: 14px; border: 2px solid var(--line); background: var(--surface); font-size: 14px; }
+.sim-device.sim-off { opacity: 0.55; border-style: dashed; }
+.sim-device-head { display: flex; justify-content: space-between; align-items: center; gap: 4px; flex-wrap: wrap; }
+.sim-presence { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; color: var(--muted); }
+.sim-avatar { width: 18px; height: 18px; border-radius: 50%; display: inline-grid; place-items: center; font-size: 10px; color: var(--accent-fg); background: var(--accent); }
+.sim-avatar.a1 { background: var(--warm); }
+.sim-shop { gap: 2px; }
+.sim-shop li { display: flex; justify-content: space-between; align-items: center; gap: 4px; padding: 2px 4px; border-radius: 6px; overflow-wrap: anywhere; }
+.sim-shop label { display: flex; align-items: center; gap: 4px; min-width: 0; cursor: pointer; }
+.sim-flash { animation: sim-flash 900ms ease-out; }
+@keyframes sim-flash { from { background: var(--warm-soft); box-shadow: 0 0 0 2px var(--warm); } to { background: transparent; box-shadow: 0 0 0 2px transparent; } }
+.sim-stale { border-color: var(--warm); color: var(--warm); }
+.sim-add { display: flex; gap: 4px; }
+.sim-add .sim-input { flex: 1 1 0; padding: 4px 8px; font-size: 13px; }
+.sim-sync { font-size: 12px; flex: none; }
+.sim-sync.ok { color: var(--accent); }
+.sim-queue { display: flex; flex-direction: column; gap: 4px; }
+
+/* 재시도와 백오프 */
+.sim-rb { display: flex; flex-direction: column; gap: 6px; max-width: 480px; }
+.sim-rb-lane { display: flex; align-items: center; gap: 6px; }
+.sim-rb-name { width: 14px; font-size: 12px; font-weight: 600; color: var(--muted); }
+.sim-rb-track { position: relative; flex: 1; height: 22px; border-radius: 6px; background: var(--surface); border: 1px solid var(--line); }
+.sim-rb-down { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 5px 0 0 5px; background: repeating-linear-gradient(135deg, transparent 0 5px, color-mix(in srgb, var(--danger) 18%, transparent) 5px 9px); }
+.sim-rb-now { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--fg); opacity: 0.4; }
+.sim-rb-dot { position: absolute; top: 50%; transform: translate(-50%, -50%); width: 16px; height: 16px; border-radius: 50%; font-size: 10px; display: grid; place-items: center; color: #fff; animation: sim-pop 220ms ease-out; }
+.sim-rb-dot.fail { background: var(--danger); }
+.sim-rb-dot.ok { background: var(--accent); color: var(--accent-fg); }
+@keyframes sim-pop { from { transform: translate(-50%, -50%) scale(0.2); } to { transform: translate(-50%, -50%) scale(1); } }
+.sim-rb-axis { display: flex; justify-content: space-between; margin-left: 20px; font-size: 11px; color: var(--muted); }
+
+/* 토큰 버킷 */
+.sim-bucket { display: flex; flex-direction: column; gap: 6px; }
+.sim-token { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--accent); position: relative; overflow: hidden; background: var(--surface); }
+.sim-token span { position: absolute; left: 0; right: 0; bottom: 0; background: var(--accent); transition: height 100ms linear; }
+
+/* 라우팅 · 딥 링크 */
+.sim-browser { border: 1px solid var(--line); border-radius: 12px; background: var(--surface); overflow: hidden; max-width: 480px; }
+.sim-addr { display: flex; gap: 4px; padding: 6px; background: var(--surface-2); border-bottom: 1px solid var(--line); }
+.sim-addr .btn { padding: 2px 8px; }
+.sim-addr-field { flex: 1; min-width: 0; display: flex; align-items: center; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); padding: 0 10px; font-family: var(--font-mono); font-size: 12px; }
+.sim-addr-field:focus-within { border-color: var(--accent); }
+.sim-addr-field input { flex: 1; min-width: 0; border: none; background: transparent; color: var(--fg); font: inherit; padding: 5px 0; outline: none; }
+.sim-app { min-height: 170px; padding: 12px; }
+.sim-page { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+.sim-page .sim-linkrow { padding: 6px 10px; }
+.sim-tabs { display: flex; border-top: 1px solid var(--line); }
+.sim-tabs button { flex: 1; padding: 8px 4px; border: none; background: none; color: var(--muted); font: inherit; font-size: 13px; cursor: pointer; }
+.sim-tabs button.on { color: var(--accent); font-weight: 600; box-shadow: inset 0 2px 0 var(--accent); }
+.sim-color { border: 1px solid var(--line); cursor: pointer; }
+.sim-color.on { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+.sim-routes { font-size: 13px; gap: 3px; }
+.sim-routes li { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 3px 8px; border-radius: 6px; color: var(--muted); }
+.sim-routes li.on { background: var(--accent-soft); color: var(--fg); }
+.sim-chat { display: flex; flex-direction: column; gap: 6px; max-width: 480px; }
+.sim-bubble { align-self: flex-start; display: flex; flex-direction: column; max-width: 100%; padding: 6px 10px; border-radius: 12px 12px 12px 4px; background: var(--surface); border: 1px solid var(--line); }
+.sim-bubble .link { font-size: 12px; text-align: left; overflow-wrap: anywhere; }
+
+/* 핫 리로드 */
+.sim-editor { border-radius: 10px; background: var(--surface-2); border: 1px solid var(--line); padding: 8px 10px; display: flex; flex-direction: column; gap: 6px; max-width: 480px; }
+.sim-editor-head { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
+.sim-editor pre { margin: 0; font-size: 13px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.sim-str { color: var(--warm); }
+.sim-dirty { color: var(--warm); }
+.sim-swatch { width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--surface); box-shadow: 0 0 0 1px var(--line); cursor: pointer; padding: 0; }
+.sim-swatch.on { box-shadow: 0 0 0 2px var(--fg); }
+.sim-preview { align-items: flex-start; }
+.sim-hr-btn { border: none; border-radius: 8px; padding: 8px 14px; color: #fff; font: inherit; font-size: 14px; cursor: pointer; animation: sim-hot 600ms ease-out; }
+@keyframes sim-hot { from { box-shadow: 0 0 0 6px color-mix(in srgb, var(--warm) 60%, transparent); } to { box-shadow: 0 0 0 0 transparent; } }
+
+/* 사용자 격자 */
+.sim-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 3px; width: 100%; max-width: 220px; }
+.sim-cell { aspect-ratio: 1; border-radius: 50%; background: var(--surface-2); border: none; padding: 0; transition: background 200ms; }
+button.sim-cell { cursor: pointer; }
+.sim-cell.new { background: var(--accent); }
+.sim-cell.staff { box-shadow: 0 0 0 2px var(--warm); }
+.sim-cell.picked { outline: 2px solid var(--fg); outline-offset: 1px; }
+.sim-cell.a { background: var(--accent); }
+.sim-cell.b { background: var(--warm); }
+.sim-cell.hit { transform: scale(1.35); box-shadow: 0 0 0 2px var(--fg); }
+.sim-cell.err { background: var(--danger); transform: scale(1.3); }
+.sim-flag-wrap { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-start; }
+.sim-flag-side { display: flex; flex-direction: column; gap: 4px; font-size: 13px; min-width: 130px; flex: 1; }
+.sim-mini-screen { display: flex; flex-direction: column; gap: 2px; padding: 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); }
+.sim-mini-screen.new { border-color: var(--accent); background: var(--accent-soft); }
+.sim-ab-variants { display: flex; gap: 8px; flex-wrap: wrap; }
+.sim-variant { flex: 1 1 120px; display: flex; flex-direction: column; gap: 4px; padding: 8px; border-radius: 10px; background: var(--surface); border: 1px solid var(--line); }
+.sim-fake-btn { align-self: flex-start; padding: 4px 10px; border-radius: 6px; font-size: 13px; color: var(--accent-fg); }
+.sim-fake-btn.a { background: var(--accent); }
+.sim-fake-btn.b { background: var(--warm); }
+.sim-stages { display: flex; gap: 4px; flex-wrap: wrap; }
+.sim-stages .chip.on { background: var(--accent); color: var(--accent-fg); }
+
+/* 시맨틱 버저닝 */
+.sim-ver { display: flex; align-items: flex-end; gap: 4px; }
+.sim-ver-part { display: flex; flex-direction: column; align-items: center; }
+.sim-ver-dot { font-size: 30px; font-weight: 700; align-self: flex-start; margin-top: 4px; }
+.sim-ver-part b { font-size: 34px; line-height: 1.1; min-width: 44px; text-align: center; padding: 2px 6px; border-radius: 8px; background: var(--surface); border: 1px solid var(--line); }
+.sim-ver-part b.bumped { border-color: var(--accent); color: var(--accent); animation: sim-bump 400ms ease-out; }
+@keyframes sim-bump { from { transform: translateY(-8px); opacity: 0.3; } to { transform: none; opacity: 1; } }
+.sim-routes li.off { color: var(--muted); }
+
+/* 린트 */
+.sim-code { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 6px 0; font-family: var(--font-mono); font-size: 12px; max-width: 480px; overflow-x: auto; }
+.sim-code-line { display: flex; gap: 8px; padding: 0 8px; white-space: pre; }
+.sim-code-line.warn { background: color-mix(in srgb, var(--warm) 12%, transparent); }
+.sim-code-line code { font-family: inherit; }
+.sim-ln { color: var(--muted); width: 14px; text-align: right; flex: none; user-select: none; }
+.sim-squiggle { text-decoration: underline wavy var(--warm); text-underline-offset: 3px; cursor: help; }
+
+/* 국제화 */
+.sim-wrap { flex-wrap: wrap; }
+.sim-i18n { gap: 4px; }
+.sim-i18n-row { display: flex; align-items: center; gap: 10px; min-height: 28px; }
+.sim-i18n-row > .muted { width: 44px; flex: none; }
+.sim-fixed-btn { display: inline-block; width: 84px; padding: 5px 8px; border-radius: 8px; background: var(--accent); color: var(--accent-fg); font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; }
+.sim-fixed-btn.fluid { width: auto; max-width: 100%; }
+.sim-fixed-btn.over { box-shadow: 0 0 0 2px var(--danger); }
+
+/* 퍼지 검색 */
+.sim-try { border: 1px solid var(--line); cursor: pointer; }
+.sim-try:hover { border-color: var(--accent); }
+.sim-two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 480px; }
+.sim-two > div { min-width: 0; }
+.sim-results { font-size: 12px; gap: 3px; margin-top: 4px; }
+.sim-results li { overflow-wrap: anywhere; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.sim-mark { background: var(--warm-soft); color: var(--warm); font-weight: 700; padding: 0; border-radius: 2px; }
+.sim-typo { font-size: 10px; padding: 0 6px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sim-flash, .sim-hr-btn, .sim-rb-dot, .sim-ver-part b.bumped, .sim-lazy-ph.loading { animation: none; }
+}

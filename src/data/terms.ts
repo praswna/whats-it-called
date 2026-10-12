@@ -9,6 +9,7 @@ export const terms: Term[] = [
     description: "마우스 커서가 요소 위에 머무는 상태입니다. 클릭하기 전에 '여기 눌러도 된다'는 신호를 주려고 색이 바뀌거나, 추가 정보가 뜨는 계기로 씁니다. 터치 화면에는 호버가 없어서 모바일에서는 다른 방법이 필요합니다.",
     examples: ["링크 위에 올리면 밑줄이 생김", "버튼이 살짝 밝아짐", "썸네일 위에 올리면 재생 버튼이 보임"],
     related: ["hover-card", "tooltip", "hover-intent", "cursor-affordance"],
+    demo: "hoverStates",
   },
   {
     id: "hover-card", name: "호버 카드", en: "Hover card", aliases: ["호버창", "호버 팝업", "미리보기 카드", "preview card", "hovercard", "프로필 카드"],
@@ -35,6 +36,7 @@ export const terms: Term[] = [
     description: "커서가 메뉴 위를 그냥 스쳐 지나갈 때 하위 메뉴가 깜빡이며 열렸다 닫히는 걸 막는 기법입니다. 일정 시간 머물러야 열거나, 커서가 하위 메뉴 쪽으로 대각선으로 움직이는 동안에는 닫지 않는 '세이프 트라이앵글'을 둡니다.",
     examples: ["Amazon 의 카테고리 메뉴", "macOS 메뉴바의 하위 메뉴"],
     related: ["hover", "hover-card", "mega-menu"],
+    demo: "hoverIntent",
   },
   {
     id: "scrubbing", name: "스크러빙", en: "Scrubbing", aliases: ["scrub", "스크럽", "문지르기", "타임라인 끌기", "scrubber"],
@@ -97,6 +99,7 @@ export const terms: Term[] = [
     description: "요소 전체가 아니라 특정 부분(보통 점 여섯 개나 가로줄 세 개 아이콘)을 잡아야만 끌리게 할 때 그 부분을 부르는 이름입니다. 본문을 선택하거나 버튼을 누르는 동작과 끌기 동작이 충돌하지 않게 분리해 줍니다. 창이나 패널의 크기를 조절하는 모서리는 '리사이즈 핸들'이라고 합니다.",
     examples: ["Notion 블록 왼쪽의 ⋮⋮", "설정 화면의 목록 순서 바꾸기 손잡이", "창 모서리의 크기 조절 핸들"],
     related: ["drag-and-drop", "split-view"],
+    demo: "dragHandle",
   },
   {
     id: "long-press", name: "길게 누르기", en: "Long press", aliases: ["롱 프레스", "press and hold", "홀드", "꾹 누르기", "touch and hold", "long click"],
@@ -114,6 +117,7 @@ export const terms: Term[] = [
     description: "팝오버, 드롭다운, 모달 바깥의 아무 곳이나 누르면 그것이 닫히는 동작입니다. 닫기 버튼을 찾지 않아도 되어 편하지만, 입력 중인 폼이 날아가면 곤란하므로 중요한 모달은 바깥 클릭으로 닫지 않게 하기도 합니다. Esc 키로 닫는 동작과 보통 짝을 이룹니다.",
     examples: ["드롭다운 메뉴 바깥 클릭", "사진 뷰어의 어두운 배경 클릭"],
     related: ["popover", "modal", "backdrop"],
+    demo: "clickOutside",
   },
   {
     id: "cursor-affordance", name: "커서 어포던스", en: "Cursor affordance", aliases: ["커서 모양 바뀜", "cursor pointer", "손가락 커서", "resize cursor", "grab cursor"],
@@ -122,6 +126,7 @@ export const terms: Term[] = [
     description: "요소 위에서 커서 모양을 바꿔 '누를 수 있다', '끌 수 있다', '크기를 바꿀 수 있다'를 미리 알려 주는 장치입니다. 손가락은 링크·버튼, 손바닥은 끌기, 양방향 화살표는 크기 조절, I 자는 글자 선택을 뜻합니다. 어포던스는 '생김새만 보고도 어떻게 쓰는지 알 수 있는 성질'을 뜻하는 디자인 용어입니다.",
     examples: ["링크 위의 손가락 커서", "창 모서리의 대각선 화살표", "지도 위의 손바닥"],
     related: ["hover", "scrubby-slider", "drag-and-drop"],
+    demo: "cursorAffordance",
   },
   {
     id: "hit-target", name: "터치 타깃·히트 영역", en: "Hit target / Hit area", aliases: ["touch target", "클릭 영역", "hit box", "히트박스", "tap target", "최소 44px"],
@@ -130,6 +135,7 @@ export const terms: Term[] = [
     description: "눌렀을 때 반응하는 실제 영역입니다. 아이콘이 작아도 그 주변까지 눌리게 넓혀 두면 실수가 줄어듭니다. Apple 은 44pt, Google 은 48dp 이상을 권합니다. 투명하게 넓힌 부분을 '히트 슬롭(hit slop)'이라고도 부릅니다.",
     examples: ["작은 X 버튼인데 주변을 눌러도 닫힘", "체크박스 라벨을 눌러도 체크됨"],
     related: ["cursor-affordance", "fat-finger"],
+    demo: "hitTarget",
   },
 
   // ───────── 터치·제스처 ─────────
@@ -158,6 +164,7 @@ export const terms: Term[] = [
     description: "목록이 맨 위에 있을 때 더 아래로 끌어내렸다 놓으면 내용을 새로 불러오는 동작입니다. 끌어내리는 동안 화살표나 로딩 표시가 점점 나타나 '놓으면 새로고침된다'는 걸 알려 줍니다. 2008년 트위터 앱 Tweetie 에서 시작해 표준이 되었습니다.",
     examples: ["트위터·인스타그램 피드", "메일 앱 받은편지함"],
     related: ["swipe", "rubber-band", "skeleton"],
+    demo: "pullToRefresh",
   },
   {
     id: "pinch-zoom", name: "핀치 줌", en: "Pinch to zoom", aliases: ["두 손가락 확대", "pinch", "오므리기", "벌리기", "멀티터치 줌"],
@@ -166,6 +173,7 @@ export const terms: Term[] = [
     description: "두 손가락 사이 거리를 바꿔 확대·축소하는 제스처입니다. 두 손가락을 돌리면 회전하는 '로테이트' 제스처와 함께 쓰이는 경우가 많습니다. 트랙패드에서도 같은 동작이 되고, 마우스는 Ctrl+휠로 대신합니다.",
     examples: ["지도 확대", "사진 확대", "브라우저 페이지 확대"],
     related: ["double-tap", "rubber-band"],
+    demo: "pinchZoom",
   },
   {
     id: "double-tap", name: "더블 탭", en: "Double tap", aliases: ["두 번 두드리기", "두 번 탭", "double tap to like", "double tap to zoom"],
@@ -174,6 +182,7 @@ export const terms: Term[] = [
     description: "짧은 간격으로 같은 자리를 두 번 두드리는 동작입니다. 더블 클릭의 터치판입니다. 확대·축소 전환이나 좋아요처럼 자주 하는 동작에 붙입니다. 한 번 탭과 구분하려면 두 번째 탭을 잠시 기다려야 해서, 한 번 탭 반응이 300ms 정도 늦어지는 부작용이 있었습니다.",
     examples: ["인스타그램 사진 두 번 두드려 좋아요", "지도 두 번 두드려 확대"],
     related: ["pinch-zoom", "long-press"],
+    demo: "doubleTap",
   },
   {
     id: "edge-swipe", name: "가장자리 스와이프", en: "Edge swipe", aliases: ["엣지 제스처", "back gesture", "뒤로 가기 제스처", "화면 끝에서 밀기", "interactive pop"],
@@ -182,6 +191,7 @@ export const terms: Term[] = [
     description: "화면 가장자리에서 시작해 안쪽으로 미는 제스처입니다. 가장자리에서 시작했다는 조건이 붙어 일반 스와이프와 구분됩니다. iOS 는 왼쪽 가장자리에서 밀면 이전 화면으로 돌아가고, 안드로이드는 양쪽 가장자리가 뒤로 가기입니다. 미는 만큼 이전 화면이 따라오는 것을 '인터랙티브 전환'이라고 합니다.",
     examples: ["iOS 뒤로 가기", "안드로이드 뒤로 가기 제스처", "왼쪽 끝에서 밀어 사이드 메뉴 열기"],
     related: ["swipe", "drawer", "shared-element"],
+    demo: "edgeSwipe",
   },
   {
     id: "rubber-band", name: "러버 밴딩", en: "Rubber banding", aliases: ["오버스크롤", "overscroll", "바운스", "bounce", "고무줄 효과", "scroll bounce"],
@@ -190,6 +200,7 @@ export const terms: Term[] = [
     description: "스크롤 끝에서 더 당기면 내용이 저항감 있게 조금 더 따라오다가 놓으면 튕겨 돌아오는 효과입니다. '여기가 끝'이라는 걸 몸으로 느끼게 해 줍니다. 안드로이드는 대신 가장자리에 빛이 번지는 '엣지 글로우'를 썼다가 최근엔 늘어나는 효과로 바꿨습니다.",
     examples: ["iOS 목록 끝에서 더 당기기", "macOS 트랙패드 스크롤 끝", "당겨서 새로고침의 늘어남"],
     related: ["pull-to-refresh", "spring-animation", "scroll-snap"],
+    demo: "rubberBand",
   },
   {
     id: "haptic", name: "햅틱 피드백", en: "Haptic feedback", aliases: ["진동 피드백", "haptics", "택틸", "tactile", "Taptic", "vibration"],
@@ -198,6 +209,7 @@ export const terms: Term[] = [
     description: "동작이 인식됐거나 어떤 경계를 넘었을 때 짧은 진동으로 알려 주는 피드백입니다. 길게 누르기가 성공했을 때, 토글이 넘어갈 때, 피커 휠이 한 칸 넘어갈 때 톡 하고 울립니다. 눈으로 확인하지 않아도 되게 해 줍니다.",
     examples: ["아이폰에서 앱 아이콘 길게 누를 때의 톡", "시계 앱 알람 시간 돌릴 때의 틱틱", "토글 스위치 넘어갈 때"],
     related: ["long-press", "toggle-switch", "picker-wheel"],
+    demo: "haptic",
   },
   {
     id: "fat-finger", name: "오터치 방지", en: "Fat finger problem", aliases: ["fat finger", "오터치", "mis-tap", "실수 터치", "confirm step"],
@@ -206,6 +218,7 @@ export const terms: Term[] = [
     description: "손가락이 버튼보다 커서 옆 것을 누르거나 두 개를 한꺼번에 누르는 문제입니다. 버튼을 충분히 키우고, 위험한 버튼은 멀리 떼고, 되돌릴 수 없는 동작은 한 번 더 확인하거나 길게 누르게 하는 식으로 막습니다.",
     examples: ["삭제 버튼과 취소 버튼 사이 간격", "'정말 삭제할까요?' 확인창"],
     related: ["hit-target", "long-press", "undo-toast"],
+    demo: "fatFinger",
   },
 
   // ───────── 입력 컨트롤 ─────────
@@ -216,6 +229,7 @@ export const terms: Term[] = [
     description: "선(트랙) 위의 손잡이(섬, thumb)를 끌어 값을 고릅니다. 정확한 숫자보다 대략의 정도를 고를 때 적합합니다. 손잡이가 두 개면 '범위 슬라이더'라고 하고, 중간에 걸리는 눈금을 '틱' 또는 '스냅 포인트'라고 합니다. 윈도우에서는 '트랙바'라고 부릅니다.",
     examples: ["볼륨", "밝기", "가격 범위 필터"],
     related: ["scrubbing", "scrubby-slider", "popup-slider", "stepper"],
+    demo: "slider",
   },
   {
     id: "stepper", name: "스테퍼", en: "Stepper", aliases: ["증감 버튼", "spin button", "스핀 박스", "spinbox", "number input", "+ - 버튼", "NumericUpDown"],
@@ -224,6 +238,7 @@ export const terms: Term[] = [
     description: "숫자 옆의 + - 또는 ▲▼ 버튼으로 값을 정해진 단위만큼 바꾸는 컨트롤입니다. 윈도우 API 에서는 스핀 버튼, 윈도우 폼에서는 NumericUpDown 이라고 부릅니다. 값의 범위가 작고 정확한 숫자가 필요할 때 슬라이더보다 낫습니다. 키보드 ↑↓ 로도 바뀌게 하는 게 관례입니다.",
     examples: ["장바구니 수량", "글자 크기 조절", "설정의 초 단위 시간"],
     related: ["slider", "scrubby-slider"],
+    demo: "stepper",
   },
   {
     id: "toggle-switch", name: "토글 스위치", en: "Toggle switch", aliases: ["스위치", "switch", "온오프", "on/off", "토글"],
@@ -250,6 +265,7 @@ export const terms: Term[] = [
     description: "글을 입력하면 그에 맞는 후보가 아래 목록으로 나타나고, 그중 하나를 고르거나 직접 입력을 마칠 수 있는 컨트롤입니다. 입력하는 대로 후보가 좁혀지는 것을 '타입어헤드' 또는 '자동완성'이라고 합니다. 후보를 서버에 물어볼 땐 디바운스를 걸어 요청 수를 줄입니다.",
     examples: ["검색창의 제안", "주소 입력", "태그 입력"],
     related: ["debounce", "command-palette", "chip"],
+    demo: "combobox",
   },
   {
     id: "chip", name: "칩·태그", en: "Chip / Tag", aliases: ["pill", "필", "token", "토큰 입력", "filter chip", "badge"],
@@ -258,6 +274,7 @@ export const terms: Term[] = [
     description: "알약처럼 둥글고 작은 덩어리로 항목을 나타낸 컨트롤입니다. 필터로 쓰면 '필터 칩', 입력칸 안에 여러 개가 쌓이면 '토큰 입력', 글자만 있고 누르지 못하면 '배지' 또는 '라벨'이라고 구분합니다. 옆의 × 로 지울 수 있는 경우가 많습니다.",
     examples: ["메일 받는 사람 입력칸", "쇼핑몰의 선택한 필터", "글의 태그"],
     related: ["combobox", "segmented-control", "badge"],
+    demo: "chips",
   },
   {
     id: "picker-wheel", name: "피커 휠", en: "Picker wheel", aliases: ["드럼 피커", "drum picker", "스핀 피커", "wheel picker", "날짜 휠", "UIPickerView"],
@@ -266,6 +283,7 @@ export const terms: Term[] = [
     description: "원통을 굴리듯 위아래로 끌어 값을 고르는 컨트롤입니다. iOS 의 날짜·시간 선택이 대표적입니다. 한 칸씩 걸리는 스냅과 틱틱 하는 햅틱이 같이 붙어 손맛이 있습니다. 항목이 아주 많으면 찾기 어려워서 검색이 되는 목록이 낫습니다.",
     examples: ["iOS 알람 시간 설정", "생년월일 입력"],
     related: ["haptic", "scroll-snap", "date-picker"],
+    demo: "pickerWheel",
   },
   {
     id: "date-picker", name: "날짜 선택기", en: "Date picker", aliases: ["캘린더 피커", "calendar picker", "달력 입력", "date range picker", "기간 선택"],
@@ -274,6 +292,7 @@ export const terms: Term[] = [
     description: "입력칸을 누르면 달력이 떠서 날짜를 고르게 하는 컨트롤입니다. 시작일과 종료일을 같이 고르면 '기간 선택기'입니다. 직접 타이핑도 허용하고, 오늘·어제 같은 빠른 선택을 함께 두는 경우가 많습니다.",
     examples: ["항공권 날짜", "보고서 기간 설정"],
     related: ["picker-wheel", "popover", "masked-input"],
+    demo: "datePicker",
   },
   {
     id: "color-picker", name: "색상 선택기", en: "Color picker", aliases: ["컬러 피커", "스포이드", "eyedropper", "색 추출", "팔레트"],
@@ -282,6 +301,7 @@ export const terms: Term[] = [
     description: "색상환이나 채도·명도 사각형에서 색을 고르는 컨트롤입니다. 화면의 아무 곳이나 찍어 그 색을 가져오는 도구를 '스포이드' 또는 '아이드로퍼'라고 합니다. 최근에 쓴 색을 모아 두는 '스와치' 영역도 흔히 있습니다.",
     examples: ["그림판의 색 고르기", "Figma 의 채우기 색", "브라우저의 input type=color"],
     related: ["popover", "slider"],
+    demo: "colorPicker",
   },
   {
     id: "file-dropzone", name: "파일 드롭 영역", en: "File dropzone", aliases: ["드래그 업로드", "drop zone", "업로드 영역", "파일 끌어다 놓기"],
@@ -290,6 +310,7 @@ export const terms: Term[] = [
     description: "파일을 끌어다 놓거나 눌러서 고르는 업로드 영역입니다. 파일을 끌고 들어오면 테두리가 강조되어 '여기 놓으면 된다'는 신호를 줍니다. 클립보드에서 붙여넣기로도 올리게 하면 더 편합니다.",
     examples: ["구글 드라이브 업로드", "이미지 첨부 영역"],
     related: ["drag-and-drop", "progress"],
+    demo: "fileDropzone",
   },
 
 
@@ -310,6 +331,7 @@ export const terms: Term[] = [
     description: "숫자만 쳐도 하이픈이나 괄호가 저절로 들어가며 형식을 맞춰 주는 입력칸입니다. 카드 번호 네 자리씩 띄기, 전화번호 하이픈, 날짜의 슬래시 등이 대표적입니다. 붙여넣기와 지우기에서 커서가 엉뚱하게 가지 않도록 신경 써야 합니다.",
     examples: ["전화번호 010-0000-0000", "카드 번호 0000 0000 0000 0000"],
     related: ["inline-validation", "date-picker"],
+    demo: "maskedInput",
   },
   {
     id: "autosave", name: "자동 저장", en: "Autosave", aliases: ["auto save", "저장 버튼 없음", "draft", "임시 저장", "초안 자동 저장"],
@@ -318,6 +340,7 @@ export const terms: Term[] = [
     description: "입력이 멈추면 잠시 뒤 알아서 저장하는 방식입니다. 보통 디바운스를 걸어 타이핑이 멈춘 뒤 몇 백 ms 후에 저장하고, '저장 중…', '저장됨' 같은 상태를 조용히 보여 줍니다. 저장 실패를 조용히 삼키면 안 되므로, 실패하면 눈에 띄게 알려야 합니다.",
     examples: ["구글 독스", "Notion", "메일 초안"],
     related: ["debounce", "inline-edit", "optimistic-ui"],
+    demo: "autosave",
   },
   {
     id: "undo-redo", name: "실행 취소·다시 실행", en: "Undo / Redo", aliases: ["언두", "리두", "되돌리기", "Ctrl+Z", "undo stack", "history"],
@@ -326,6 +349,7 @@ export const terms: Term[] = [
     description: "작업 기록을 쌓아 두고 거꾸로 되돌리거나 다시 적용하는 기능입니다. 기록을 쌓아 두는 구조를 '언두 스택'이라고 합니다. 연속 타이핑을 한 번에 되돌릴지 글자마다 되돌릴지 같은 '묶음 단위' 결정이 체감을 좌우합니다. 되돌릴 수 있으면 확인창을 줄일 수 있습니다.",
     examples: ["텍스트 에디터의 Ctrl+Z", "포토샵 히스토리 패널", "Gmail 의 '보내기 취소'"],
     related: ["undo-toast", "autosave"],
+    demo: "undoRedo",
   },
   {
     id: "multi-cursor", name: "멀티 커서", en: "Multi-cursor", aliases: ["다중 커서", "multiple cursors", "column select", "블록 선택", "Ctrl+D"],
@@ -334,6 +358,7 @@ export const terms: Term[] = [
     description: "코드 에디터에서 커서를 여러 군데 동시에 두고 똑같이 입력하거나 지우는 기능입니다. 같은 단어를 하나씩 추가 선택하는 Ctrl+D, 세로로 커서를 늘리는 Alt+클릭, 사각형으로 선택하는 '블록 선택'이 변형입니다.",
     examples: ["VS Code 의 Ctrl+D", "Sublime Text 의 멀티 셀렉션"],
     related: ["find-replace"],
+    demo: "multiCursor",
   },
   {
     id: "find-replace", name: "찾기·바꾸기", en: "Find and replace", aliases: ["검색 바꾸기", "Ctrl+H", "정규식 치환", "incremental search", "증분 검색"],
@@ -342,6 +367,7 @@ export const terms: Term[] = [
     description: "문서 안의 문자열을 찾고, 하나씩 또는 한꺼번에 바꾸는 기능입니다. 입력하는 대로 결과가 바로 강조되는 것을 '증분 검색'이라고 합니다. 대소문자 구분, 단어 단위, 정규식 옵션이 보통 딸려 있습니다.",
     examples: ["워드의 Ctrl+H", "VS Code 의 전체 찾기"],
     related: ["multi-cursor", "command-palette"],
+    demo: "findReplace",
   },
   {
     id: "rich-text", name: "리치 텍스트 편집기", en: "Rich text editor", aliases: ["WYSIWYG", "위지윅", "서식 편집기", "블록 에디터", "마크다운 에디터", "slash command"],
@@ -350,6 +376,7 @@ export const terms: Term[] = [
     description: "서식이 적용된 결과를 보면서 편집하는 입력창입니다. '보이는 대로 얻는다'는 뜻의 WYSIWYG 로도 부릅니다. 문단마다 하나의 블록으로 다루는 '블록 에디터', 글자 그대로 쓰고 기호로 서식을 표현하는 '마크다운 에디터'가 있습니다. '/' 를 쳐서 블록을 고르는 것은 '슬래시 커맨드'라고 합니다.",
     examples: ["Notion", "구글 독스", "네이버 블로그 에디터"],
     related: ["inline-edit", "command-palette"],
+    demo: "richText",
   },
   {
     id: "placeholder", name: "플레이스홀더", en: "Placeholder", aliases: ["입력 힌트", "placeholder text", "회색 안내 글", "ghost text", "고스트 텍스트"],
@@ -358,6 +385,7 @@ export const terms: Term[] = [
     description: "입력칸이 비어 있을 때 흐린 색으로 보이는 예시나 안내 글입니다. 입력을 시작하면 사라집니다. 라벨 대신 쓰면 입력 중에 무엇을 적는 칸인지 잊어버리므로, 라벨은 따로 두는 게 좋습니다. 입력하면 라벨이 위로 떠오르는 것은 '플로팅 라벨'입니다. 코드 자동완성에서 흐리게 미리 보여 주는 제안은 '고스트 텍스트'라고 합니다.",
     examples: ["검색창의 '검색어를 입력하세요'", "Copilot 의 회색 제안 코드"],
     related: ["combobox", "empty-state"],
+    demo: "placeholder",
   },
 
   // ───────── 피드백·상태 표시 ─────────
@@ -395,6 +423,7 @@ export const terms: Term[] = [
     description: "진행 정도를 모를 때 '일하고 있다'는 것만 알려 주는 돌아가는 표시입니다. 끝나는 시점을 알 수 있으면 진행 바가 낫고, 1초 이상 걸릴 것 같으면 스켈레톤이 낫습니다. 너무 빨리 끝나는 작업에 스피너를 띄우면 깜빡여서 오히려 거슬리므로, 몇 백 ms 지나서 띄우기도 합니다.",
     examples: ["버튼 안의 작은 스피너", "브라우저 탭의 로딩 표시"],
     related: ["progress", "skeleton"],
+    demo: "spinner",
   },
   {
     id: "progress", name: "진행 표시", en: "Progress indicator", aliases: ["프로그레스 바", "progress bar", "indeterminate", "불확정 진행 바", "퍼센트 바", "스텝 표시"],
@@ -421,6 +450,7 @@ export const terms: Term[] = [
     description: "목록이 비었거나 검색 결과가 없을 때 그냥 빈 화면 대신 '아직 항목이 없어요. 첫 항목을 만들어 보세요' 같은 안내와 버튼을 보여 주는 화면입니다. 처음 쓰는 사람에게 다음 할 일을 알려 주는 역할을 합니다.",
     examples: ["받은편지함이 비었을 때 그림과 안내", "검색 결과 없음 화면"],
     related: ["placeholder", "onboarding"],
+    demo: "emptyState",
   },
   {
     id: "inline-validation", name: "인라인 검증", en: "Inline validation", aliases: ["실시간 검증", "즉시 유효성 검사", "live validation", "폼 오류 표시", "validate on blur"],
@@ -429,6 +459,7 @@ export const terms: Term[] = [
     description: "제출 버튼을 누른 뒤 한꺼번에 오류를 보여 주는 대신, 입력칸을 벗어나거나 입력하는 도중에 바로 옆에 오류나 통과 표시를 띄우는 방식입니다. 타이핑하는 도중에 빨간 오류를 띄우면 짜증이 나므로, 칸을 벗어날 때(blur) 검사하고 그 뒤부터는 입력마다 다시 검사하는 식이 흔합니다.",
     examples: ["이메일 형식 오류 즉시 표시", "비밀번호 강도 표시"],
     related: ["masked-input", "placeholder"],
+    demo: "inlineValidation",
   },
   {
     id: "badge", name: "배지", en: "Badge", aliases: ["알림 숫자", "빨간 점", "notification dot", "count badge", "unread badge"],
@@ -437,6 +468,7 @@ export const terms: Term[] = [
     description: "아이콘이나 탭 모서리에 붙어 새 소식 개수나 '새것 있음'을 알리는 작은 표시입니다. 숫자가 있으면 '카운트 배지', 점만 있으면 '도트'라고 합니다. 너무 많이 쓰면 사용자가 무시하게 됩니다.",
     examples: ["앱 아이콘의 읽지 않은 메시지 수", "탭의 빨간 점"],
     related: ["chip", "toast"],
+    demo: "badge",
   },
   {
     id: "banner", name: "배너·공지 띠", en: "Banner", aliases: ["알림 바", "notice", "announcement bar", "상단 띠", "system message"],
@@ -445,6 +477,7 @@ export const terms: Term[] = [
     description: "토스트와 달리 저절로 사라지지 않고 사용자가 닫거나 문제가 해결될 때까지 남아 있는 안내 띠입니다. '오프라인 상태입니다', '이메일을 인증해 주세요' 같은 지속적인 상태에 씁니다.",
     examples: ["쿠키 동의 띠", "'인터넷 연결 없음' 상단 띠"],
     related: ["toast", "modal"],
+    demo: "banner",
   },
 
   // ───────── 창·오버레이 ─────────
@@ -464,6 +497,7 @@ export const terms: Term[] = [
     description: "모달이나 시트가 열릴 때 뒤쪽을 어둡게 덮어 '지금 이것에 집중하라'고 알려 주는 반투명 막입니다. 구글 머티리얼에서는 '스크림'이라고 부릅니다. 누르면 닫히는 경우가 많습니다. 뒤가 흐려지는 효과는 '블러 백드롭'입니다.",
     examples: ["모달 뒤 반투명 검정", "iOS 알림 센터 뒤의 블러"],
     related: ["modal", "click-outside", "bottom-sheet"],
+    demo: "backdrop",
   },
   {
     id: "popover", name: "팝오버", en: "Popover", aliases: ["플라이아웃", "flyout", "드롭다운 패널", "작은 창", "anchored panel", "말풍선 메뉴"],
@@ -472,6 +506,7 @@ export const terms: Term[] = [
     description: "어떤 요소에 붙어서(anchored) 그 옆이나 아래에 뜨는 작은 패널입니다. 툴팁과 달리 누르거나 입력할 수 있고, 모달과 달리 뒤쪽 화면을 막지 않습니다. 바깥을 누르면 닫히는 게 보통입니다. 윈도우 앱에서는 '플라이아웃'이라고 부릅니다. 화면 가장자리에 닿으면 반대쪽으로 뒤집히는 것을 '플리핑' 또는 '콜리전 처리'라고 합니다.",
     examples: ["날짜 입력칸을 누르면 뜨는 달력", "이모지 선택 패널", "공유 버튼의 옵션 패널"],
     related: ["tooltip", "hover-card", "context-menu", "click-outside", "dropdown"],
+    demo: "popover",
   },
   {
     id: "dropdown", name: "드롭다운", en: "Dropdown menu", aliases: ["풀다운", "pulldown", "select", "셀렉트 박스", "펼침 메뉴", "콤보 메뉴"],
@@ -480,6 +515,7 @@ export const terms: Term[] = [
     description: "버튼이나 입력칸을 누르면 아래로 목록이 펼쳐지는 컨트롤입니다. 값을 고르는 셀렉트 박스와, 동작을 고르는 드롭다운 메뉴를 구분하기도 합니다. 메뉴 안에 다시 메뉴가 열리면 '하위 메뉴(서브메뉴)' 또는 '캐스케이딩 메뉴'입니다.",
     examples: ["정렬 기준 고르기", "프로필 사진을 누르면 뜨는 계정 메뉴"],
     related: ["popover", "combobox", "context-menu", "hover-intent"],
+    demo: "dropdown",
   },
   {
     id: "context-menu", name: "컨텍스트 메뉴", en: "Context menu", aliases: ["우클릭 메뉴", "right-click menu", "바로가기 메뉴", "shortcut menu", "팝업 메뉴"],
@@ -515,6 +551,7 @@ export const terms: Term[] = [
     description: "모달과 달리 열어 둔 채로 다른 창을 계속 조작할 수 있는 창입니다. 포토샵의 도구 팔레트처럼 작고 항상 위에 떠 있는 것을 '팔레트 창' 또는 '유틸리티 창'이라고 합니다. 찾기·바꾸기 창이 대표적인 모덜리스 대화상자입니다.",
     examples: ["워드의 찾기 창", "포토샵의 레이어 패널", "플로팅 계산기"],
     related: ["modal", "always-on-top", "docking"],
+    demo: "modeless",
   },
 
   // ───────── 탐색·레이아웃 구조 ─────────
@@ -525,6 +562,7 @@ export const terms: Term[] = [
     description: "서류철 꼬리표처럼, 여러 화면 중 하나만 골라 같은 자리에 보여 주는 장치입니다. 모바일 아래쪽의 아이콘 줄은 '탭 바' 또는 '하단 내비게이션'입니다. 화면 전체가 아니라 값 하나를 고르는 것이면 세그먼트 컨트롤입니다.",
     examples: ["브라우저 탭", "인스타그램 하단 아이콘", "설정 화면의 일반/고급 탭"],
     related: ["segmented-control", "accordion"],
+    demo: "tabs",
   },
   {
     id: "accordion", name: "아코디언", en: "Accordion", aliases: ["접기 펼치기", "collapsible", "expander", "익스팬더", "disclosure", "details summary", "토글 섹션"],
@@ -542,6 +580,7 @@ export const terms: Term[] = [
     description: "지금 보고 있는 페이지가 전체 구조에서 어디에 있는지 경로로 보여 주는 줄입니다. 헨젤과 그레텔이 길에 빵 부스러기를 뿌린 데서 온 이름입니다. 각 단계를 눌러 위로 올라갈 수 있습니다.",
     examples: ["쇼핑몰 카테고리 경로", "파일 탐색기 주소 표시줄"],
     related: ["tree-view", "master-detail"],
+    demo: "breadcrumb",
   },
   {
     id: "infinite-scroll", name: "무한 스크롤", en: "Infinite scroll", aliases: ["endless scroll", "자동 더 불러오기", "load more", "더 보기 버튼", "lazy list"],
@@ -559,6 +598,7 @@ export const terms: Term[] = [
     description: "목록을 한 페이지에 몇 개씩 잘라 페이지 번호로 이동하는 방식입니다. 특정 페이지로 돌아가기 쉽고 끝이 있습니다. 서버 쪽에서는 '몇 번째부터 몇 개'로 자르는 오프셋 방식과, '이 항목 다음부터'로 자르는 커서 방식이 있습니다. 커서 방식은 중간에 항목이 추가돼도 겹치거나 빠지지 않습니다.",
     examples: ["구글 검색 결과 하단 번호", "게시판 목록"],
     related: ["infinite-scroll", "virtualization"],
+    demo: "pagination",
   },
   {
     id: "virtualization", name: "가상 스크롤", en: "Virtual scrolling", aliases: ["virtualization", "윈도잉", "windowing", "리스트 가상화", "recycler view", "UI 가상화"],
@@ -576,6 +616,7 @@ export const terms: Term[] = [
     description: "스크롤해도 화면 위에 붙어 있는 요소입니다. 처음엔 제자리에 있다가 스크롤이 지나가면 붙는 것이 '스티키', 항상 고정된 것이 '픽스드'입니다. 목록의 섹션 제목이 다음 섹션이 올 때까지 위에 붙어 있다가 밀려나는 것은 '섹션 헤더 피닝'입니다. 아래로 스크롤하면 숨고 위로 올리면 나타나는 변형도 많습니다.",
     examples: ["연락처의 ㄱ, ㄴ, ㄷ 글자 헤더", "표의 첫 행 고정", "쇼핑몰 상단 메뉴"],
     related: ["scroll-snap", "parallax"],
+    demo: "stickyHeader",
   },
   {
     id: "scroll-snap", name: "스크롤 스냅", en: "Scroll snap", aliases: ["스냅", "snap to item", "페이지 단위 스크롤", "paging scroll", "carousel snap"],
@@ -584,6 +625,7 @@ export const terms: Term[] = [
     description: "스크롤을 놓았을 때 아무 데나 멈추지 않고 가장 가까운 항목 경계에 딱 맞춰 정렬되는 동작입니다. 사진을 한 장씩 넘기거나, 바텀 시트가 정해진 높이에 걸리는 것이 이 방식입니다. CSS 의 scroll-snap-type 으로 구현할 수 있습니다.",
     examples: ["인스타그램 스토리·릴스", "앱 스토어의 가로 카드", "iOS 홈 화면 페이지"],
     related: ["carousel", "bottom-sheet", "picker-wheel", "rubber-band"],
+    demo: "scrollSnap",
   },
   {
     id: "parallax", name: "패럴랙스", en: "Parallax scrolling", aliases: ["시차 스크롤", "배경 느리게 움직이기", "depth effect"],
@@ -592,6 +634,7 @@ export const terms: Term[] = [
     description: "앞쪽 내용과 뒤쪽 배경이 다른 속도로 움직여 입체감이 나는 효과입니다. 기차에서 멀리 있는 산이 천천히 움직이는 원리와 같습니다. 과하면 어지럽고 성능도 먹으므로 '움직임 줄이기' 설정을 존중해야 합니다.",
     examples: ["애플 제품 소개 페이지", "게임 배경"],
     related: ["sticky", "reduced-motion", "scroll-animation"],
+    demo: "parallax",
   },
   {
     id: "master-detail", name: "마스터-디테일", en: "Master-detail", aliases: ["목록-상세", "list-detail", "두 칸 구성", "split view", "스플릿 뷰"],
@@ -600,6 +643,7 @@ export const terms: Term[] = [
     description: "왼쪽에 목록(마스터)을 두고 하나를 고르면 오른쪽에 그 내용(디테일)을 보여 주는 구성입니다. 메일 앱이 대표적입니다. 화면이 좁으면 목록과 상세가 한 화면씩 번갈아 나오고, 넓으면 나란히 보입니다. 칸 사이를 끌어 너비를 바꾸는 구성은 '스플릿 뷰'입니다.",
     examples: ["메일 앱", "설정 앱", "파일 탐색기"],
     related: ["split-view", "drawer", "breadcrumb"],
+    demo: "masterDetail",
   },
   {
     id: "split-view", name: "스플릿 뷰·리사이즈 패널", en: "Split view / Resizable panes", aliases: ["분할 창", "splitter", "스플리터", "gutter", "패널 나누기", "resizable panel"],
@@ -608,6 +652,7 @@ export const terms: Term[] = [
     description: "화면을 두 칸 이상으로 나누고 그 경계(스플리터, 거터)를 끌어 각 칸의 크기를 바꿀 수 있는 구성입니다. 끌어서 한쪽을 완전히 접을 수 있게 만들기도 합니다. VS Code 의 에디터 분할이 대표적입니다.",
     examples: ["VS Code 의 에디터 나누기", "파일 탐색기의 폴더 트리 너비 조절"],
     related: ["master-detail", "drag-handle", "docking"],
+    demo: "splitView",
   },
   {
     id: "tree-view", name: "트리 뷰", en: "Tree view", aliases: ["폴더 트리", "계층 목록", "outline", "아웃라인", "expand collapse tree"],
@@ -616,6 +661,7 @@ export const terms: Term[] = [
     description: "항목 안에 하위 항목이 있는 계층 구조를 들여쓰기와 ▶ 화살표로 보여 주는 목록입니다. 화살표를 누르면 하위가 펼쳐지고 접힙니다. 키보드 → 로 펼치고 ← 로 접는 것이 관례입니다.",
     examples: ["파일 탐색기 폴더 창", "VS Code 탐색기", "Notion 사이드바"],
     related: ["accordion", "breadcrumb"],
+    demo: "treeView",
   },
   {
     id: "command-palette", name: "커맨드 팔레트", en: "Command palette", aliases: ["Ctrl+K", "Cmd+K", "명령 팔레트", "quick open", "빠른 열기", "spotlight", "launcher"],
@@ -633,6 +679,7 @@ export const terms: Term[] = [
     description: "상단 메뉴에 커서를 올리면 하위 항목이 여러 열로 넓게 펼쳐지는 메뉴입니다. 계단식 하위 메뉴를 여러 번 타고 들어가지 않아도 되어 큰 쇼핑몰에서 많이 씁니다. 커서가 지나갈 때 깜빡이지 않게 호버 의도 판단이 필요합니다.",
     examples: ["쿠팡·아마존 카테고리", "대학 홈페이지 메뉴"],
     related: ["dropdown", "hover-intent"],
+    demo: "megaMenu",
   },
   {
     id: "fab", name: "플로팅 액션 버튼", en: "Floating action button", aliases: ["FAB", "떠 있는 둥근 버튼", "플로팅 버튼", "+ 버튼"],
@@ -641,6 +688,7 @@ export const terms: Term[] = [
     description: "화면 내용 위에 떠 있는 둥근 버튼으로, 그 화면의 가장 중요한 동작 하나를 담습니다. 구글 머티리얼 디자인에서 이름이 붙었습니다. 누르면 여러 버튼으로 펼쳐지는 '스피드 다이얼' 변형이 있습니다.",
     examples: ["Gmail 의 '작성' 버튼", "지도의 현재 위치 버튼"],
     related: ["sticky", "bottom-sheet"],
+    demo: "fab",
   },
   {
     id: "onboarding", name: "온보딩·코치마크", en: "Onboarding / Coach marks", aliases: ["튜토리얼", "walkthrough", "워크스루", "product tour", "투어", "spotlight tour", "첫 사용 안내"],
@@ -649,6 +697,7 @@ export const terms: Term[] = [
     description: "처음 들어온 사용자에게 주요 기능을 알려 주는 흐름입니다. 화면을 어둡게 하고 특정 버튼만 밝혀 설명하는 것을 '코치마크' 또는 '스포트라이트 투어', 여러 장을 넘기며 소개하는 것을 '워크스루'라고 합니다. 언제든 건너뛸 수 있어야 합니다.",
     examples: ["앱 첫 실행 시 소개 화면", "새 기능 출시 때 '여기 눌러 보세요' 풍선"],
     related: ["empty-state", "tooltip", "backdrop"],
+    demo: "onboarding",
   },
   // ───────── 이미지 ─────────
   // 이미지 비교·확인
@@ -713,6 +762,7 @@ export const terms: Term[] = [
     description: "사진 위에 네모 틀을 띄우고 모서리 손잡이로 크기를, 안쪽을 끌어 위치를 정해 그 부분만 남기는 기능입니다. 틀 바깥은 어둡게 덮어 무엇이 잘려 나갈지 보여 줍니다. 프로필 사진처럼 비율이 정해진 곳에서는 1:1, 16:9 처럼 비율을 고정하고, 틀 대신 사진을 움직이게 하기도 합니다. 3등분 격자를 겹쳐 구도를 잡기 쉽게 해 줍니다.",
     examples: ["프로필 사진 올릴 때 동그란 틀에 맞추기", "아이폰 사진 편집의 자르기", "카카오톡 배경 사진 맞추기"],
     related: ["object-fit", "focal-point", "drag-handle"],
+    demo: "crop",
   },
   {
     id: "object-fit", name: "채우기·맞추기", en: "Cover / Contain", aliases: ["object-fit", "cover", "contain", "꽉 채우기", "비율 유지", "레터박스", "letterbox", "늘이기", "fill", "background-size"],
@@ -748,6 +798,7 @@ export const terms: Term[] = [
     description: "같은 사진을 여러 크기로 만들어 두고, 브라우저가 화면 폭과 화소 밀도(레티나 등)에 맞는 것을 골라 받게 합니다. 휴대폰이 데스크톱용 큰 사진을 받느라 느려지는 걸 막습니다. HTML 의 srcset·sizes 로 크기를, <picture> 로 화면에 따라 아예 다르게 자른 사진(아트 디렉션)이나 WebP·AVIF 같은 새 형식을 고르게 합니다.",
     examples: ["<img srcset=\"a-400.jpg 400w, a-800.jpg 800w\">", "아이콘을 @1x, @2x, @3x 로 내보내기", "모바일은 세로로 자른 배너"],
     related: ["lazy-loading", "blur-up", "object-fit", "focal-point"],
+    demo: "responsiveImage",
   },
   {
     id: "alt-text", name: "대체 텍스트", en: "Alt text", aliases: ["alt", "alt 속성", "이미지 설명", "image description", "대체 문구", "장식 이미지", "alt=\"\""],
@@ -756,6 +807,7 @@ export const terms: Term[] = [
     description: "스크린 리더가 사진 대신 읽어 주고, 사진을 불러오지 못했을 때 그 자리에 보이는 글입니다. '사진'이 아니라 그 사진이 이 자리에서 전하려는 내용을 적습니다. 꾸미기만 하는 사진은 alt=\"\" 로 비워 두어 건너뛰게 합니다. 버튼 안 아이콘처럼 사진이 곧 기능이면 무엇을 하는지(예: '검색')를 적습니다.",
     examples: ["<img alt=\"빨간 우산을 든 아이가 비 오는 골목을 걷는 모습\">", "인스타그램 '대체 텍스트 작성'", "X(트위터) 이미지의 ALT 배지"],
     related: ["a11y-general", "responsive-image", "aria-live"],
+    demo: "altText",
   },
 
   // ───────── 영상 ─────────
@@ -766,6 +818,7 @@ export const terms: Term[] = [
     description: "영상을 작은 창으로 떼어 내 다른 작업을 하는 동안 구석에 띄워 두는 기능입니다. 항상 위 창의 특수한 경우입니다. 브라우저와 운영체제가 직접 지원하며, 크기 조절과 끌어 옮기기가 됩니다.",
     examples: ["유튜브 PiP", "페이스타임 통화 중 다른 앱 쓰기"],
     related: ["always-on-top", "overlay-window"],
+    demo: "pictureInPicture",
   },
   {
     id: "seek-preview", name: "탐색 미리보기", en: "Seek preview", aliases: ["트릭플레이", "trickplay", "타임라인 썸네일", "스크러버 미리보기", "seek thumbnail", "스토리보드", "storyboard", "프레임 미리보기"],
@@ -801,6 +854,7 @@ export const terms: Term[] = [
     description: "영상 화면의 오른쪽 절반을 두 번 두드리면 10초 앞으로, 왼쪽 절반은 10초 뒤로 넘깁니다. 계속 두드리면 20초, 30초로 늘어납니다. 작은 재생 바를 정확히 누르기 어려운 휴대폰에서 특히 편합니다. 넘어간 쪽에 물결 모양 표시와 '+10초' 같은 글자를 잠깐 띄워 무슨 일이 일어났는지 알려 줍니다.",
     examples: ["유튜브 모바일 앱", "넷플릭스 모바일 앱"],
     related: ["double-tap", "scrubbing", "seek-preview"],
+    demo: "doubleTapSeek",
   },
   {
     id: "autoplay-muted", name: "음소거 자동 재생", en: "Muted autoplay", aliases: ["자동 재생", "autoplay", "소리 없이 재생", "탭해서 소리 켜기", "인라인 재생", "playsinline"],
@@ -809,6 +863,7 @@ export const terms: Term[] = [
     description: "브라우저는 사용자가 아무것도 누르지 않았을 때 소리 나는 영상의 자동 재생을 막습니다. 그래서 피드나 배경 영상은 음소거 상태로 자동 재생하고, 구석에 스피커 아이콘을 띄워 눌러야 소리가 나게 합니다. 화면에 보일 때만 재생하고 벗어나면 멈추게 해야 데이터와 배터리를 아낍니다. 움직임 줄이기 설정을 켠 사용자에게는 자동 재생을 끄는 것이 좋습니다.",
     examples: ["인스타그램·페이스북 피드 영상", "홈페이지 첫 화면의 배경 영상", "<video autoplay muted playsinline>"],
     related: ["hover-preview", "poster-frame", "reduced-motion", "lazy-loading"],
+    demo: "mutedAutoplay",
   },
   {
     id: "hover-preview", name: "호버 미리보기 재생", en: "Hover to preview", aliases: ["올리면 재생", "인라인 미리보기", "inline preview", "썸네일 재생", "미리보기 영상", "animated thumbnail"],
@@ -817,6 +872,7 @@ export const terms: Term[] = [
     description: "목록의 썸네일에 커서를 올리거나(모바일은 화면 가운데 오면) 그 자리에서 소리 없이 영상 일부를 재생해 보여 주는 방식입니다. 눌러서 들어가지 않고도 내용을 가늠할 수 있습니다. 지나가는 커서마다 재생되면 정신없으므로 호버 카드처럼 잠깐 기다렸다 시작합니다.",
     examples: ["유튜브 홈 화면 썸네일", "넷플릭스 작품 타일", "GIF 처럼 움직이는 썸네일"],
     related: ["hover", "hover-intent", "autoplay-muted", "poster-frame"],
+    demo: "hoverPreview",
   },
   {
     id: "poster-frame", name: "포스터 이미지", en: "Poster frame", aliases: ["poster", "대표 이미지", "영상 썸네일", "커버 이미지", "첫 화면", "thumbnail"],
@@ -825,6 +881,7 @@ export const terms: Term[] = [
     description: "영상을 재생하기 전, 또는 불러오는 동안 영상 자리에 보여 주는 사진입니다. 지정하지 않으면 첫 프레임(대개 검은 화면)이 보이거나 빈칸이 됩니다. <video poster=\"...\"> 로 지정하며, 영상 내용을 잘 보여 주는 장면을 고르는 것이 좋습니다.",
     examples: ["<video poster=\"cover.jpg\">", "유튜브 썸네일", "재생 전 동영상 자리의 큰 재생 버튼과 사진"],
     related: ["blur-up", "seek-preview", "autoplay-muted", "lazy-loading"],
+    demo: "posterFrame",
   },
   {
     id: "captions", name: "자막", en: "Captions / Subtitles", aliases: ["CC", "closed captions", "자막 켜기", "subtitles", "WebVTT", "SRT", "자동 자막", "청각 장애인용 자막"],
@@ -833,6 +890,7 @@ export const terms: Term[] = [
     description: "영상 속 대사를 글로 보여 줍니다. 엄밀히 'subtitles'는 대사 번역, 'captions'는 '[문 닫히는 소리]' 같은 소리 묘사까지 담은 것입니다. 켜고 끌 수 있는 자막을 CC(closed captions)라 하고, 영상에 박혀 있어 끌 수 없는 자막은 '하드 자막'이라 합니다. 웹에서는 WebVTT(.vtt) 파일을 <track> 으로 붙입니다.",
     examples: ["유튜브 CC 버튼", "넷플릭스 자막 언어 선택", "소리 없이 보는 SNS 영상의 큰 자막"],
     related: ["a11y-general", "autoplay-muted", "i18n"],
+    demo: "captions",
   },
   {
     id: "adaptive-streaming", name: "적응형 스트리밍", en: "Adaptive bitrate streaming", aliases: ["ABR", "HLS", "DASH", "화질 자동", "자동 화질", "auto quality", "m3u8", "비트레이트"],
@@ -841,6 +899,7 @@ export const terms: Term[] = [
     description: "영상을 여러 화질로 미리 만들고 몇 초 단위 조각으로 나눠 둡니다. 플레이어는 조각을 받을 때마다 지금 속도를 보고 다음 조각의 화질을 고릅니다. 그래서 인터넷이 느려지면 끊기는 대신 잠깐 흐려지고, 빨라지면 다시 선명해집니다. 애플이 만든 HLS(.m3u8)와 표준인 MPEG-DASH 가 대표적입니다.",
     examples: ["유튜브 화질 '자동'", "넷플릭스 재생 초반에 흐렸다가 선명해짐"],
     related: ["buffer-bar", "retry-backoff", "caching"],
+    demo: "adaptiveStreaming",
   },
 
   // ───────── 갤러리 ─────────
@@ -851,6 +910,7 @@ export const terms: Term[] = [
     description: "썸네일을 누르면 화면 전체를 어둡게 덮고 그 위에 사진을 크게 보여 주는 오버레이입니다. 좌우 화살표로 넘기고, 바깥을 누르거나 Esc 로 닫습니다. 2005년 같은 이름의 자바스크립트 라이브러리에서 이름이 굳었습니다.",
     examples: ["쇼핑몰 상품 사진 확대", "블로그의 이미지 클릭"],
     related: ["modal", "backdrop", "carousel", "pinch-zoom"],
+    demo: "lightbox",
   },
   {
     id: "carousel", name: "캐러셀", en: "Carousel", aliases: ["슬라이드쇼", "이미지 슬라이더", "회전 목마", "배너 롤링", "swiper"],
@@ -859,6 +919,7 @@ export const terms: Term[] = [
     description: "여러 항목을 한 자리에서 옆으로 넘겨 가며 보는 구성입니다. 회전목마처럼 돈다고 붙은 이름입니다. 점(dots)이나 화살표로 넘기고, 자동으로 넘어가기도 합니다. 자동 넘김은 읽는 중에 바뀌어 불편하니 멈출 수 있게 둡니다.",
     examples: ["쇼핑몰 메인 배너", "상품 사진 여러 장"],
     related: ["scroll-snap", "swipe", "lightbox"],
+    demo: "carousel",
   },
   {
     id: "masonry", name: "메이슨리", en: "Masonry layout", aliases: ["벽돌 쌓기", "핀터레스트 레이아웃", "pinterest layout", "워터폴", "waterfall", "엇갈린 격자", "staggered grid"],
@@ -894,6 +955,7 @@ export const terms: Term[] = [
     description: "사진이 중요할 때는 큰 썸네일 격자, 이름·날짜·크기 같은 정보가 중요할 때는 줄 목록으로 바꿔 보게 하는 버튼입니다. 보통 오른쪽 위에 격자 아이콘과 줄 아이콘을 세그먼트 컨트롤로 둡니다. 썸네일 크기를 슬라이더로 조절하게 하기도 하고, 고른 보기 방식은 다음에도 기억해 두는 것이 좋습니다.",
     examples: ["윈도우 탐색기의 '보기' 메뉴", "macOS Finder 의 아이콘·목록·갤러리 보기", "쇼핑몰 상품 목록의 격자/목록 버튼"],
     related: ["segmented-control", "masonry", "justified-grid"],
+    demo: "viewToggle",
   },
   {
     id: "multi-select", name: "다중 선택", en: "Multi-select", aliases: ["선택 모드", "여러 장 선택", "체크 표시", "일괄 선택", "드래그 선택", "Shift 클릭", "범위 선택", "선택 바", "bulk actions"],
@@ -902,6 +964,7 @@ export const terms: Term[] = [
     description: "'선택' 버튼을 누르거나 하나를 길게 눌러 선택 모드로 들어가면, 각 사진 구석에 동그란 체크가 생기고 눌러서 여러 장을 고를 수 있습니다. 데스크톱에서는 Ctrl(⌘)+클릭으로 하나씩, Shift+클릭으로 범위를 고르고, 빈 곳에서 끌어 사각형으로 묶어 고르기도 합니다. 고른 개수와 할 수 있는 동작(삭제, 공유, 이동)은 위나 아래의 막대에 모아 보여 줍니다.",
     examples: ["구글 포토·아이폰 사진 앱의 선택", "Gmail 메일 여러 개 체크", "탐색기에서 끌어서 파일 여러 개 고르기"],
     related: ["long-press", "drag-and-drop", "undo-toast"],
+    demo: "multiSelect",
   },
 
   // ───────── 모션·애니메이션 ─────────
@@ -930,6 +993,7 @@ export const terms: Term[] = [
     description: "UI 움직임은 짧을수록 좋습니다. 작은 변화(호버, 토글)는 100~150ms, 패널 열기는 200~300ms, 화면 전환은 300~400ms 정도가 흔한 기준입니다. 큰 거리를 움직이거나 큰 요소일수록 조금 길게 잡습니다. 400ms 를 넘으면 기다리는 느낌이 납니다.",
     examples: ["구글 머티리얼의 모션 지침", "iOS 의 기본 0.3초"],
     related: ["easing", "micro-interaction", "reduced-motion"],
+    demo: "durationCompare",
   },
   {
     id: "micro-interaction", name: "마이크로 인터랙션", en: "Micro-interaction", aliases: ["작은 반응", "버튼 눌림 효과", "하트 터짐", "subtle feedback"],
@@ -938,6 +1002,7 @@ export const terms: Term[] = [
     description: "버튼을 눌렀을 때 살짝 눌리는 느낌, 좋아요 하트가 튀어오르는 것, 토글이 미끄러지는 것처럼 하나의 작은 동작에 붙는 짧은 피드백입니다. 작동했다는 확신을 주고 제품의 성격을 만듭니다. 과하면 매번 보기 귀찮아지므로 짧게 둡니다.",
     examples: ["트위터 좋아요 하트 애니메이션", "iOS 토글 스위치", "버튼 누를 때 살짝 작아짐"],
     related: ["easing", "haptic", "duration"],
+    demo: "microInteraction",
   },
   {
     id: "shared-element", name: "공유 요소 전환", en: "Shared element transition", aliases: ["히어로 전환", "hero transition", "매직 무브", "magic move", "morph", "모핑", "View Transitions"],
@@ -946,6 +1011,7 @@ export const terms: Term[] = [
     description: "목록의 썸네일이 그대로 커져서 상세 화면의 큰 이미지가 되는 것처럼, 두 화면에 공통으로 있는 요소를 자연스럽게 이어 주는 전환입니다. 어디서 왔는지 눈으로 따라갈 수 있습니다. 키노트의 '매직 무브', 안드로이드의 '공유 요소', 웹의 'View Transitions API' 가 같은 개념입니다.",
     examples: ["앱 스토어 카드가 펼쳐져 상세로", "사진 앱에서 썸네일이 커지며 열림"],
     related: ["easing", "edge-swipe", "morphing"],
+    demo: "sharedElement",
   },
   {
     id: "morphing", name: "모핑", en: "Morphing", aliases: ["모양 변환", "shape morph", "햄버거→X", "icon morph"],
@@ -954,6 +1020,7 @@ export const terms: Term[] = [
     description: "아이콘이나 도형이 다른 모양으로 중간 단계를 거쳐 매끄럽게 바뀌는 애니메이션입니다. 햄버거 아이콘(≡)이 X 로 바뀌는 것, 재생 ▶ 이 일시정지 ‖ 로 바뀌는 것이 대표적입니다. 두 상태가 '같은 것'임을 알려 줍니다.",
     examples: ["≡ 가 X 로", "▶ 가 ‖ 로", "검색 버튼이 입력칸으로 늘어남"],
     related: ["shared-element", "micro-interaction"],
+    demo: "iconMorph",
   },
   {
     id: "interruptible", name: "중단 가능한 애니메이션", en: "Interruptible animation", aliases: ["interruptible", "취소 가능한 전환", "되돌아가는 애니메이션", "gesture-driven"],
@@ -962,6 +1029,7 @@ export const terms: Term[] = [
     description: "열리는 도중에 닫기를 누르면 끝까지 열렸다가 닫히는 게 아니라 그 자리에서 바로 되돌아가는 애니메이션입니다. 제스처로 끌다가 놓아도 속도를 이어받습니다. 스프링 애니메이션이 이걸 자연스럽게 지원합니다. 중단이 안 되면 빠르게 연타할 때 앱이 느리게 느껴집니다.",
     examples: ["iOS 에서 앱을 열다 말고 홈으로", "메뉴를 열다 말고 닫기"],
     related: ["spring-animation", "edge-swipe"],
+    demo: "interruptible",
   },
   {
     id: "reduced-motion", name: "움직임 줄이기", en: "Reduced motion", aliases: ["prefers-reduced-motion", "동작 줄이기", "애니메이션 끄기", "vestibular", "어지럼 배려"],
@@ -970,6 +1038,7 @@ export const terms: Term[] = [
     description: "운영체제의 '움직임 줄이기' 설정을 읽어 큰 이동·확대·패럴랙스 같은 애니메이션을 끄거나 페이드로 바꾸는 배려입니다. 웹에서는 prefers-reduced-motion 미디어 쿼리로 감지합니다. 전정기관 장애가 있는 사람은 큰 움직임에 멀미를 느낍니다.",
     examples: ["iOS 설정 > 손쉬운 사용 > 동작 줄이기", "CSS @media (prefers-reduced-motion)"],
     related: ["parallax", "duration", "a11y-general"],
+    demo: "reducedMotion",
   },
   {
     id: "scroll-animation", name: "스크롤 연동 애니메이션", en: "Scroll-driven animation", aliases: ["scroll-linked", "스크롤텔링", "scrollytelling", "reveal on scroll", "스크롤 등장"],
@@ -978,6 +1047,7 @@ export const terms: Term[] = [
     description: "시간이 아니라 스크롤 위치에 따라 진행되는 애니메이션입니다. 내려가면 요소가 서서히 나타나거나(reveal), 스크롤에 맞춰 그림이 바뀌는 식입니다. 이야기를 스크롤로 풀어 가는 기사를 '스크롤텔링'이라고 합니다. CSS 의 animation-timeline: scroll() 로 브라우저가 직접 지원하기 시작했습니다.",
     examples: ["뉴욕타임스 인터랙티브 기사", "애플 제품 페이지", "스크롤하면 숫자가 올라가는 카운터"],
     related: ["parallax", "sticky", "lazy-loading"],
+    demo: "scrollAnimation",
   },
   {
     id: "layout-shift", name: "레이아웃 시프트", en: "Layout shift", aliases: ["CLS", "화면 튐", "내용 밀림", "jank", "잰크", "content jump"],
@@ -986,6 +1056,7 @@ export const terms: Term[] = [
     description: "이미지나 광고가 늦게 뜨면서 아래 내용이 밀려 버튼 위치가 바뀌는 현상입니다. 구글은 이것을 CLS 라는 지표로 측정합니다. 자리를 미리 잡아 두거나 스켈레톤을 쓰면 막을 수 있습니다. 애니메이션이 끊기는 것은 '잰크(jank)'라고 따로 부릅니다.",
     examples: ["기사 읽는 중 광고가 뜨며 글이 밀림", "이미지 높이가 없어 생기는 점프"],
     related: ["skeleton", "lazy-loading"],
+    demo: "layoutShift",
   },
 
   // ───────── 데스크톱 앱 ─────────
@@ -996,6 +1067,7 @@ export const terms: Term[] = [
     description: "다른 창에 포커스를 줘도 그 위에 계속 떠 있는 창입니다. 메모, 계산기, 작은 플레이어에 씁니다. 윈도우 API 에서는 TOPMOST 플래그, WPF 에서는 Topmost 속성입니다. 항상 위인 창끼리는 다시 순서를 다툽니다.",
     examples: ["PiP 영상 창", "미니 플레이어", "모니터링 위젯"],
     related: ["pip", "modeless", "overlay-window"],
+    demo: "alwaysOnTop",
   },
   {
     id: "overlay-window", name: "오버레이 창·HUD", en: "Overlay window / HUD", aliases: ["heads-up display", "투명 창", "click-through window", "클릭 통과 창", "게임 오버레이"],
@@ -1004,6 +1076,7 @@ export const terms: Term[] = [
     description: "배경이 투명하고 다른 앱 위에 겹쳐서 정보만 띄우는 창입니다. 전투기 조종석의 전방 표시 장치에서 온 HUD 라는 이름으로도 부릅니다. 마우스 클릭이 창을 통과해 아래 앱에 전달되게 만든 것을 '클릭 스루 창'이라고 합니다. 윈도우에서는 WS_EX_TRANSPARENT 와 WS_EX_LAYERED 로 만듭니다.",
     examples: ["디스코드 게임 오버레이", "FPS 표시", "화면 녹화 중 표시 테두리"],
     related: ["always-on-top", "pip", "global-hotkey"],
+    demo: "overlayHud",
   },
   {
     id: "system-tray", name: "시스템 트레이", en: "System tray", aliases: ["알림 영역", "notification area", "트레이 아이콘", "menu bar extra", "메뉴바 아이콘", "상주"],
@@ -1012,6 +1085,7 @@ export const terms: Term[] = [
     description: "윈도우 작업 표시줄 오른쪽의 작은 아이콘 영역입니다. 창을 닫아도 여기 아이콘으로 남아 '상주'하는 앱이 많습니다. 마이크로소프트의 공식 이름은 '알림 영역'이고, macOS 에서는 '메뉴바 엑스트라'라고 합니다. 아이콘 우클릭에 메뉴, 더블클릭에 창 열기를 두는 게 관례입니다.",
     examples: ["카카오톡 아이콘", "와이파이·소리 아이콘", "클립보드 관리자"],
     related: ["global-hotkey", "minimize-to-tray", "context-menu"],
+    demo: "systemTray",
   },
   {
     id: "minimize-to-tray", name: "트레이로 최소화", en: "Minimize to tray", aliases: ["close to tray", "닫아도 종료 안 됨", "백그라운드 실행", "run in background"],
@@ -1020,6 +1094,7 @@ export const terms: Term[] = [
     description: "창의 X 를 눌렀을 때 프로그램을 끝내지 않고 트레이 아이콘만 남기고 숨는 동작입니다. 메신저처럼 계속 떠 있어야 하는 앱에서 씁니다. 처음 숨을 때 '트레이에서 계속 실행됩니다'라고 한 번 알려 주는 게 좋습니다.",
     examples: ["디스코드·슬랙", "토렌트 클라이언트"],
     related: ["system-tray", "autostart"],
+    demo: "systemTray",
   },
   {
     id: "global-hotkey", name: "전역 단축키", en: "Global hotkey", aliases: ["글로벌 핫키", "시스템 단축키", "어디서든 단축키", "RegisterHotKey", "키 후킹"],
@@ -1028,6 +1103,7 @@ export const terms: Term[] = [
     description: "그 앱이 포커스를 갖고 있지 않아도 운영체제 전체에서 작동하는 단축키입니다. 캡처 도구, 런처, 클립보드 관리자가 씁니다. 윈도우의 RegisterHotKey API 로 등록하며, 다른 앱과 겹치면 등록이 실패합니다. 모든 키 입력을 가로채는 '키보드 후킹'과는 다릅니다.",
     examples: ["Win+Shift+S 캡처", "Alt+Space 런처", "클립보드 기록 Win+V"],
     related: ["keyboard-shortcut", "system-tray", "overlay-window"],
+    demo: "globalHotkey",
   },
   {
     id: "keyboard-shortcut", name: "단축키·키 코드", en: "Keyboard shortcut / Key chord", aliases: ["핫키", "accelerator", "액셀러레이터", "mnemonic", "니모닉", "chord", "코드 단축키", "Ctrl+K Ctrl+S"],
@@ -1036,6 +1112,7 @@ export const terms: Term[] = [
     description: "Ctrl+S 처럼 키 조합으로 명령을 실행하는 것입니다. 윈도우에서는 '액셀러레이터'라고 하고, Alt 를 누르면 메뉴에 밑줄로 보이는 글자는 '니모닉'입니다. VS Code 의 Ctrl+K 뒤 Ctrl+S 처럼 두 단계로 누르는 것은 '키 코드(chord)'입니다. 메뉴 항목 오른쪽에 단축키를 써 두면 저절로 배우게 됩니다.",
     examples: ["Ctrl+C / Ctrl+V", "Alt+F 로 파일 메뉴", "Vim 의 gg"],
     related: ["global-hotkey", "command-palette", "focus-ring"],
+    demo: "shortcutRecorder",
   },
   {
     id: "docking", name: "도킹", en: "Docking", aliases: ["도킹 패널", "dockable", "패널 붙이기", "떼어내기", "detach", "tear-off"],
@@ -1044,6 +1121,7 @@ export const terms: Term[] = [
     description: "도구 패널을 메인 창의 위아래 좌우에 붙이거나, 떼어 내 별도 창으로 띄울 수 있는 구성입니다. 끌어 옮기면 붙을 수 있는 자리가 화살표로 표시됩니다. 비주얼 스튜디오와 포토샵이 대표적입니다. 탭을 끌어 새 창으로 빼는 것은 '티어오프'라고 합니다.",
     examples: ["비주얼 스튜디오의 솔루션 탐색기", "포토샵 패널", "브라우저 탭을 끌어 새 창으로"],
     related: ["split-view", "modeless", "window-snap"],
+    demo: "docking",
   },
   {
     id: "window-snap", name: "창 스냅", en: "Window snapping", aliases: ["에어로 스냅", "Aero Snap", "화면 분할 배치", "스냅 레이아웃", "타일링", "tiling"],
@@ -1052,6 +1130,7 @@ export const terms: Term[] = [
     description: "창을 화면 가장자리로 끌고 가면 절반이나 모서리 크기로 자동 정렬되는 기능입니다. 윈도우 7 의 '에어로 스냅'에서 시작해 윈도우 11 에서는 최대화 버튼에 올리면 배치를 고르는 '스냅 레이아웃'이 됐습니다. 창들이 겹치지 않게 자동으로 바닥에 까는 방식은 '타일링'입니다.",
     examples: ["창을 왼쪽 끝으로 끌어 반 화면", "Win+← →", "macOS 의 Split View"],
     related: ["docking", "split-view"],
+    demo: "windowSnap",
   },
   {
     id: "quick-look", name: "퀵 룩·미리보기", en: "Quick look / Peek", aliases: ["스페이스바 미리보기", "peek", "피크", "빠른 미리보기", "preview pane"],
@@ -1060,6 +1139,7 @@ export const terms: Term[] = [
     description: "파일을 선택하고 스페이스바를 누르면 앱을 열지 않고 내용을 바로 보여 주는 기능입니다. macOS 의 '훑어보기(Quick Look)'가 유명하고, 윈도우에는 PowerToys 의 Peek 이 있습니다. 같은 키를 다시 누르면 닫힙니다. 탐색기의 '미리보기 창'은 옆에 붙어 있는 변형입니다.",
     examples: ["macOS Finder 에서 스페이스바", "윈도우 탐색기 미리보기 창"],
     related: ["hover-card", "modeless"],
+    demo: "quickLook",
   },
   {
     id: "autostart", name: "시작 프로그램 등록", en: "Run at startup", aliases: ["자동 시작", "로그인 시 실행", "launch at login", "startup", "자동 실행"],
@@ -1068,6 +1148,7 @@ export const terms: Term[] = [
     description: "운영체제에 로그인할 때 앱이 자동으로 실행되게 등록하는 것입니다. 윈도우는 레지스트리 Run 키나 시작 프로그램 폴더, macOS 는 로그인 항목을 씁니다. 사용자가 설정에서 켜고 끌 수 있게 두어야 합니다.",
     examples: ["설정의 '윈도우 시작 시 실행' 체크박스"],
     related: ["minimize-to-tray", "system-tray"],
+    demo: "systemTray",
   },
   {
     id: "dpi-scaling", name: "DPI 스케일링", en: "DPI scaling", aliases: ["고해상도 대응", "HiDPI", "레티나", "Retina", "배율", "per-monitor DPI", "흐릿한 글자"],
@@ -1076,6 +1157,7 @@ export const terms: Term[] = [
     description: "4K 모니터처럼 픽셀이 조밀한 화면에서 앱을 125%, 150% 로 키워 보여 주는 것입니다. 앱이 스케일링을 모르면 운영체제가 비트맵처럼 늘려 글자가 흐려집니다. 모니터마다 배율이 다를 때 창을 옮기면 다시 그리는 것을 '모니터별 DPI 인식'이라고 합니다.",
     examples: ["윈도우 설정의 배율 150%", "맥북 레티나 디스플레이"],
     related: ["window-snap"],
+    demo: "dpiScaling",
   },
 
   // ───────── 접근성·키보드 ─────────
@@ -1094,6 +1176,7 @@ export const terms: Term[] = [
     description: "키보드로 요소 사이를 옮겨 다닐 때 현재 포커스가 있는 요소에 보이는 테두리입니다. 디자인상 지워 버리는 경우가 많은데, 그러면 키보드 사용자는 자기가 어디 있는지 알 수 없습니다. CSS 의 :focus-visible 을 쓰면 키보드로 왔을 때만 보이고 마우스 클릭에는 안 보이게 할 수 있습니다.",
     examples: ["Tab 을 누르면 버튼에 파란 테두리", "브라우저 기본 outline"],
     related: ["focus-trap", "roving-tabindex", "skip-link"],
+    demo: "focusRing",
   },
   {
     id: "focus-trap", name: "포커스 트랩", en: "Focus trap", aliases: ["포커스 가두기", "focus lock", "모달 포커스", "Tab 순환"],
@@ -1111,6 +1194,7 @@ export const terms: Term[] = [
     description: "버튼이 열 개인 툴바를 Tab 으로 하나씩 지나가면 너무 느립니다. 그래서 그룹 전체를 Tab 한 번으로 들어오고, 안에서는 ←→ 화살표로 옮기게 합니다. 그룹 안에서 현재 항목만 tabindex=0 을 갖고 나머지는 -1 로 두어 '돌아다니는(roving)' 방식이라 부릅니다.",
     examples: ["탭 목록에서 ←→", "라디오 버튼 그룹", "툴바"],
     related: ["focus-ring", "tabs", "segmented-control"],
+    demo: "rovingTabindex",
   },
   {
     id: "skip-link", name: "건너뛰기 링크", en: "Skip link", aliases: ["본문 바로가기", "skip to content", "skip navigation", "숨은 링크"],
@@ -1119,6 +1203,7 @@ export const terms: Term[] = [
     description: "페이지에서 처음 Tab 을 누르면 나타나는 '본문으로 건너뛰기' 링크입니다. 키보드·스크린 리더 사용자가 매 페이지마다 메뉴 수십 개를 지나지 않아도 되게 합니다. 평소엔 화면 밖에 숨어 있다가 포커스가 오면 보입니다.",
     examples: ["네이버·정부 사이트 첫 Tab", "GitHub 의 'Skip to content'"],
     related: ["focus-ring", "a11y-general"],
+    demo: "skipLink",
   },
   {
     id: "aria-live", name: "라이브 리전", en: "ARIA live region", aliases: ["aria-live", "스크린 리더 알림", "동적 내용 읽어 주기", "role=status", "role=alert"],
@@ -1127,6 +1212,7 @@ export const terms: Term[] = [
     description: "토스트나 검색 결과 개수처럼 사용자가 보고 있지 않은 곳이 바뀌었을 때 스크린 리더가 자동으로 읽게 표시해 두는 영역입니다. polite 는 하던 말을 마치고, assertive 는 바로 끊고 읽습니다. 눈으로만 알 수 있는 변화를 귀로도 알게 해 줍니다.",
     examples: ["'3개의 결과를 찾았습니다' 읽어 주기", "토스트 내용 읽어 주기"],
     related: ["toast", "a11y-general"],
+    demo: "ariaLive",
   },
   {
     id: "color-contrast", name: "색 대비", en: "Color contrast", aliases: ["명도 대비", "contrast ratio", "4.5:1", "색약 배려", "colorblind"],
@@ -1135,6 +1221,7 @@ export const terms: Term[] = [
     description: "글자 색과 배경 색의 밝기 차이입니다. WCAG 는 보통 글자에 4.5:1, 큰 글자에 3:1 이상을 요구합니다. 연한 회색 글자는 보기 좋아 보여도 밝은 곳이나 저가 모니터에서는 안 보입니다. 색만으로 뜻을 전하지 말고(빨강=오류) 아이콘이나 글자도 함께 두어야 색약 사용자가 알 수 있습니다.",
     examples: ["흰 배경에 연회색 글자는 탈락", "오류에 빨간색과 ⚠ 아이콘 함께"],
     related: ["a11y-general", "toggle-switch"],
+    demo: "colorContrast",
   },
 
   // ───────── 성능·동작 패턴 ─────────
@@ -1163,6 +1250,7 @@ export const terms: Term[] = [
     description: "화면에 보이는 것만 먼저 불러오고 나머지는 스크롤해서 가까워질 때 불러오는 기법입니다. 첫 화면이 빨라지고 데이터도 아낍니다. 이미지는 HTML 의 loading=lazy 한 줄로 되고, 코드는 '코드 스플리팅'으로 나눠 필요할 때 불러옵니다. 반대로 곧 필요할 것을 미리 가져오는 것은 '프리페칭'입니다.",
     examples: ["스크롤하면 그때 뜨는 이미지", "탭을 누를 때 그 탭의 코드 불러오기"],
     related: ["prefetch", "infinite-scroll", "skeleton", "code-splitting"],
+    demo: "lazyLoading",
   },
   {
     id: "prefetch", name: "프리페치·프리로드", en: "Prefetch / Preload", aliases: ["미리 불러오기", "preloading", "예측 로딩", "hover prefetch", "링크 위에 올리면 미리 받기"],
@@ -1171,6 +1259,7 @@ export const terms: Term[] = [
     description: "사용자가 다음에 갈 것 같은 페이지나 데이터를 미리 받아 두어 눌렀을 때 바로 보이게 하는 기법입니다. 링크 위에 커서를 올리는 순간 받기 시작하면 클릭까지 100~300ms 를 벌 수 있습니다. 프리로드는 지금 페이지에 꼭 필요한 것을 먼저, 프리페치는 다음에 쓸 것을 한가할 때 받습니다.",
     examples: ["Next.js 의 Link 가 화면에 보이면 미리 받음", "유튜브가 다음 영상 앞부분을 미리 받음"],
     related: ["lazy-loading", "caching", "hover"],
+    demo: "prefetch",
   },
   {
     id: "caching", name: "캐싱", en: "Caching", aliases: ["캐시", "cache", "stale-while-revalidate", "SWR", "메모리 캐시", "캐시 무효화", "invalidation"],
@@ -1179,6 +1268,7 @@ export const terms: Term[] = [
     description: "계산하거나 받아 온 결과를 저장해 두고 같은 요청이 오면 다시 안 하고 저장된 것을 주는 기법입니다. 문제는 언제 버리느냐(무효화)입니다. '일단 저장된 걸 보여 주고 뒤에서 새로 받아 바꿔 끼우는' 방식을 stale-while-revalidate 라고 하고, 프론트엔드 라이브러리 SWR 과 React Query 가 이 방식입니다.",
     examples: ["브라우저가 이미지를 저장해 두는 것", "앱을 다시 켜면 이전 목록이 먼저 뜨고 갱신됨"],
     related: ["prefetch", "memoization", "optimistic-ui"],
+    demo: "caching",
   },
   {
     id: "memoization", name: "메모이제이션", en: "Memoization", aliases: ["메모", "memo", "useMemo", "계산 결과 저장", "pure function cache"],
@@ -1187,6 +1277,7 @@ export const terms: Term[] = [
     description: "함수의 입력과 결과를 짝지어 저장해 두고 같은 입력이 오면 바로 돌려주는 기법입니다. 캐싱의 한 종류로, 함수 호출에 쓰는 것을 특별히 이렇게 부릅니다. React 의 useMemo, memo 가 여기서 온 이름입니다. 입력이 같으면 결과도 같은 함수에만 쓸 수 있습니다.",
     examples: ["피보나치 계산", "React 에서 큰 목록 필터링 결과 저장"],
     related: ["caching"],
+    demo: "memoization",
   },
   {
     id: "code-splitting", name: "코드 스플리팅", en: "Code splitting", aliases: ["번들 나누기", "dynamic import", "동적 import", "청크", "chunk", "tree shaking"],
@@ -1211,6 +1302,7 @@ export const terms: Term[] = [
     description: "같은 요청을 두 번, 세 번 보내도 결과가 한 번과 똑같은 성질입니다. 결제 버튼을 두 번 눌러도 한 번만 결제되어야 합니다. 요청마다 고유한 '멱등성 키'를 붙여 서버가 중복을 알아보게 하거나, 버튼을 누르면 즉시 비활성화합니다. 네트워크가 끊겨 재시도할 때 꼭 필요합니다.",
     examples: ["결제 중복 방지", "HTTP 의 PUT 과 DELETE", "Stripe 의 Idempotency-Key 헤더"],
     related: ["retry-backoff", "optimistic-ui"],
+    demo: "idempotency",
   },
   {
     id: "race-condition", name: "경쟁 상태", en: "Race condition", aliases: ["레이스 컨디션", "응답 순서 꼬임", "stale response", "오래된 응답", "AbortController", "요청 취소"],
@@ -1219,6 +1311,7 @@ export const terms: Term[] = [
     description: "검색어 'ab' 의 결과가 'abc' 의 결과보다 늦게 도착하면 화면이 옛 결과로 덮입니다. 이렇게 순서를 보장할 수 없는 작업이 서로 경쟁해 생기는 문제입니다. 새 요청을 보낼 때 이전 요청을 취소하거나(AbortController), 응답에 번호를 붙여 최신 것만 쓰는 식으로 막습니다.",
     examples: ["빠르게 타이핑할 때 검색 결과가 엉뚱함", "탭을 빠르게 바꿀 때 내용이 뒤섞임"],
     related: ["debounce", "idempotency"],
+    demo: "raceCondition",
   },
 
   // ───────── 데이터·네트워크 ─────────
@@ -1229,6 +1322,7 @@ export const terms: Term[] = [
     description: "클라이언트가 몇 초마다 '새 거 있어?' 하고 서버에 묻는 방식입니다. 단순하지만 낭비가 많습니다. 서버가 새 것이 생길 때까지 응답을 붙들고 있다가 주는 것을 '롱 폴링'이라고 하며, 실시간이 필요하면 웹소켓이나 SSE 로 갑니다.",
     examples: ["몇 초마다 새 메일 확인", "작업 상태 확인"],
     related: ["websocket", "sse", "realtime"],
+    demo: "liveTransport",
   },
   {
     id: "websocket", name: "웹소켓", en: "WebSocket", aliases: ["양방향 통신", "소켓", "실시간 연결", "full-duplex", "ws"],
@@ -1237,6 +1331,7 @@ export const terms: Term[] = [
     description: "한 번 연결을 맺으면 양쪽이 아무 때나 메시지를 보낼 수 있는 지속 연결입니다. 채팅, 협업 편집, 게임처럼 서버가 먼저 말을 걸어야 할 때 씁니다. 연결이 끊기면 다시 잇는 '재연결' 로직이 필요합니다.",
     examples: ["채팅 앱", "구글 독스 동시 편집", "주식 시세"],
     related: ["polling", "sse", "realtime", "retry-backoff"],
+    demo: "liveTransport",
   },
   {
     id: "sse", name: "서버 전송 이벤트", en: "Server-sent events (SSE)", aliases: ["SSE", "EventSource", "단방향 스트림", "스트리밍 응답", "토큰 스트리밍"],
@@ -1245,6 +1340,7 @@ export const terms: Term[] = [
     description: "서버에서 클라이언트로만 계속 보내는 단방향 스트림입니다. 웹소켓보다 단순하고 보통 HTTP 로 되며, 끊기면 브라우저가 알아서 다시 붙습니다. 챗봇이 글자를 한 글자씩 흘려보내는 것이 이 방식인 경우가 많습니다.",
     examples: ["ChatGPT 답변이 한 글자씩 뜸", "실시간 알림", "빌드 로그 스트리밍"],
     related: ["websocket", "polling", "realtime"],
+    demo: "liveTransport",
   },
   {
     id: "realtime", name: "실시간 동기화", en: "Realtime sync", aliases: ["라이브 업데이트", "live update", "동시 편집", "CRDT", "OT", "presence", "프레즌스"],
@@ -1253,6 +1349,7 @@ export const terms: Term[] = [
     description: "여러 사람이 같은 데이터를 보고 있을 때 한쪽의 변경이 다른 쪽에 바로 반영되는 것입니다. 동시에 같은 곳을 고칠 때 충돌을 푸는 알고리즘으로 OT 와 CRDT 가 있습니다. 누가 보고 있는지 커서와 아바타로 보여 주는 것은 '프레즌스'입니다.",
     examples: ["Figma 의 다른 사람 커서", "구글 독스 동시 편집"],
     related: ["websocket", "optimistic-ui", "offline-first"],
+    demo: "realtimeSync",
   },
   {
     id: "retry-backoff", name: "재시도와 백오프", en: "Retry with exponential backoff", aliases: ["지수 백오프", "exponential backoff", "jitter", "지터", "자동 재시도", "circuit breaker", "서킷 브레이커"],
@@ -1261,6 +1358,7 @@ export const terms: Term[] = [
     description: "요청이 실패했을 때 바로 다시 하지 않고 1초, 2초, 4초, 8초처럼 간격을 늘려 가며 재시도하는 방식입니다. 모두가 동시에 재시도해 서버를 더 괴롭히는 걸 막으려고 간격에 무작위 흔들림(지터)을 줍니다. 계속 실패하면 아예 한동안 시도를 끊는 것이 '서킷 브레이커'입니다.",
     examples: ["네트워크 끊김 뒤 자동 재연결", "API 429 응답 후 재시도"],
     related: ["idempotency", "websocket", "rate-limit"],
+    demo: "retryBackoff",
   },
   {
     id: "rate-limit", name: "요청 제한", en: "Rate limiting", aliases: ["레이트 리밋", "429", "Too Many Requests", "쿼터", "quota", "token bucket"],
@@ -1269,6 +1367,7 @@ export const terms: Term[] = [
     description: "서버가 한 사용자에게 '분당 60번까지'처럼 요청 수를 제한하는 것입니다. 넘으면 HTTP 429 응답이 오고, 보통 언제 다시 할 수 있는지(Retry-After)를 알려 줍니다. 클라이언트 쪽에서 미리 줄이는 것이 스로틀입니다.",
     examples: ["API 분당 호출 제한", "로그인 5회 실패 시 잠금"],
     related: ["throttle", "retry-backoff"],
+    demo: "rateLimit",
   },
   {
     id: "offline-first", name: "오프라인 우선", en: "Offline-first", aliases: ["로컬 퍼스트", "local-first", "오프라인 지원", "sync queue", "동기화 큐", "PWA"],
@@ -1277,6 +1376,7 @@ export const terms: Term[] = [
     description: "데이터를 기기에 먼저 저장하고 쓰며, 네트워크가 되면 서버와 맞추는 설계입니다. 지하철에서도 메모가 되고 올라오면 올라갑니다. 보낼 것을 줄 세워 두는 '동기화 큐'와 충돌 해결이 핵심입니다. 로컬 사본이 '진짜'라는 입장을 강조하면 '로컬 퍼스트'라고 합니다.",
     examples: ["구글 독스 오프라인 모드", "Apple 메모", "Obsidian"],
     related: ["realtime", "caching", "optimistic-ui"],
+    demo: "offlineFirst",
   },
   {
     id: "deep-link", name: "딥 링크", en: "Deep link", aliases: ["앱 링크", "universal link", "유니버설 링크", "URL scheme", "커스텀 스킴", "myapp://"],
@@ -1285,6 +1385,7 @@ export const terms: Term[] = [
     description: "홈이 아니라 특정 상품, 특정 글처럼 앱 깊숙한 화면으로 바로 여는 링크입니다. myapp:// 같은 커스텀 스킴이나, 보통 https 주소를 앱이 가로채는 '유니버설 링크(iOS)·앱 링크(안드로이드)'로 만듭니다. 웹에서는 URL 에 상태를 담아 그 화면을 다시 열 수 있게 하는 것을 뜻하기도 합니다.",
     examples: ["카톡으로 받은 링크가 앱의 그 글로 바로 열림", "zoom.us 링크가 줌 앱을 띄움"],
     related: ["routing"],
+    demo: "deepLink",
   },
   {
     id: "routing", name: "라우팅", en: "Routing", aliases: ["클라이언트 라우팅", "SPA 라우팅", "history API", "해시 라우팅", "URL 상태"],
@@ -1293,6 +1394,7 @@ export const terms: Term[] = [
     description: "URL 과 화면을 짝지어 주소가 바뀌면 그 화면을 보여 주는 장치입니다. 페이지를 새로 받지 않고 자바스크립트가 화면만 갈아 끼우는 것을 '클라이언트 라우팅'이라고 하고, 그런 앱을 SPA 라고 합니다. 뒤로 가기가 제대로 되게 history API 로 주소를 바꿔 줍니다.",
     examples: ["React Router", "주소창의 #section", "뒤로 가기가 되는 탭 전환"],
     related: ["deep-link", "hydration"],
+    demo: "routing",
   },
 
   // ───────── 개발 흐름·배포 ─────────
@@ -1303,6 +1405,7 @@ export const terms: Term[] = [
     description: "파일을 저장하면 앱 전체를 다시 켜지 않고 바뀐 모듈만 실행 중인 앱에 갈아 끼우는 기능입니다. 입력하던 상태가 유지된 채 화면만 바뀝니다. 페이지 전체를 새로고침하는 '라이브 리로드'보다 한 단계 위입니다. React 의 Fast Refresh, Flutter 와 .NET 의 Hot Reload 가 같은 개념입니다.",
     examples: ["Vite 개발 서버", "Visual Studio 의 핫 리로드 🔥 버튼", "Flutter 의 r 키"],
     related: ["dev-server", "bundler"],
+    demo: "hotReload",
   },
   {
     id: "dev-server", name: "개발 서버", en: "Dev server", aliases: ["로컬 서버", "localhost", "npm run dev", "watch mode", "워치 모드"],
@@ -1327,6 +1430,7 @@ export const terms: Term[] = [
     description: "새 기능 코드를 배포하되, 설정 스위치로 사용자에게 보일지 말지를 정하는 방식입니다. 배포와 공개를 분리해 일부 사용자에게만 먼저 켜 보거나, 문제가 생기면 코드를 되돌리지 않고 끌 수 있습니다. 문제 시 바로 끄는 용도면 '킬 스위치', 켜지 않은 채 배포만 하는 것은 '다크 런치'입니다.",
     examples: ["직원에게만 새 UI 보이기", "10% 사용자에게 먼저 공개"],
     related: ["ab-test", "canary", "staged-rollout"],
+    demo: "featureFlag",
   },
   {
     id: "ab-test", name: "A/B 테스트", en: "A/B testing", aliases: ["실험", "experiment", "split test", "버킷", "bucket", "variant", "변형"],
@@ -1335,6 +1439,7 @@ export const terms: Term[] = [
     description: "사용자를 무작위로 나누어 A 안과 B 안을 각각 보여 주고 클릭률이나 전환율을 비교하는 실험입니다. 같은 사용자는 늘 같은 쪽을 봐야 하므로 '버킷'에 배정합니다. 결과는 통계적으로 의미가 있어야 믿을 수 있습니다.",
     examples: ["버튼 색 빨강 vs 파랑", "제목 문구 두 가지"],
     related: ["feature-flag", "canary"],
+    demo: "abTest",
   },
   {
     id: "canary", name: "카나리 배포", en: "Canary release", aliases: ["점진적 배포", "staged rollout", "단계적 출시", "1% 먼저", "blue-green", "블루그린", "롤백", "rollback"],
@@ -1343,6 +1448,7 @@ export const terms: Term[] = [
     description: "새 버전을 전체가 아니라 1%, 10% 식으로 조금씩 넓혀 가며 내보내는 방식입니다. 광산에서 유독 가스를 먼저 감지하던 카나리아 새에서 온 이름입니다. 문제가 보이면 이전 버전으로 '롤백'합니다. 두 환경을 통째로 준비해 두고 한 번에 전환하는 것은 '블루그린 배포'입니다.",
     examples: ["플레이 스토어 단계적 출시", "크롬의 Canary 채널"],
     related: ["feature-flag", "ab-test", "ci-cd", "staged-rollout"],
+    demo: "rollout",
   },
   {
     id: "staged-rollout", name: "단계적 출시", en: "Staged rollout", aliases: ["phased rollout", "점진적 출시", "percentage rollout", "퍼센트 배포"],
@@ -1351,6 +1457,7 @@ export const terms: Term[] = [
     description: "앱 스토어나 업데이트 서버에서 새 버전을 일부 사용자에게만 먼저 내려 주고 비율을 점차 올리는 것입니다. 카나리 배포를 앱 업데이트에 적용한 것입니다. 문제가 보이면 비율을 올리지 않고 멈춥니다.",
     examples: ["구글 플레이의 단계적 출시 20%", "윈도우 업데이트의 점진 배포"],
     related: ["canary", "feature-flag", "auto-update"],
+    demo: "rollout",
   },
   {
     id: "auto-update", name: "자동 업데이트", en: "Auto-update", aliases: ["업데이터", "updater", "Squirrel", "ClickOnce", "MSIX", "delta update", "차등 업데이트", "백그라운드 업데이트"],
@@ -1375,6 +1482,7 @@ export const terms: Term[] = [
     description: "버전을 메이저.마이너.패치 세 자리로 쓰고, 호환성이 깨지면 메이저, 기능이 추가되면 마이너, 버그만 고쳤으면 패치를 올리는 규칙입니다. 번호만 봐도 올려도 되는지 알 수 있습니다. 날짜로 버전을 매기는 것은 CalVer(예: 2026.10) 입니다.",
     examples: ["npm 패키지 ^1.2.3", "Ubuntu 24.04 (CalVer)"],
     related: ["changelog", "auto-update"],
+    demo: "semver",
   },
   {
     id: "changelog", name: "체인지로그·릴리스 노트", en: "Changelog / Release notes", aliases: ["변경 이력", "업데이트 내역", "what's new", "새로운 기능", "conventional commits"],
@@ -1399,6 +1507,7 @@ export const terms: Term[] = [
     description: "코드를 실행하지 않고 읽어서 잠재적 버그나 규칙 위반을 알려 주는 것이 린터(ESLint 등), 들여쓰기와 줄바꿈을 자동으로 통일하는 것이 포매터(Prettier 등)입니다. 저장할 때 자동으로 돌게 해 두면 코드 리뷰에서 스타일 얘기를 안 해도 됩니다.",
     examples: ["저장하면 들여쓰기가 저절로 맞춰짐", "안 쓰는 변수에 노란 밑줄"],
     related: ["ci-cd", "hot-reload"],
+    demo: "lint",
   },
   {
     id: "dogfooding", name: "도그푸딩", en: "Dogfooding", aliases: ["내부 사용", "eat your own dog food", "직원 먼저 쓰기", "internal beta"],
@@ -1423,6 +1532,7 @@ export const terms: Term[] = [
     description: "글자, 날짜, 숫자, 통화 형식을 언어와 지역에 맞춰 바꿀 수 있게 구조를 잡는 것이 국제화(i18n, 18은 사이 글자 수), 실제로 한국어판을 만드는 것이 현지화(l10n)입니다. 아랍어처럼 오른쪽에서 왼쪽으로 쓰는 언어(RTL)는 레이아웃까지 뒤집어야 합니다.",
     examples: ["설정의 언어 선택", "날짜가 2026. 10. 9. 와 10/9/2026 으로 다르게"],
     related: ["a11y-general", "feature-flag"],
+    demo: "i18n",
   },
   {
     id: "fuzzy-search", name: "퍼지 검색", en: "Fuzzy search", aliases: ["유사 검색", "오타 허용 검색", "approximate match", "fzf", "글자 순서 매칭"],
@@ -1431,5 +1541,6 @@ export const terms: Term[] = [
     description: "정확히 일치하지 않아도 비슷한 항목을 찾아 주는 검색입니다. 'ssr' 을 치면 'StyleSheetRenderer' 가 나오는 식으로 글자 순서만 맞으면 찾아 주는 방식이 커맨드 팔레트에 흔히 쓰이고, 한두 글자 틀린 것을 허용하는 방식도 있습니다.",
     examples: ["VS Code 의 파일 빠른 열기", "fzf"],
     related: ["command-palette", "combobox"],
+    demo: "fuzzySearch",
   },
 ];
