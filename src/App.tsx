@@ -4,6 +4,7 @@ import { terms } from "./data/terms";
 import type { CategoryId, Term } from "./data/types";
 import { demos } from "./demos";
 import { searchTerms } from "./search";
+import { thumbs } from "./data/thumbs";
 
 const byId = new Map(terms.map((t) => [t.id, t]));
 const catName = (id: CategoryId) => categories.find((c) => c.id === id)?.name ?? id;
@@ -30,6 +31,7 @@ export default function App() {
   const [query, setQuery] = useState("");
   const [openId, setOpenId] = useState<string | null>(readHash);
   const wide = useMedia(WIDE);
+  const still = useMedia("(prefers-reduced-motion: reduce)");
   const searchRef = useRef<HTMLInputElement>(null);
   const topRef = useRef<HTMLElement>(null);
   const paneRef = useRef<HTMLElement>(null);
@@ -160,7 +162,7 @@ export default function App() {
                   <p className="muted">{c.blurb}</p>
                 </header>
                 <div className="grid">
-                  {list.map((t) => <TermCard key={t.id} term={t} active={t.id === openId} onOpen={open} />)}
+                  {list.map((t) => <TermCard key={t.id} term={t} active={t.id === openId} still={still} onOpen={open} />)}
                 </div>
               </section>
             );
@@ -227,9 +229,18 @@ export default function App() {
   );
 }
 
-function TermCard({ term, active, onOpen }: { term: Term; active: boolean; onOpen: (id: string) => void }) {
+function TermCard({ term, active, still, onOpen }: { term: Term; active: boolean; still: boolean; onOpen: (id: string) => void }) {
+  const kind = thumbs[term.id];
+  // 움직임 줄이기를 켠 사람에게는 정지 썸네일
+  const file = (theme: string) => `./thumbs/${term.id}.${theme}${kind === "anim" && !still ? ".anim" : ""}.webp`;
   return (
     <button type="button" id={`card-${term.id}`} className={`card ${active ? "on" : ""}`} aria-current={active || undefined} onClick={() => onOpen(term.id)}>
+      {kind && (
+        <picture className="card-thumb">
+          <source media="(prefers-color-scheme: dark)" srcSet={file("dark")} />
+          <img src={file("light")} alt="" loading="lazy" decoding="async" width={400} height={250} />
+        </picture>
+      )}
       <span className="card-name">{term.name}</span>
       <span className="card-en mono">{term.en}</span>
       <span className="card-summary">{term.summary}</span>

@@ -1,0 +1,808 @@
+{
+  "slider": [
+    {
+      "do": "hover",
+      "sel": ".inp-thumb",
+      "ms": 400
+    },
+    {
+      "do": "drag",
+      "sel": ".inp-track",
+      "from": [
+        0.4,
+        0.5
+      ],
+      "to": [
+        0.9,
+        0.5
+      ],
+      "ms": 900
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "drag",
+      "sel": ".stack .inp-track",
+      "from": [
+        0.7,
+        0.5
+      ],
+      "to": [
+        0.42,
+        0.5
+      ],
+      "ms": 800
+    },
+    {
+      "do": "drag",
+      "sel": ".inp-track",
+      "from": [
+        0.9,
+        0.5
+      ],
+      "to": [
+        0.4,
+        0.5
+      ],
+      "ms": 700
+    }
+  ],
+  "stepper": [
+    {
+      "do": "click",
+      "sel": "button[aria-label='수량 늘리기']",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 250
+    },
+    {
+      "do": "click",
+      "sel": "button[aria-label='수량 늘리기']",
+      "ms": 100
+    },
+    {
+      "do": "wait",
+      "ms": 250
+    },
+    {
+      "do": "click",
+      "sel": "button[aria-label='수량 늘리기']",
+      "ms": 100
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "down",
+      "sel": "button[aria-label='글자 크기 늘리기']",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 900
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "up"
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    }
+  ],
+  "toggle-switch": [
+    {
+      "do": "hover",
+      "sel": ".switch",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 200
+    },
+    {
+      "do": "click",
+      "sel": ".switch",
+      "ms": 100
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "click",
+      "sel": ".switch",
+      "ms": 100
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "click",
+      "sel": ".switch",
+      "ms": 100
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "click",
+      "sel": ".switch",
+      "ms": 100
+    }
+  ],
+  "segmented-control": [
+    {
+      "do": "hover",
+      "sel": ".segmented button:has-text('일')",
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": ".segmented button:has-text('일')",
+      "ms": 100
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    },
+    {
+      "do": "click",
+      "sel": ".segmented button:has-text('월')",
+      "ms": 500
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    },
+    {
+      "do": "click",
+      "sel": ".segmented button:has-text('주')",
+      "ms": 400
+    }
+  ],
+  "combobox": [
+    {
+      "do": "click",
+      "sel": "#inp-combo-input",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "type",
+      "text": "대",
+      "delay": 120
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "press",
+      "key": "ArrowDown",
+      "ms": 350
+    },
+    {
+      "do": "press",
+      "key": "Enter",
+      "ms": 500
+    }
+  ],
+  "chip": [
+    {
+      "do": "click",
+      "sel": ".inp-chip:has-text('무료 배송')",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "click",
+      "sel": ".inp-chip:has-text('오늘 출발')",
+      "ms": 300
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "click",
+      "sel": "#inp-token-input",
+      "ms": 400
+    },
+    {
+      "do": "type",
+      "text": "hana@mail.com",
+      "delay": 45
+    },
+    {
+      "do": "press",
+      "key": "Enter",
+      "ms": 500
+    },
+    {
+      "do": "poster"
+    }
+  ],
+  "picker-wheel": [
+    {
+      "do": "drag",
+      "sel": ".inp-wheel-col:nth-child(3)",
+      "from": [
+        0.5,
+        0.75
+      ],
+      "dy": -90,
+      "ms": 600
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    },
+    {
+      "do": "drag",
+      "sel": ".inp-wheel-col:nth-child(4)",
+      "from": [
+        0.5,
+        0.3
+      ],
+      "dy": 110,
+      "ms": 600
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "click",
+      "sel": ".inp-wheel-col:nth-child(2)",
+      "at": [
+        0.5,
+        0.7
+      ],
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    }
+  ],
+  "date-picker": [
+    {
+      "do": "click",
+      "sel": ".segmented button:has-text('기간')",
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": ".inp-date-btn",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "click",
+      "sel": ".inp-cal-grid button:nth-child(18)",
+      "ms": 400
+    },
+    {
+      "do": "hover",
+      "sel": ".inp-cal-grid button:nth-child(22)",
+      "ms": 400
+    },
+    {
+      "do": "hover",
+      "sel": ".inp-cal-grid button:nth-child(29)",
+      "ms": 500
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "click",
+      "sel": ".inp-cal-grid button:nth-child(29)",
+      "ms": 100
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    }
+  ],
+  "color-picker": [
+    {
+      "do": "drag",
+      "sel": ".inp-sv",
+      "from": [
+        0.85,
+        0.55
+      ],
+      "to": [
+        0.55,
+        0.15
+      ],
+      "ms": 700
+    },
+    {
+      "do": "drag",
+      "sel": ".inp-hue",
+      "from": [
+        0.47,
+        0.5
+      ],
+      "to": [
+        0.05,
+        0.5
+      ],
+      "ms": 800
+    },
+    {
+      "do": "wait",
+      "ms": 200
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "drag",
+      "sel": ".inp-hue",
+      "from": [
+        0.05,
+        0.5
+      ],
+      "to": [
+        0.75,
+        0.5
+      ],
+      "ms": 900
+    }
+  ],
+  "file-dropzone": [
+    {
+      "do": "hover",
+      "sel": ".inp-drop",
+      "at": [
+        0.5,
+        0.2
+      ],
+      "ms": 400
+    },
+    {
+      "do": "eval",
+      "js": "(() => { const z = document.querySelector('#shot .inp-drop'); const dt = new DataTransfer(); window.__dt = dt; dt.items.add(new File([new Uint8Array(248000)], '여행 사진.jpg', { type: 'image/jpeg' })); dt.items.add(new File([new Uint8Array(1300000)], '견적서.pdf', { type: 'application/pdf' })); z.dispatchEvent(new DragEvent('dragenter', { bubbles: true, cancelable: true, dataTransfer: dt })); z.dispatchEvent(new DragEvent('dragover', { bubbles: true, cancelable: true, dataTransfer: dt })); })()"
+    },
+    {
+      "do": "hover",
+      "sel": ".inp-drop",
+      "at": [
+        0.5,
+        0.55
+      ],
+      "ms": 700
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "eval",
+      "js": "(() => { const z = document.querySelector('#shot .inp-drop'); z.dispatchEvent(new DragEvent('drop', { bubbles: true, cancelable: true, dataTransfer: window.__dt })); })()"
+    },
+    {
+      "do": "wait",
+      "ms": 900
+    }
+  ],
+  "inline-edit": [
+    {
+      "do": "hover",
+      "sel": ".inline-text",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 200
+    },
+    {
+      "do": "click",
+      "sel": ".inline-text",
+      "ms": 100
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    },
+    {
+      "do": "type",
+      "text": "최종 제안서.docx",
+      "delay": 90
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "press",
+      "key": "Enter",
+      "ms": 500
+    }
+  ],
+  "masked-input": [
+    {
+      "do": "click",
+      "sel": "#inp-mask-11",
+      "ms": 400
+    },
+    {
+      "do": "type",
+      "text": "01012345678",
+      "delay": 90
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "click",
+      "sel": "#inp-mask-16",
+      "ms": 400
+    },
+    {
+      "do": "type",
+      "text": "4242424242",
+      "delay": 80
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    }
+  ],
+  "autosave": [
+    {
+      "do": "focus",
+      "sel": "textarea"
+    },
+    {
+      "do": "hover",
+      "sel": "textarea",
+      "at": [
+        0.6,
+        0.3
+      ],
+      "ms": 300
+    },
+    {
+      "do": "press",
+      "key": "Control+End",
+      "ms": 100
+    },
+    {
+      "do": "type",
+      "text": ", 선크림",
+      "delay": 110
+    },
+    {
+      "do": "wait",
+      "ms": 1000
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 900
+    }
+  ],
+  "undo-redo": [
+    {
+      "do": "click",
+      "sel": ".inp-field",
+      "at": [
+        0.95,
+        0.5
+      ],
+      "ms": 400
+    },
+    {
+      "do": "press",
+      "key": "End",
+      "ms": 50
+    },
+    {
+      "do": "type",
+      "text": ": 장보기",
+      "delay": 90
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text('🎉 추가')",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text('실행 취소')",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 450
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text('실행 취소')",
+      "ms": 100
+    },
+    {
+      "do": "wait",
+      "ms": 450
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text('다시 실행')",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    }
+  ],
+  "multi-cursor": [
+    {
+      "do": "focus",
+      "sel": ".inp-mc-ta"
+    },
+    {
+      "do": "hover",
+      "sel": "button:has-text('다음 같은 단어')",
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text('다음 같은 단어')",
+      "ms": 100
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text('다음 같은 단어')",
+      "ms": 100
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text('다음 같은 단어')",
+      "ms": 100
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "type",
+      "text": "shade",
+      "delay": 130
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    }
+  ],
+  "find-replace": [
+    {
+      "do": "click",
+      "sel": "input[aria-label='찾을 말']",
+      "ms": 400
+    },
+    {
+      "do": "press",
+      "key": "Control+a",
+      "ms": 50
+    },
+    {
+      "do": "type",
+      "text": "고양이",
+      "delay": 150
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "press",
+      "key": "Enter",
+      "times": 2,
+      "ms": 350
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "click",
+      "sel": "input[aria-label='바꿀 말']",
+      "ms": 400
+    },
+    {
+      "do": "press",
+      "key": "Control+a",
+      "ms": 50
+    },
+    {
+      "do": "type",
+      "text": "냥이",
+      "delay": 120
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text('모두')",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    }
+  ],
+  "rich-text": [
+    {
+      "do": "dblclick",
+      "sel": ".inp-rt-ed li",
+      "at": [
+        0.12,
+        0.5
+      ],
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "click",
+      "sel": ".inp-rt-btn[aria-label^='굵게']",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 250
+    },
+    {
+      "do": "click",
+      "sel": ".inp-rt-btn[aria-label^='밑줄']",
+      "ms": 250
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": ".inp-rt-ed p",
+      "at": [
+        0.3,
+        0.5
+      ],
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": ".inp-rt-btn[aria-label='제목']",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    }
+  ],
+  "placeholder": [
+    {
+      "do": "hover",
+      "sel": "button:has-text('둘 다 채워 보기')",
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text('둘 다 채워 보기')",
+      "ms": 100
+    },
+    {
+      "do": "wait",
+      "ms": 1000
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "click",
+      "sel": "#inp-ghost",
+      "ms": 400
+    },
+    {
+      "do": "type",
+      "text": "안녕",
+      "delay": 150
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    },
+    {
+      "do": "press",
+      "key": "Tab",
+      "ms": 600
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text('비우기')",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    }
+  ]
+}

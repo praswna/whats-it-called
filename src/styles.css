@@ -73,6 +73,8 @@ a { color: var(--accent); }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
 .card { text-align: left; display: flex; flex-direction: column; gap: 4px; padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; cursor: pointer; transition: transform 120ms ease-out, border-color 120ms; }
 .card:hover { border-color: var(--accent); transform: translateY(-1px); }
+.card-thumb { display: block; margin: -4px -6px 8px; border-radius: 8px; overflow: hidden; background: var(--surface-2); aspect-ratio: 16 / 10; }
+.card-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .card-name { font-weight: 600; font-size: 16px; }
 .card-en { font-size: 12px; color: var(--muted); }
 .card-summary { font-size: 13.5px; color: var(--fg); margin-top: 4px; }
@@ -211,7 +213,7 @@ a { color: var(--accent); }
 .like:active { transform: scale(0.9); }
 
 /* 토글·세그먼트 */
-.switch { width: 44px; height: 26px; border-radius: 13px; border: none; background: var(--surface-2); position: relative; cursor: pointer; transition: background 160ms; padding: 0; }
+.switch { width: 44px; height: 26px; border-radius: 13px; border: none; background: color-mix(in srgb, var(--muted) 55%, transparent); position: relative; cursor: pointer; transition: background 160ms; padding: 0; }
 .switch span { position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: var(--surface); box-shadow: 0 1px 3px rgba(0,0,0,0.3); transition: transform 160ms cubic-bezier(0.2, 0.9, 0.3, 1.2); }
 .switch.on { background: var(--accent); }
 .switch.on span { transform: translateX(18px); }
@@ -276,7 +278,8 @@ a { color: var(--accent); }
 .lane-label { width: 90px; font-size: 12px; color: var(--muted); }
 .lane { position: relative; height: 24px; background: var(--surface); border-radius: 12px; padding-left: 8px; max-width: 420px; }
 .ball { position: absolute; left: 100px; width: 18px; height: 18px; border-radius: 50%; background: var(--accent); }
-@keyframes slide { to { transform: translateX(min(260px, calc(100% - 20px))); } }
+/* % 를 레인 폭 기준으로 쓰려고 transform 대신 left 를 움직인다 (translate 의 % 는 공 자신 기준) */
+@keyframes slide { to { left: calc(100% - 26px); } }
 
 /* ── 푸터 ── */
 .foot { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 14px 24px calc(14px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); }
@@ -299,9 +302,13 @@ a { color: var(--accent); }
   .pager { grid-template-columns: 1fr; }
   .pager-btn.end { align-items: flex-start; text-align: left; }
   .grid { grid-template-columns: 1fr; }
+  /* 휴대폰: 썸네일을 왼쪽에 작게, 글은 오른쪽에 */
+  .card:has(.card-thumb) { display: grid; grid-template-columns: 116px minmax(0, 1fr); column-gap: 12px; align-items: start; }
+  .card:has(.card-thumb) > :not(.card-thumb) { grid-column: 2; }
+  .card-thumb { grid-column: 1; grid-row: 1 / span 4; margin: 0; align-self: start; }
   .detail-body { padding: 18px 18px 26px; }
   .detail-name { font-size: 24px; }
-  .popup-slider { left: auto; right: 0; top: 100%; transform: none; margin: 6px 0 0; }
+  .popup-slider { left: 0; right: auto; top: 100%; transform: none; margin: 6px 0 0; }
   .foot { padding-inline: 16px; }
 }
 @media (prefers-reduced-motion: reduce) {

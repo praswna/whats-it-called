@@ -1,0 +1,932 @@
+{
+  "debounce": [
+    {
+      "do": "eval",
+      "js": "(() => { const r = document.querySelectorAll('#shot .counts tr')[2]; r.style.background = 'var(--warm-soft)'; r.style.outline = '2px solid var(--warm)'; })()"
+    },
+    {
+      "do": "move",
+      "sel": ".move-area",
+      "at": [
+        0.15,
+        0.5
+      ],
+      "ms": 300
+    },
+    {
+      "do": "move",
+      "sel": ".move-area",
+      "at": [
+        0.85,
+        0.4
+      ],
+      "ms": 600
+    },
+    {
+      "do": "move",
+      "sel": ".move-area",
+      "at": [
+        0.3,
+        0.6
+      ],
+      "ms": 500
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "move",
+      "sel": ".move-area",
+      "at": [
+        0.8,
+        0.5
+      ],
+      "ms": 600
+    },
+    {
+      "do": "move",
+      "sel": ".move-area",
+      "at": [
+        0.4,
+        0.4
+      ],
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "poster"
+    }
+  ],
+  "throttle": [
+    {
+      "do": "eval",
+      "js": "(() => { const r = document.querySelectorAll('#shot .counts tr')[1]; r.style.background = 'var(--warm-soft)'; r.style.outline = '2px solid var(--warm)'; })()"
+    },
+    {
+      "do": "move",
+      "sel": ".move-area",
+      "at": [
+        0.1,
+        0.5
+      ],
+      "ms": 300
+    },
+    {
+      "do": "move",
+      "sel": ".move-area",
+      "at": [
+        0.9,
+        0.3
+      ],
+      "ms": 700
+    },
+    {
+      "do": "move",
+      "sel": ".move-area",
+      "at": [
+        0.1,
+        0.7
+      ],
+      "ms": 700
+    },
+    {
+      "do": "move",
+      "sel": ".move-area",
+      "at": [
+        0.9,
+        0.5
+      ],
+      "ms": 700
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "move",
+      "sel": ".move-area",
+      "at": [
+        0.5,
+        0.5
+      ],
+      "ms": 500
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    }
+  ],
+  "lazy-loading": [
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "hover",
+      "sel": ".sim-lazy-box",
+      "ms": 300
+    },
+    {
+      "do": "scroll",
+      "sel": ".sim-lazy-box",
+      "dy": 260,
+      "ms": 900
+    },
+    {
+      "do": "wait",
+      "ms": 250
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "scroll",
+      "sel": ".sim-lazy-box",
+      "dy": 300,
+      "ms": 900
+    },
+    {
+      "do": "wait",
+      "ms": 1000
+    }
+  ],
+  "prefetch": [
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "hover",
+      "sel": ".sim-linkrow >> nth=0",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 1100
+    },
+    {
+      "do": "click",
+      "sel": ".sim-linkrow >> nth=0",
+      "ms": 150
+    },
+    {
+      "do": "wait",
+      "ms": 900
+    },
+    {
+      "do": "poster"
+    }
+  ],
+  "caching": [
+    {
+      "do": "click",
+      "sel": "button:has-text(\"서울 날씨\")",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 1300
+    },
+    {
+      "do": "move",
+      "sel": "button:has-text(\"부산 날씨\")",
+      "ms": 250
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"서울 날씨\")",
+      "ms": 250
+    },
+    {
+      "do": "wait",
+      "ms": 1000
+    },
+    {
+      "do": "poster"
+    }
+  ],
+  "memoization": [
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "drag",
+      "sel": "input[type=range]",
+      "from": [
+        0.83,
+        0.5
+      ],
+      "to": [
+        0.15,
+        0.5
+      ],
+      "ms": 900
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "drag",
+      "sel": "input[type=range]",
+      "from": [
+        0.15,
+        0.5
+      ],
+      "to": [
+        1,
+        0.5
+      ],
+      "ms": 1100
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"같은 n 다시 계산\")",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 900
+    },
+    {
+      "do": "poster"
+    }
+  ],
+  "idempotency": [
+    {
+      "do": "eval",
+      "js": "(() => { const s = document.createElement('style'); s.textContent = \"#shot .sim-log li:nth-child(n+5) { display: none; }\"; document.head.appendChild(s); })()"
+    },
+    {
+      "do": "click",
+      "sel": ".btn.primary",
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": ".btn.primary",
+      "ms": 100
+    },
+    {
+      "do": "click",
+      "sel": ".btn.primary",
+      "ms": 100
+    },
+    {
+      "do": "wait",
+      "ms": 1400
+    },
+    {
+      "do": "click",
+      "sel": ".sim-seg button:has-text(\"멱등 키\")",
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": ".btn.primary",
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": ".btn.primary",
+      "ms": 100
+    },
+    {
+      "do": "click",
+      "sel": ".btn.primary",
+      "ms": 100
+    },
+    {
+      "do": "wait",
+      "ms": 1400
+    },
+    {
+      "do": "poster"
+    }
+  ],
+  "race-condition": [
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"빠르게 치기\")",
+      "ms": 500
+    },
+    {
+      "do": "wait",
+      "ms": 1600
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    }
+  ],
+  "polling": [
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"서버에 새 소식 만들기\")",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 1300
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 1200
+    }
+  ],
+  "sse": [
+    {
+      "do": "click",
+      "sel": ".sim-seg button:has-text(\"SSE\")",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 900
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"서버에 새 소식 만들기\")",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"내가 서버로 보내기\")",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 800
+    }
+  ],
+  "websocket": [
+    {
+      "do": "click",
+      "sel": ".sim-seg button:has-text(\"웹소켓\")",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 900
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"내가 서버로 보내기\")",
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"서버에 새 소식 만들기\")",
+      "ms": 250
+    },
+    {
+      "do": "wait",
+      "ms": 250
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 900
+    }
+  ],
+  "realtime": [
+    {
+      "do": "click",
+      "sel": ".sim-device >> nth=0 >> input[type=checkbox] >> nth=0",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 450
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    },
+    {
+      "do": "type",
+      "sel": ".sim-device >> nth=1 >> .sim-input",
+      "text": "빵",
+      "delay": 120
+    },
+    {
+      "do": "press",
+      "key": "Enter",
+      "ms": 500
+    },
+    {
+      "do": "wait",
+      "ms": 900
+    }
+  ],
+  "retry-backoff": [
+    {
+      "do": "click",
+      "sel": "button:has-text(\"재시도 시작\")",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 2400
+    },
+    {
+      "do": "click",
+      "sel": ".sim-seg button:has-text(\"지터 있음\")",
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"재시도 시작\")",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 2500
+    },
+    {
+      "do": "poster"
+    }
+  ],
+  "rate-limit": [
+    {
+      "do": "eval",
+      "js": "(() => { const s = document.createElement('style'); s.textContent = \"#shot .sim-log li:nth-child(n+5) { display: none; }\"; document.head.appendChild(s); })()"
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"한꺼번에 10번\")",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 900
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 1500
+    }
+  ],
+  "offline-first": [
+    {
+      "do": "type",
+      "sel": ".sim-input",
+      "text": "우유 사기",
+      "delay": 90
+    },
+    {
+      "do": "press",
+      "key": "Enter",
+      "ms": 300
+    },
+    {
+      "do": "click",
+      "sel": "input[type=checkbox] >> nth=0",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "click",
+      "sel": "button[role=switch]",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 1700
+    }
+  ],
+  "routing": [
+    {
+      "do": "click",
+      "sel": "button:has-text(\"상품 보러 가기\")",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    },
+    {
+      "do": "click",
+      "sel": ".sim-linkrow:has-text(\"장우산\")",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "click",
+      "sel": "button[aria-label=\"뒤로\"]",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    }
+  ],
+  "deep-link": [
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "hover",
+      "sel": ".sim-bubble >> nth=0 >> button",
+      "ms": 500
+    },
+    {
+      "do": "click",
+      "sel": ".sim-bubble >> nth=0 >> button",
+      "ms": 100
+    },
+    {
+      "do": "wait",
+      "ms": 1200
+    },
+    {
+      "do": "poster"
+    }
+  ],
+  "hot-reload": [
+    {
+      "do": "click",
+      "sel": ".sim-hr-btn",
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": ".sim-hr-btn",
+      "ms": 120
+    },
+    {
+      "do": "click",
+      "sel": ".sim-hr-btn",
+      "ms": 120
+    },
+    {
+      "do": "click",
+      "sel": ".sim-swatch >> nth=1",
+      "ms": 450
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"핫 리로드\")",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 900
+    },
+    {
+      "do": "poster"
+    }
+  ],
+  "feature-flag": [
+    {
+      "do": "eval",
+      "js": "(() => { const s = document.createElement('style'); s.textContent = \"#shot .sim-cell { background: color-mix(in srgb, var(--fg) 14%, transparent); } #shot .sim-cell.new, #shot .sim-cell.a { background: var(--accent); } #shot .sim-cell.b { background: var(--warm); } #shot .sim-cell.err { background: var(--danger); }\"; document.head.appendChild(s); })()"
+    },
+    {
+      "do": "wait",
+      "ms": 200
+    },
+    {
+      "do": "drag",
+      "sel": "input[type=range]",
+      "from": [
+        0.1,
+        0.5
+      ],
+      "to": [
+        0.6,
+        0.5
+      ],
+      "ms": 1000
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "click",
+      "sel": "button[role=switch]",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 800
+    },
+    {
+      "do": "click",
+      "sel": "button[role=switch]",
+      "ms": 200
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    }
+  ],
+  "ab-test": [
+    {
+      "do": "click",
+      "sel": "button:has-text(\"실험 시작\")",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 2800
+    },
+    {
+      "do": "poster"
+    }
+  ],
+  "canary": [
+    {
+      "do": "eval",
+      "js": "(() => { const s = document.createElement('style'); s.textContent = \"#shot .sim-cell { background: color-mix(in srgb, var(--fg) 14%, transparent); } #shot .sim-cell.new, #shot .sim-cell.a { background: var(--accent); } #shot .sim-cell.b { background: var(--warm); } #shot .sim-cell.err { background: var(--danger); }\"; document.head.appendChild(s); })()"
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"다음 단계\")",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"다음 단계\")",
+      "ms": 200
+    },
+    {
+      "do": "wait",
+      "ms": 1600
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"롤백\")",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    }
+  ],
+  "staged-rollout": [
+    {
+      "do": "eval",
+      "js": "(() => { const s = document.createElement('style'); s.textContent = \"#shot .sim-cell { background: color-mix(in srgb, var(--fg) 14%, transparent); } #shot .sim-cell.new, #shot .sim-cell.a { background: var(--accent); } #shot .sim-cell.b { background: var(--warm); } #shot .sim-cell.err { background: var(--danger); }\"; document.head.appendChild(s); })()"
+    },
+    {
+      "do": "click",
+      "sel": "input[type=checkbox]",
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"다음 단계\")",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 350
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"다음 단계\")",
+      "ms": 150
+    },
+    {
+      "do": "wait",
+      "ms": 350
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"다음 단계\")",
+      "ms": 150
+    },
+    {
+      "do": "wait",
+      "ms": 450
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"다음 단계\")",
+      "ms": 150
+    },
+    {
+      "do": "wait",
+      "ms": 350
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"다음 단계\")",
+      "ms": 150
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    }
+  ],
+  "semver": [
+    {
+      "do": "click",
+      "sel": "button:has-text(\"버그 수정\")",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"기능 추가\")",
+      "ms": 350
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"호환 깨짐\")",
+      "ms": 350
+    },
+    {
+      "do": "wait",
+      "ms": 800
+    },
+    {
+      "do": "poster"
+    }
+  ],
+  "linting": [
+    {
+      "do": "hover",
+      "sel": ".sim-squiggle >> nth=0",
+      "ms": 400
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"린트 자동 수정\")",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 800
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"포맷\")",
+      "ms": 350
+    },
+    {
+      "do": "wait",
+      "ms": 800
+    }
+  ],
+  "i18n": [
+    {
+      "do": "click",
+      "sel": ".sim-seg button:has-text(\"English\")",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 450
+    },
+    {
+      "do": "click",
+      "sel": ".sim-seg button:has-text(\"日本語\")",
+      "ms": 300
+    },
+    {
+      "do": "wait",
+      "ms": 450
+    },
+    {
+      "do": "click",
+      "sel": ".sim-seg button:has-text(\"Deutsch\")",
+      "ms": 300
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    },
+    {
+      "do": "click",
+      "sel": ".sim-seg button >> nth=4",
+      "ms": 300
+    },
+    {
+      "do": "wait",
+      "ms": 800
+    },
+    {
+      "do": "poster"
+    }
+  ],
+  "fuzzy-search": [
+    {
+      "do": "click",
+      "sel": ".sim-input",
+      "ms": 400
+    },
+    {
+      "do": "press",
+      "key": "Control+a",
+      "ms": 50
+    },
+    {
+      "do": "type",
+      "text": "usrprof",
+      "delay": 110
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "click",
+      "sel": ".sim-try:has-text(\"setings\")",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 900
+    }
+  ]
+}

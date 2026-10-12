@@ -1,0 +1,350 @@
+{
+  "easing": [
+    {
+      "do": "hover",
+      "sel": "button:has-text(\"움직이기\")",
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"움직이기\")",
+      "ms": 150
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 1000
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"움직이기\")",
+      "ms": 150
+    },
+    {
+      "do": "wait",
+      "ms": 1200
+    }
+  ],
+  "spring-animation": [
+    {
+      "do": "eval",
+      "js": "document.querySelectorAll('#shot .lane').forEach((l) => { if (!/spring/.test(l.textContent)) l.style.opacity = '0.3'; })"
+    },
+    {
+      "do": "hover",
+      "sel": "button:has-text(\"움직이기\")",
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"움직이기\")",
+      "ms": 150
+    },
+    {
+      "do": "wait",
+      "ms": 250
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 1000
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"움직이기\")",
+      "ms": 150
+    },
+    {
+      "do": "wait",
+      "ms": 1200
+    }
+  ],
+  "duration": [
+    {
+      "do": "hover",
+      "sel": ".btn.primary",
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": ".btn.primary",
+      "ms": 150
+    },
+    {
+      "do": "wait",
+      "ms": 180
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 1200
+    },
+    {
+      "do": "click",
+      "sel": ".btn.primary",
+      "ms": 150
+    },
+    {
+      "do": "wait",
+      "ms": 1300
+    }
+  ],
+  "micro-interaction": [
+    {
+      "do": "click",
+      "sel": ".mo-mi-plain >> nth=0",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    },
+    {
+      "do": "click",
+      "sel": ".mo-mi-like",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 200
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    },
+    {
+      "do": "click",
+      "sel": ".mo-mi-copy",
+      "ms": 350
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    }
+  ],
+  "shared-element": [
+    {
+      "do": "hover",
+      "sel": ".mo-se-thumb >> nth=1",
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": ".mo-se-thumb >> nth=1",
+      "ms": 150
+    },
+    {
+      "do": "wait",
+      "ms": 160
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 1000
+    },
+    {
+      "do": "click",
+      "sel": ".mo-se-back",
+      "ms": 350
+    },
+    {
+      "do": "wait",
+      "ms": 800
+    }
+  ],
+  "morphing": [
+    {
+      "do": "click",
+      "sel": ".mo-mo-btn >> nth=0",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "click",
+      "sel": ".mo-mo-btn >> nth=1",
+      "ms": 350
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "drag",
+      "sel": ".mo-mo-scrub input",
+      "from": [
+        0.98,
+        0.5
+      ],
+      "to": [
+        0.5,
+        0.5
+      ],
+      "ms": 1000
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    },
+    {
+      "do": "drag",
+      "sel": ".mo-mo-scrub input",
+      "from": [
+        0.5,
+        0.5
+      ],
+      "to": [
+        0.0,
+        0.5
+      ],
+      "ms": 800
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    }
+  ],
+  "interruptible": [
+    {
+      "do": "hover",
+      "sel": ".btn.primary",
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": ".btn.primary",
+      "ms": 150
+    },
+    {
+      "do": "wait",
+      "ms": 450
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 1600
+    }
+  ],
+  "reduced-motion": [
+    {
+      "do": "click",
+      "sel": ".btn.primary",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 200
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "click",
+      "sel": "button[role=switch]",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "click",
+      "sel": ".btn.primary",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "click",
+      "sel": "button[role=switch]",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 200
+    }
+  ],
+  "scroll-animation": [
+    {
+      "do": "hover",
+      "sel": ".mo-sc-box",
+      "ms": 300
+    },
+    {
+      "do": "scroll",
+      "sel": ".mo-sc-box",
+      "dy": 260,
+      "ms": 1400
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "scroll",
+      "sel": ".mo-sc-box",
+      "dy": 300,
+      "ms": 1400
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "scroll",
+      "sel": ".mo-sc-box",
+      "dy": -600,
+      "ms": 900
+    }
+  ],
+  "layout-shift": [
+    {
+      "do": "hover",
+      "sel": "button:has-text(\"글 열기\")",
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"글 열기\")",
+      "ms": 150
+    },
+    {
+      "do": "wait",
+      "ms": 1900
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    }
+  ]
+}

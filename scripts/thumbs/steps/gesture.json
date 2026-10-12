@@ -1,0 +1,982 @@
+{
+  "hover": [
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "hover",
+      "sel": ".ges-hlink",
+      "ms": 500
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    },
+    {
+      "do": "hover",
+      "sel": ".ges-hbtn",
+      "ms": 450
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    },
+    {
+      "do": "hover",
+      "sel": ".ges-thumb",
+      "ms": 450
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    },
+    {
+      "do": "hover",
+      "sel": ".chip",
+      "ms": 500
+    }
+  ],
+  "hover-card": [
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "hover",
+      "sel": ".anchor",
+      "ms": 500
+    },
+    {
+      "do": "wait",
+      "ms": 800
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "hover",
+      "sel": ".hover-card .btn",
+      "ms": 500
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "hover",
+      "sel": ".demo-stage",
+      "at": [
+        0.95,
+        0.05
+      ],
+      "ms": 500
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    }
+  ],
+  "tooltip": [
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "hover",
+      "sel": ".tip-wrap:nth-child(1) .btn",
+      "ms": 450
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "hover",
+      "sel": ".tip-wrap:nth-child(2) .btn",
+      "ms": 350
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "hover",
+      "sel": ".tip-wrap:nth-child(3) .btn",
+      "ms": 350
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "hover",
+      "sel": ".demo-stage",
+      "at": [
+        0.98,
+        0.95
+      ],
+      "ms": 400
+    }
+  ],
+  "hover-intent": [
+    {
+      "do": "hover",
+      "sel": ".ges-hi-col:nth-child(1) .ges-hi-main li:nth-child(1) button",
+      "ms": 450
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "move",
+      "sel": ".ges-hi-col:nth-child(1) .ges-hi-sub li:nth-child(5)",
+      "ms": 700
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    },
+    {
+      "do": "hover",
+      "sel": ".ges-hi-col:nth-child(2) .ges-hi-main li:nth-child(1) button",
+      "ms": 500
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "move",
+      "sel": ".ges-hi-col:nth-child(2) .ges-hi-sub li:nth-child(5)",
+      "ms": 700
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    }
+  ],
+  "scrubbing": [
+    {
+      "do": "hover",
+      "sel": ".scrubby",
+      "ms": 400
+    },
+    {
+      "do": "drag",
+      "sel": ".scrubby",
+      "dx": 140,
+      "ms": 1100
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "drag",
+      "sel": ".scrubby",
+      "dx": -140,
+      "ms": 1100
+    }
+  ],
+  "scrubby-slider": [
+    {
+      "do": "hover",
+      "sel": ".scrubby",
+      "ms": 400
+    },
+    {
+      "do": "drag",
+      "sel": ".scrubby",
+      "dx": -80,
+      "ms": 800
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "drag",
+      "sel": ".scrubby",
+      "dx": 22,
+      "ms": 900,
+      "shift": true
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "drag",
+      "sel": ".scrubby",
+      "dx": -10,
+      "ms": 600,
+      "shift": true
+    }
+  ],
+  "popup-slider": [
+    {
+      "do": "down",
+      "sel": ".popup-wrap .btn",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "move",
+      "sel": ".ps-track",
+      "at": [
+        0.1,
+        0.5
+      ],
+      "ms": 700
+    },
+    {
+      "do": "move",
+      "sel": ".ps-track",
+      "at": [
+        0.9,
+        0.5
+      ],
+      "ms": 900
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "move",
+      "sel": ".ps-track",
+      "at": [
+        0.6,
+        0.5
+      ],
+      "ms": 500
+    },
+    {
+      "do": "up"
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    }
+  ],
+  "press-drag-release": [
+    {
+      "do": "down",
+      "sel": ".popup-wrap .btn",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 200
+    },
+    {
+      "do": "move",
+      "sel": ".spring-menu li:nth-child(3)",
+      "ms": 600
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "up"
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    }
+  ],
+  "spring-loaded": [
+    {
+      "do": "down",
+      "sel": ".popup-wrap .btn",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "move",
+      "sel": ".spring-menu li:nth-child(1)",
+      "ms": 350
+    },
+    {
+      "do": "wait",
+      "ms": 250
+    },
+    {
+      "do": "move",
+      "sel": ".spring-menu li:nth-child(2)",
+      "ms": 300
+    },
+    {
+      "do": "wait",
+      "ms": 250
+    },
+    {
+      "do": "move",
+      "sel": ".spring-menu li:nth-child(4)",
+      "ms": 400
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "up"
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    }
+  ],
+  "drag-and-drop": [
+    {
+      "do": "hover",
+      "sel": ".reorder li:nth-child(1) .grip",
+      "ms": 400
+    },
+    {
+      "do": "drag",
+      "sel": ".reorder li:nth-child(1) .grip",
+      "toSel": ".reorder li:nth-child(3)",
+      "to": [
+        0.3,
+        0.6
+      ],
+      "ms": 1000,
+      "hold": 200
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    },
+    {
+      "do": "poster"
+    }
+  ],
+  "drag-handle": [
+    {
+      "do": "hover",
+      "sel": ".ges-dh-row:nth-child(1) .ges-dh-grip",
+      "ms": 400
+    },
+    {
+      "do": "down",
+      "sel": ".ges-dh-row:nth-child(1) .ges-dh-grip",
+      "ms": 100
+    },
+    {
+      "do": "move",
+      "sel": ".ges-dh-row:nth-child(3) .ges-dh-grip",
+      "at": [
+        0.5,
+        0.7
+      ],
+      "ms": 1400
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "up"
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "drag",
+      "sel": ".ges-dh-resize",
+      "dx": 60,
+      "dy": 30,
+      "ms": 800
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    }
+  ],
+  "long-press": [
+    {
+      "do": "down",
+      "sel": ".lp",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "up"
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    },
+    {
+      "do": "down",
+      "sel": ".lp",
+      "at": [
+        0.55,
+        0.5
+      ],
+      "ms": 150
+    },
+    {
+      "do": "wait",
+      "ms": 750
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "up"
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    }
+  ],
+  "click-outside": [
+    {
+      "do": "click",
+      "sel": ".ges-co-dd .btn",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "click",
+      "sel": ".ges-co-stage",
+      "at": [
+        0.85,
+        0.7
+      ],
+      "ms": 600
+    },
+    {
+      "do": "wait",
+      "ms": 900
+    }
+  ],
+  "cursor-affordance": [
+    {
+      "do": "hover",
+      "sel": ".ges-cur-tile:nth-child(1)",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "hover",
+      "sel": ".ges-cur-tile:nth-child(2)",
+      "ms": 300
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "hover",
+      "sel": ".ges-cur-tile:nth-child(5)",
+      "ms": 400
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "hover",
+      "sel": ".ges-cur-tile:nth-child(8)",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "drag",
+      "sel": ".ges-cur-map",
+      "from": [
+        0.3,
+        0.5
+      ],
+      "to": [
+        0.7,
+        0.4
+      ],
+      "ms": 900
+    }
+  ],
+  "hit-target": [
+    {
+      "do": "click",
+      "sel": ".ges-ht-tag:nth-child(1)",
+      "at": [
+        0.3,
+        0.5
+      ],
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": ".ges-check input",
+      "ms": 500
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "click",
+      "sel": ".ges-ht-tag:nth-child(1) .ges-ht-x",
+      "at": [
+        1.6,
+        -0.3
+      ],
+      "ms": 500
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": ".ges-ht-tag:nth-child(1) .ges-ht-x",
+      "at": [
+        -0.4,
+        1.5
+      ],
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    }
+  ],
+  "swipe": [
+    {
+      "do": "drag",
+      "sel": ".notif:nth-child(1)",
+      "dx": 230,
+      "ms": 450
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    },
+    {
+      "do": "drag",
+      "sel": ".notif:nth-child(1)",
+      "dx": -230,
+      "ms": 450
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    },
+    {
+      "do": "poster"
+    }
+  ],
+  "swipe-dismiss": [
+    {
+      "do": "drag",
+      "sel": ".notif:nth-child(1)",
+      "dx": 70,
+      "ms": 600
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    },
+    {
+      "do": "down",
+      "sel": ".notif:nth-child(1)",
+      "ms": 300
+    },
+    {
+      "do": "move",
+      "sel": ".notif:nth-child(1)",
+      "at": [
+        1.15,
+        0.5
+      ],
+      "ms": 700
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 200
+    },
+    {
+      "do": "up"
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    }
+  ],
+  "pull-to-refresh": [
+    {
+      "do": "down",
+      "sel": ".ges-ptr-body",
+      "at": [
+        0.5,
+        0.1
+      ],
+      "ms": 400
+    },
+    {
+      "do": "move",
+      "sel": ".ges-ptr-body",
+      "at": [
+        0.5,
+        1.25
+      ],
+      "ms": 1100
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "up"
+    },
+    {
+      "do": "wait",
+      "ms": 1700
+    }
+  ],
+  "pinch-zoom": [
+    {
+      "do": "wheel",
+      "sel": ".ges-pz-vp",
+      "at": [
+        0.6,
+        0.45
+      ],
+      "dy": -180,
+      "times": 14,
+      "ctrl": true
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "drag",
+      "sel": ".ges-pz-vp",
+      "from": [
+        0.4,
+        0.5
+      ],
+      "to": [
+        0.7,
+        0.6
+      ],
+      "ms": 700
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "wheel",
+      "sel": ".ges-pz-vp",
+      "at": [
+        0.5,
+        0.5
+      ],
+      "dy": 220,
+      "times": 12,
+      "ctrl": true
+    }
+  ],
+  "double-tap": [
+    {
+      "do": "dblclick",
+      "sel": ".ges-dt-photo",
+      "at": [
+        0.45,
+        0.45
+      ],
+      "ms": 500
+    },
+    {
+      "do": "wait",
+      "ms": 350
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    },
+    {
+      "do": "click",
+      "sel": "button[role=radio]:has-text(\"확대\")",
+      "ms": 500
+    },
+    {
+      "do": "dblclick",
+      "sel": ".ges-dt-photo",
+      "at": [
+        0.6,
+        0.4
+      ],
+      "ms": 500
+    },
+    {
+      "do": "wait",
+      "ms": 800
+    },
+    {
+      "do": "dblclick",
+      "sel": ".ges-dt-photo",
+      "at": [
+        0.6,
+        0.4
+      ],
+      "ms": 200
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    }
+  ],
+  "edge-swipe": [
+    {
+      "do": "down",
+      "sel": ".ges-es",
+      "at": [
+        0.03,
+        0.5
+      ],
+      "ms": 500
+    },
+    {
+      "do": "move",
+      "sel": ".ges-es",
+      "at": [
+        0.45,
+        0.5
+      ],
+      "ms": 700
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "move",
+      "sel": ".ges-es",
+      "at": [
+        0.7,
+        0.5
+      ],
+      "ms": 300
+    },
+    {
+      "do": "up"
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "click",
+      "sel": ".ges-es-list li:nth-child(1) button",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    }
+  ],
+  "rubber-band": [
+    {
+      "do": "down",
+      "sel": ".ges-rb-vp",
+      "at": [
+        0.5,
+        0.2
+      ],
+      "ms": 400
+    },
+    {
+      "do": "move",
+      "sel": ".ges-rb-vp",
+      "at": [
+        0.5,
+        0.95
+      ],
+      "ms": 900
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "up"
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    }
+  ],
+  "haptic": [
+    {
+      "do": "click",
+      "sel": ".ges-hap-sw",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "drag",
+      "sel": ".ges-hap-row input[type=range]",
+      "from": [
+        0.5,
+        0.5
+      ],
+      "to": [
+        0.9,
+        0.5
+      ],
+      "ms": 800
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "down",
+      "sel": ".ges-hap-icon",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "up"
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    }
+  ],
+  "fat-finger": [
+    {
+      "do": "click",
+      "sel": ".ges-ff-tight button[data-act=cancel]",
+      "at": [
+        0.6,
+        0.5
+      ],
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    },
+    {
+      "do": "click",
+      "sel": ".ges-ff-tight button[data-act=cancel]",
+      "at": [
+        0.8,
+        0.5
+      ],
+      "ms": 300
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    },
+    {
+      "do": "click",
+      "sel": ".ges-ff-tight button[data-act=cancel]",
+      "at": [
+        0.9,
+        0.5
+      ],
+      "ms": 300
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    }
+  ]
+}

@@ -88,7 +88,7 @@
 .dk-menu-list li.on .muted { color: inherit; }
 
 /* 도킹 */
-.dk-app { position: relative; width: 100%; max-width: 460px; height: 220px; display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--surface); }
+.dk-app { position: relative; width: 100%; max-width: 460px; height: 220px; display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--surface); user-select: none; -webkit-user-select: none; }
 .dk-appbar { flex: none; height: 26px; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0 10px; font-size: 12px; background: var(--surface-2); border-bottom: 1px solid var(--line); white-space: nowrap; overflow: hidden; }
 .dk-appbody { position: relative; flex: 1; min-height: 0; display: grid; }
 .dk-lay-float .dk-appbody { grid-template-areas: "c"; }

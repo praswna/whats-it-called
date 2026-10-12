@@ -7,7 +7,7 @@ export function photo(seed: number, w = 400, h = 260): string {
   const hit = photoCache.get(key); if (hit) return hit;
   const hue = (seed * 47) % 360;
   const peak = 0.3 + ((seed * 37) % 40) / 100;
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
 <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="hsl(${hue},65%,55%)"/><stop offset="1" stop-color="hsl(${(hue + 40) % 360},75%,80%)"/></linearGradient></defs>
 <rect width="${w}" height="${h}" fill="url(#g)"/>
 <circle cx="${w * (0.2 + ((seed * 13) % 60) / 100)}" cy="${h * 0.28}" r="${Math.min(w, h) * 0.1}" fill="hsl(${(hue + 180) % 360},80%,85%)"/>

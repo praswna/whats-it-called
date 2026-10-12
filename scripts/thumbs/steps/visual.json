@@ -1,0 +1,1233 @@
+{
+  "before-after-slider": [
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "drag",
+      "sel": ".cmp-frame",
+      "from": [
+        0.5,
+        0.5
+      ],
+      "to": [
+        0.12,
+        0.5
+      ],
+      "ms": 900
+    },
+    {
+      "do": "drag",
+      "sel": ".cmp-frame",
+      "from": [
+        0.12,
+        0.5
+      ],
+      "to": [
+        0.88,
+        0.5
+      ],
+      "ms": 1300
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "drag",
+      "sel": ".cmp-frame",
+      "from": [
+        0.88,
+        0.5
+      ],
+      "to": [
+        0.5,
+        0.5
+      ],
+      "ms": 800
+    }
+  ],
+  "onion-skin": [
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "drag",
+      "sel": "input[type=range]",
+      "from": [
+        0.5,
+        0.5
+      ],
+      "to": [
+        0.02,
+        0.5
+      ],
+      "ms": 900
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "drag",
+      "sel": "input[type=range]",
+      "from": [
+        0.02,
+        0.5
+      ],
+      "to": [
+        0.98,
+        0.5
+      ],
+      "ms": 1400
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "drag",
+      "sel": "input[type=range]",
+      "from": [
+        0.98,
+        0.5
+      ],
+      "to": [
+        0.5,
+        0.5
+      ],
+      "ms": 800
+    },
+    {
+      "do": "poster"
+    }
+  ],
+  "side-by-side-compare": [
+    {
+      "do": "hover",
+      "sel": ".cmp-side:nth-child(1) .cmp-frame",
+      "at": [
+        0.2,
+        0.3
+      ],
+      "ms": 500
+    },
+    {
+      "do": "hover",
+      "sel": ".cmp-side:nth-child(1) .cmp-frame",
+      "at": [
+        0.4,
+        0.72
+      ],
+      "ms": 900
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "hover",
+      "sel": ".cmp-side:nth-child(2) .cmp-frame",
+      "at": [
+        0.74,
+        0.32
+      ],
+      "ms": 1000
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    }
+  ],
+  "hold-to-compare": [
+    {
+      "do": "hover",
+      "sel": ".cmp-frame",
+      "at": [
+        0.5,
+        0.5
+      ],
+      "ms": 500
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "down",
+      "sel": ".cmp-frame",
+      "at": [
+        0.5,
+        0.5
+      ],
+      "ms": 100
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    },
+    {
+      "do": "up"
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "down",
+      "sel": ".cmp-frame",
+      "at": [
+        0.5,
+        0.5
+      ],
+      "ms": 100
+    },
+    {
+      "do": "wait",
+      "ms": 900
+    },
+    {
+      "do": "up"
+    }
+  ],
+  "magnifier-loupe": [
+    {
+      "do": "hover",
+      "sel": ".cmp-loupe-frame",
+      "at": [
+        0.15,
+        0.3
+      ],
+      "ms": 300
+    },
+    {
+      "do": "hover",
+      "sel": ".cmp-loupe-frame",
+      "at": [
+        0.4,
+        0.68
+      ],
+      "ms": 1000
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "hover",
+      "sel": ".cmp-loupe-frame",
+      "at": [
+        0.74,
+        0.32
+      ],
+      "ms": 1000
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    }
+  ],
+  "pixel-diff": [
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"v1\")",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"v2\")",
+      "ms": 300
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"차이\")",
+      "ms": 300
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    }
+  ],
+  "crop": [
+    {
+      "do": "wait",
+      "ms": 200
+    },
+    {
+      "do": "drag",
+      "sel": ".vis-crop-handle.se",
+      "dx": 50,
+      "dy": 25,
+      "ms": 700
+    },
+    {
+      "do": "drag",
+      "sel": ".vis-crop-frame",
+      "dx": -30,
+      "dy": -20,
+      "ms": 700
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"1:1\")",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"16:9\")",
+      "ms": 300
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"자유\")",
+      "ms": 300
+    }
+  ],
+  "object-fit": [
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"contain\")",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"fill\")",
+      "ms": 300
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"cover\")",
+      "ms": 300
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    }
+  ],
+  "focal-point": [
+    {
+      "do": "wait",
+      "ms": 200
+    },
+    {
+      "do": "click",
+      "sel": ".fit-pick",
+      "at": [
+        0.12,
+        0.8
+      ],
+      "ms": 500
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "click",
+      "sel": ".fit-pick",
+      "at": [
+        0.59,
+        0.28
+      ],
+      "ms": 600
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "click",
+      "sel": ".fit-pick",
+      "at": [
+        0.75,
+        0.4
+      ],
+      "ms": 400
+    }
+  ],
+  "blur-up": [
+    {
+      "do": "click",
+      "sel": "button:has-text(\"다시 불러오기\")",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 800
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 1500
+    }
+  ],
+  "responsive-image": [
+    {
+      "do": "wait",
+      "ms": 200
+    },
+    {
+      "do": "drag",
+      "sel": ".vis-ri-ctl input",
+      "from": [
+        0.06,
+        0.5
+      ],
+      "to": [
+        0.9,
+        0.5
+      ],
+      "ms": 1400
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"1x\")",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"3x\")",
+      "ms": 300
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "drag",
+      "sel": ".vis-ri-ctl input",
+      "from": [
+        0.9,
+        0.5
+      ],
+      "to": [
+        0.06,
+        0.5
+      ],
+      "ms": 900
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"2x\")",
+      "ms": 300
+    }
+  ],
+  "alt-text": [
+    {
+      "do": "wait",
+      "ms": 200
+    },
+    {
+      "do": "click",
+      "sel": ".vis-check input",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"나쁜 alt\")",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 900
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"좋은 alt\")",
+      "ms": 300
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "click",
+      "sel": ".vis-check input",
+      "ms": 300
+    }
+  ],
+  "pip": [
+    {
+      "do": "wait",
+      "ms": 200
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"작은 창으로\")",
+      "ms": 500
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "scroll",
+      "sel": ".vis-pip-scroll",
+      "dy": 140,
+      "ms": 700
+    },
+    {
+      "do": "drag",
+      "sel": ".vis-pip-mini",
+      "at": [
+        0.4,
+        0.5
+      ],
+      "dx": -300,
+      "dy": -150,
+      "ms": 800
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    },
+    {
+      "do": "scroll",
+      "sel": ".vis-pip-scroll",
+      "dy": -140,
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": ".vis-pip-x.back",
+      "ms": 300
+    }
+  ],
+  "seek-preview": [
+    {
+      "do": "hover",
+      "sel": ".vp-track",
+      "at": [
+        0.12,
+        0.5
+      ],
+      "ms": 500
+    },
+    {
+      "do": "hover",
+      "sel": ".vp-track",
+      "at": [
+        0.45,
+        0.5
+      ],
+      "ms": 1000
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "hover",
+      "sel": ".vp-track",
+      "at": [
+        0.8,
+        0.5
+      ],
+      "ms": 1000
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "click",
+      "sel": ".vp-track",
+      "at": [
+        0.8,
+        0.5
+      ],
+      "ms": 100
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    }
+  ],
+  "buffer-bar": [
+    {
+      "do": "click",
+      "sel": ".vp-play",
+      "ms": 400
+    },
+    {
+      "do": "hover",
+      "sel": ".vp-time",
+      "ms": 300
+    },
+    {
+      "do": "wait",
+      "ms": 1200
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 1600
+    }
+  ],
+  "chapter-markers": [
+    {
+      "do": "hover",
+      "sel": ".vp-track",
+      "at": [
+        0.08,
+        0.5
+      ],
+      "ms": 500
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "hover",
+      "sel": ".vp-track",
+      "at": [
+        0.3,
+        0.5
+      ],
+      "ms": 500
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "hover",
+      "sel": ".vp-track",
+      "at": [
+        0.6,
+        0.5
+      ],
+      "ms": 500
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "hover",
+      "sel": ".vp-track",
+      "at": [
+        0.9,
+        0.5
+      ],
+      "ms": 500
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    }
+  ],
+  "double-tap-seek": [
+    {
+      "do": "hover",
+      "sel": ".vis-dts",
+      "at": [
+        0.78,
+        0.45
+      ],
+      "ms": 400
+    },
+    {
+      "do": "dblclick",
+      "sel": ".vis-dts",
+      "at": [
+        0.78,
+        0.45
+      ],
+      "ms": 50
+    },
+    {
+      "do": "wait",
+      "ms": 150
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 900
+    },
+    {
+      "do": "hover",
+      "sel": ".vis-dts",
+      "at": [
+        0.22,
+        0.45
+      ],
+      "ms": 400
+    },
+    {
+      "do": "dblclick",
+      "sel": ".vis-dts",
+      "at": [
+        0.22,
+        0.45
+      ],
+      "ms": 50
+    },
+    {
+      "do": "wait",
+      "ms": 900
+    }
+  ],
+  "autoplay-muted": [
+    {
+      "do": "wait",
+      "ms": 600
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "scroll",
+      "sel": ".vis-feed",
+      "dy": 260,
+      "ms": 900
+    },
+    {
+      "do": "wait",
+      "ms": 900
+    },
+    {
+      "do": "scroll",
+      "sel": ".vis-feed",
+      "dy": -260,
+      "ms": 700
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": ".vis-feed-mute",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "click",
+      "sel": ".vis-feed-mute",
+      "ms": 200
+    }
+  ],
+  "hover-preview": [
+    {
+      "do": "hover",
+      "sel": ".vis-hp-card:nth-child(1)",
+      "ms": 400
+    },
+    {
+      "do": "hover",
+      "sel": ".vis-hp-card:nth-child(2)",
+      "ms": 250
+    },
+    {
+      "do": "hover",
+      "sel": ".vis-hp-card:nth-child(4)",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 1200
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 1000
+    },
+    {
+      "do": "move",
+      "sel": ".vis-hp-card:nth-child(1)",
+      "at": [
+        0.5,
+        -0.3
+      ],
+      "ms": 300
+    }
+  ],
+  "poster-frame": [
+    {
+      "do": "wait",
+      "ms": 1700
+    },
+    {
+      "do": "click",
+      "sel": ".vis-pf-scenes button:nth-child(4)",
+      "ms": 500
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "click",
+      "sel": ".vis-pf-scenes button:nth-child(2)",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    },
+    {
+      "do": "click",
+      "sel": ".vis-pf-scenes button:nth-child(3)",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    }
+  ],
+  "captions": [
+    {
+      "do": "click",
+      "sel": ".vis-cap-ctrl .vis-ov-btn",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 900
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "click",
+      "sel": ".vis-cap-cue >> nth=1",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 900
+    },
+    {
+      "do": "click",
+      "sel": ".vis-cc",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    },
+    {
+      "do": "click",
+      "sel": ".vis-cc",
+      "ms": 200
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    }
+  ],
+  "adaptive-streaming": [
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "drag",
+      "sel": ".vis-ri-ctl input",
+      "from": [
+        0.65,
+        0.5
+      ],
+      "to": [
+        0.03,
+        0.5
+      ],
+      "ms": 800
+    },
+    {
+      "do": "wait",
+      "ms": 2800
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "drag",
+      "sel": ".vis-ri-ctl input",
+      "from": [
+        0.03,
+        0.5
+      ],
+      "to": [
+        0.65,
+        0.5
+      ],
+      "ms": 600
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    }
+  ],
+  "lightbox": [
+    {
+      "do": "click",
+      "sel": ".vis-lb-thumb:nth-child(2)",
+      "ms": 500
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "click",
+      "sel": ".vis-lb-nav.next",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    },
+    {
+      "do": "click",
+      "sel": ".vis-lb-close",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    }
+  ],
+  "carousel": [
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "click",
+      "sel": ".vis-car .vis-lb-nav.next",
+      "ms": 500
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "click",
+      "sel": ".vis-car .vis-lb-nav.next",
+      "ms": 200
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "click",
+      "sel": ".vis-car-dots button:nth-child(1)",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    }
+  ],
+  "masonry": [
+    {
+      "do": "wait",
+      "ms": 500
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"그리드\")",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 900
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"메이슨리\")",
+      "ms": 300
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 800
+    }
+  ],
+  "justified-grid": [
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"저스티파이드\")",
+      "ms": 500
+    },
+    {
+      "do": "wait",
+      "ms": 1000
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"그리드\")",
+      "ms": 300
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"저스티파이드\")",
+      "ms": 300
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    }
+  ],
+  "filmstrip": [
+    {
+      "do": "click",
+      "sel": ".fs-nav.next",
+      "ms": 500
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": ".fs-nav.next",
+      "ms": 100
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": ".fs-thumb:nth-child(6)",
+      "ms": 500
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "click",
+      "sel": ".fs-thumb:nth-child(1)",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    }
+  ],
+  "grid-list-toggle": [
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "click",
+      "sel": "button[aria-label=\"목록 보기\"]",
+      "ms": 500
+    },
+    {
+      "do": "wait",
+      "ms": 900
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "click",
+      "sel": "button[aria-label=\"격자 보기\"]",
+      "ms": 300
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    },
+    {
+      "do": "drag",
+      "sel": ".vis-gl-size input",
+      "from": [
+        0.33,
+        0.5
+      ],
+      "to": [
+        0.0,
+        0.5
+      ],
+      "ms": 600
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "drag",
+      "sel": ".vis-gl-size input",
+      "from": [
+        0.0,
+        0.5
+      ],
+      "to": [
+        0.33,
+        0.5
+      ],
+      "ms": 400
+    }
+  ],
+  "multi-select": [
+    {
+      "do": "down",
+      "sel": ".vis-ms-item:nth-child(2)",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 650
+    },
+    {
+      "do": "up"
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "click",
+      "sel": ".vis-ms-item:nth-child(4)",
+      "ms": 300
+    },
+    {
+      "do": "click",
+      "sel": ".vis-ms-item:nth-child(11)",
+      "shift": true,
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"취소\")",
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    }
+  ]
+}

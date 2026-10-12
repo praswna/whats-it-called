@@ -22,6 +22,16 @@ Vite + React + TypeScript. 데이터는 `src/data/terms.ts`, 예시 컴포넌트
 
 `src/data/terms.ts` 에 항목을 하나 추가하면 됩니다. `demo` 키를 넣으면 `src/demos/index.tsx` 에 같은 키로 등록된 컴포넌트가 상세 화면에 붙습니다.
 
+## 목록 썸네일
+
+카드의 움직이는 썸네일은 예시를 실제로 조작하며 녹화해 만듭니다. 조작 순서는 `scripts/thumbs/steps/*.json` 에 있습니다.
+예시를 고치거나 새로 넣었으면 순서를 적고 다시 녹화합니다 (ffmpeg, Playwright 필요).
+
+```bash
+npm run thumbs                          # 전부 (public/thumbs, src/data/thumbs.ts 갱신)
+npm run thumbs -- --only lightbox,tabs  # 일부만
+```
+
 ## 배포
 
 `main` 에 푸시하면 GitHub Actions 가 빌드해서 GitHub Pages 에 올립니다 (저장소 설정 > Pages > Source 를 "GitHub Actions" 로 한 번 바꿔 두어야 합니다).
