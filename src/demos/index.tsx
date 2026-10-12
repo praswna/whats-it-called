@@ -2,6 +2,7 @@ import type { ComponentType } from "react";
 import { HoverCardDemo, TooltipDemo, ScrubbyDemo, PopupSliderDemo, SpringMenuDemo, DragReorderDemo, LongPressDemo, SwipeDismissDemo, ContextMenuDemo } from "./pointer";
 import { ToastDemo, SkeletonDemo, ProgressDemo, OptimisticDemo, TogglesDemo, InlineEditDemo, DebounceThrottleDemo } from "./feedback";
 import { FocusTrapDemo, BottomSheetDemo, AccordionDemo, InfiniteScrollDemo, VirtualListDemo, CommandPaletteDemo, EasingDemo } from "./layout";
+import { BeforeAfterDemo, OnionSkinDemo, SideBySideDemo, HoldCompareDemo, LoupeDemo, PixelDiffDemo } from "./compare";
 import { terms } from "../data/terms";
 
 const commandNames = terms.map((t) => `${t.name} (${t.en})`);
@@ -30,4 +31,10 @@ export const demos: Record<string, ComponentType> = {
   virtualList: VirtualListDemo,
   commandPalette: () => <CommandPaletteDemo commands={commandNames} />,
   easing: EasingDemo,
+  beforeAfter: BeforeAfterDemo,
+  onionSkin: OnionSkinDemo,
+  sideBySide: SideBySideDemo,
+  holdCompare: HoldCompareDemo,
+  loupe: LoupeDemo,
+  pixelDiff: PixelDiffDemo,
 };

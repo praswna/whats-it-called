@@ -292,6 +292,62 @@ export const terms: Term[] = [
     related: ["drag-and-drop", "progress"],
   },
 
+  // 이미지 비교·확인
+  {
+    id: "before-after-slider", name: "비포·애프터 슬라이더", en: "Before/after slider", aliases: ["이미지 비교 슬라이더", "image comparison slider", "전후 비교", "와이프 비교", "wipe", "스와이프 비교", "swipe compare", "비교 슬라이더", "juxtapose", "선 끌어서 비교"],
+    category: "control",
+    summary: "두 사진을 겹쳐 놓고 가운데 선을 끌어 전과 후를 나눠 보는 컨트롤.",
+    description: "같은 크기의 두 이미지를 겹쳐 두고, 위 이미지를 세로선 위치까지만 잘라 보여 주는 방식입니다. 선을 좌우로 끌면 선 왼쪽은 '전', 오른쪽은 '후'가 됩니다. 같은 자리의 변화를 눈을 옮기지 않고 볼 수 있어 나란히 놓는 것보다 작은 차이가 잘 보입니다. 위 이미지를 CSS clip-path: inset(0 0 0 X%) 로 자르고, 끄는 동안 X 를 바꾸면 만들 수 있습니다. 손잡이는 키보드 화살표로도 움직이게 해 두면 좋습니다.",
+    examples: ["사진 보정 앱의 보정 전후 비교", "리모델링·성형 전후 사진", "위성 지도의 연도별 비교", "GitHub 이미지 diff 의 Swipe 보기"],
+    related: ["onion-skin", "side-by-side-compare", "hold-to-compare", "pixel-diff", "slider"],
+    demo: "beforeAfter",
+  },
+  {
+    id: "onion-skin", name: "어니언 스킨", en: "Onion skin", aliases: ["겹쳐 보기", "불투명도 비교", "opacity compare", "오버레이 비교", "반투명 겹치기", "크로스페이드 비교", "라이트 테이블"],
+    category: "control",
+    summary: "두 이미지를 겹쳐 놓고 위 이미지의 불투명도를 조절해 비교하는 방식.",
+    description: "두 이미지를 같은 자리에 겹쳐 두고 위 이미지의 불투명도를 0~100% 사이에서 조절합니다. 슬라이더를 움직이면 한 장면이 다른 장면으로 서서히 바뀌어, 위치가 조금 어긋났거나 물체가 생기고 없어진 곳이 눈에 띕니다. 이름은 애니메이터가 얇은 종이(양파 껍질)를 겹쳐 앞뒤 그림을 비춰 보던 데서 왔습니다.",
+    examples: ["GitHub 이미지 diff 의 Onion Skin 보기", "애니메이션 툴에서 앞뒤 프레임 반투명 표시", "디자인 시안 위에 실제 화면 겹쳐 맞춰 보기"],
+    related: ["before-after-slider", "pixel-diff", "side-by-side-compare"],
+    demo: "onionSkin",
+  },
+  {
+    id: "side-by-side-compare", name: "나란히 비교", en: "Side-by-side comparison", aliases: ["2-up", "투업", "좌우 비교", "병렬 비교", "동기화 커서", "synced cursor", "동기화 줌", "synced zoom"],
+    category: "control",
+    summary: "두 이미지를 옆에 나란히 두고, 커서·확대·스크롤을 함께 움직이는 비교 방식.",
+    description: "두 버전을 좌우(또는 위아래)에 나란히 놓고 보는 가장 기본적인 비교입니다. 둘을 오가며 같은 자리를 찾기가 번거로워서, 한쪽에서 커서를 움직이거나 확대·스크롤하면 다른 쪽도 같은 자리를 따라가게 묶어 두는 경우가 많습니다. 전체 모습을 한눈에 보기 좋고, 작은 차이는 비포·애프터 슬라이더나 어니언 스킨이 더 잘 보입니다.",
+    examples: ["GitHub 이미지 diff 의 2-up 보기", "Lightroom 의 전후 나란히 보기(Y 키)", "코드 리뷰의 좌우 diff(split diff)"],
+    related: ["before-after-slider", "onion-skin", "split-view", "pixel-diff"],
+    demo: "sideBySide",
+  },
+  {
+    id: "hold-to-compare", name: "누르고 있는 동안 원본 보기", en: "Press and hold to compare", aliases: ["홀드 비교", "꾹 눌러 원본", "show original", "원본 보기", "토글 비교", "flicker compare", "깜빡이 비교", "백슬래시 키"],
+    category: "control",
+    summary: "누르고 있는 동안만 원본으로 바뀌고, 떼면 결과로 돌아오는 비교.",
+    description: "보정·필터를 적용한 결과를 보여 주다가, 사진이나 버튼을 누르고 있는 동안만 원본으로 바꿔 보여 주는 방식입니다. 같은 자리에서 순간적으로 바뀌어서 변화가 깜빡이듯 눈에 들어옵니다. 손을 떼면 저절로 돌아오므로 '원본 보기'를 켜 놓고 잊어버리는 일이 없습니다. 데스크톱에서는 키를 누르고 있는 동안 바뀌게 하기도 합니다.",
+    examples: ["인스타그램·아이폰 사진 편집에서 사진 꾹 눌러 원본 보기", "Lightroom 의 \\ 키로 보정 전후 전환", "카메라 앱 필터 미리보기"],
+    related: ["before-after-slider", "long-press", "onion-skin"],
+    demo: "holdCompare",
+  },
+  {
+    id: "magnifier-loupe", name: "돋보기 렌즈", en: "Magnifier loupe", aliases: ["루페", "loupe", "확대경", "돋보기", "magnifying glass", "hover zoom", "호버 줌", "이미지 줌 렌즈", "zoom lens"],
+    category: "control",
+    summary: "커서가 있는 자리만 동그란 렌즈 안에 크게 보여 주는 기능.",
+    description: "사진 위에 커서를 올리면 그 자리 주변을 확대해서 작은 렌즈(원이나 사각형) 안에 보여 줍니다. 화면 전체를 확대하지 않고도 세부를 볼 수 있어, 흐름을 잃지 않습니다. 렌즈 대신 옆에 큰 확대 창을 띄우는 방식도 같은 계열입니다. 터치 화면에서는 손가락에 가려지므로 렌즈를 손가락 위쪽에 띄웁니다.",
+    examples: ["쇼핑몰 상품 사진에 커서를 올리면 확대", "iOS 텍스트 선택 시 뜨던 돋보기", "Lightroom·Photoshop 의 루페 보기"],
+    related: ["pinch-zoom", "lightbox", "side-by-side-compare"],
+    demo: "loupe",
+  },
+  {
+    id: "pixel-diff", name: "차이 강조", en: "Pixel diff", aliases: ["이미지 diff", "image diff", "difference blend", "차이 블렌드", "변경 부분 강조", "visual diff", "시각적 회귀", "visual regression", "스크린샷 비교"],
+    category: "control",
+    summary: "두 버전을 겹쳐 서로 다른 픽셀만 밝게 드러내는 비교 방식.",
+    description: "두 이미지를 겹쳐 '차이(difference)' 방식으로 섞으면 같은 픽셀은 검게 사라지고 다른 픽셀만 밝게 남습니다. 눈으로는 찾기 힘든 한두 픽셀 차이도 바로 보입니다. 개발에서는 화면 스크린샷을 이전 것과 자동으로 비교해 의도하지 않은 변화를 잡는 '시각적 회귀 테스트'에 같은 원리를 씁니다. CSS 에서는 mix-blend-mode: difference 로 흉내 낼 수 있습니다.",
+    examples: ["Photoshop 레이어 혼합 모드 '차이'", "Percy·Chromatic 같은 스크린샷 비교 테스트", "틀린 그림 찾기 자동 풀이"],
+    related: ["onion-skin", "before-after-slider", "side-by-side-compare"],
+    demo: "pixelDiff",
+  },
+
   // ───────── 텍스트·편집 ─────────
   {
     id: "inline-edit", name: "인라인 편집", en: "Inline editing", aliases: ["제자리 편집", "edit in place", "click to edit", "더블클릭 편집", "contenteditable"],
