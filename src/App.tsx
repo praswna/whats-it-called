@@ -248,7 +248,7 @@ export default function App() {
   );
 
   return (
-    <div className="app" ref={appRef}>
+    <div className={`app ${current && !floating ? "reading" : ""}`} ref={appRef}>
       <header className="top" ref={topRef}>
         <div className="brand">
           <h1><a href="./" onClick={(e) => { e.preventDefault(); if (current) close(); setQuery(""); window.scrollTo(0, 0); }}>이거 뭐라고 하지</a></h1>

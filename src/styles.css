@@ -111,6 +111,8 @@ a { color: var(--accent); }
 @media (max-width: 759.98px) {
   .body.has-detail .main { display: none; }
   .detail { overflow-x: clip; }
+  /* 휴대폰에서 용어를 읽는 동안에는 제목·검색 머리말을 숨겨 내용을 위로 올린다 */
+  .app.reading .top { display: none; }
   .swipe { touch-action: pan-y; }
   .detail-body { margin: 0 auto; }
 }
