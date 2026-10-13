@@ -243,6 +243,7 @@ export default function App() {
           </button>
         ) : <span />}
       </nav>
+      {!floating && (prev || next) && <p className="swipe-hint muted">좌우로 밀어도 이전·다음 용어로 넘어갑니다.</p>}
     </article>
   );
 
@@ -304,7 +305,7 @@ export default function App() {
 
         {current && !floating && (
           <aside className="detail" ref={paneRef} aria-label={`${current.name} 설명`}>
-            {detail}
+            <SwipeNav prevId={prev?.id} nextId={next?.id} onGo={open}>{detail}</SwipeNav>
           </aside>
         )}
       </div>
@@ -345,6 +346,60 @@ function TermCard({ term, active, still, onOpen }: { term: Term; active: boolean
       <span className="card-summary">{term.summary}</span>
       {term.demo && <span className="card-demo">▶ 직접 해 보기</span>}
     </button>
+  );
+}
+
+// 휴대폰 상세 화면: 손가락으로 좌우로 밀면 이전·다음 용어로 넘어간다.
+// 예시 상자 안이나 입력칸에서 시작한 손짓, 화면 왼쪽 끝(브라우저 뒤로 가기 손짓)은 건드리지 않는다.
+function SwipeNav({ prevId, nextId, onGo, children }: { prevId?: string; nextId?: string; onGo: (id: string) => void; children: React.ReactNode }) {
+  const [dx, setDx] = useState(0);
+  const [anim, setAnim] = useState(false);
+  const st = useRef<{ x: number; y: number; t: number; lock: "x" | "y" | null } | null>(null);
+  const timers = useRef<number[]>([]);
+  useEffect(() => () => timers.current.forEach(clearTimeout), []);
+  const later = (fn: () => void, ms: number) => { timers.current.push(window.setTimeout(fn, ms)); };
+
+  const onDown = (e: React.PointerEvent) => {
+    if (e.pointerType !== "touch" || e.clientX < 24) return;
+    if ((e.target as Element).closest(".demo, input, textarea, select, [contenteditable]")) return;
+    st.current = { x: e.clientX, y: e.clientY, t: performance.now(), lock: null };
+  };
+  const onMove = (e: React.PointerEvent) => {
+    const s = st.current; if (!s) return;
+    const mx = e.clientX - s.x, my = e.clientY - s.y;
+    if (!s.lock && Math.hypot(mx, my) > 10) s.lock = Math.abs(mx) > Math.abs(my) * 1.3 ? "x" : "y";
+    if (s.lock !== "x") return;
+    // 더 갈 곳이 없는 쪽은 살짝만 따라오게
+    const blocked = (mx > 0 && !prevId) || (mx < 0 && !nextId);
+    setAnim(false);
+    setDx(blocked ? mx * 0.25 : mx);
+  };
+  const onEnd = (e: React.PointerEvent) => {
+    const s = st.current; st.current = null;
+    if (!s || s.lock !== "x") return;
+    const mx = e.clientX - s.x;
+    const fast = Math.abs(mx) / (performance.now() - s.t) > 0.5;
+    const target = mx < 0 ? nextId : prevId;
+    setAnim(true);
+    if (target && (Math.abs(mx) > 80 || (fast && Math.abs(mx) > 30))) {
+      const w = window.innerWidth, dir = mx < 0 ? -1 : 1;
+      setDx(dir * w);
+      later(() => {
+        onGo(target);
+        setAnim(false);
+        setDx(-dir * w * 0.35);
+        later(() => { setAnim(true); setDx(0); }, 30);
+      }, 180);
+    } else {
+      setDx(0);
+    }
+  };
+  const onCancel = () => { st.current = null; setAnim(true); setDx(0); };
+  return (
+    <div className="swipe" onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onEnd} onPointerCancel={onCancel}
+      style={{ transform: dx ? `translateX(${dx}px)` : undefined, transition: anim ? "transform 180ms ease-out" : "none", opacity: anim && Math.abs(dx) > 200 ? 0.4 : 1 }}>
+      {children}
+    </div>
   );
 }
 

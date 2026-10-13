@@ -95,6 +95,7 @@ a { color: var(--accent); }
 .pager-btn.end { align-items: flex-end; text-align: right; }
 .pager-btn:hover { border-color: var(--accent); }
 .pager-btn span { font-size: 12px; }
+.swipe-hint { font-size: 12px; text-align: center; margin-top: 10px; }
 /* 넓은 화면: 누른 카드 옆에 떠 있는 창 */
 .app { position: relative; }
 .pop { position: absolute; z-index: 4; width: min(560px, calc(100vw - 32px)); animation: pop-in 140ms ease-out; }
@@ -109,6 +110,8 @@ a { color: var(--accent); }
 /* 좁은 화면: 목록 대신 한 페이지 */
 @media (max-width: 759.98px) {
   .body.has-detail .main { display: none; }
+  .detail { overflow-x: clip; }
+  .swipe { touch-action: pan-y; }
   .detail-body { margin: 0 auto; }
 }
 .eyebrow { font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
