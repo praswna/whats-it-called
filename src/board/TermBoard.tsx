@@ -12,7 +12,7 @@ type Side = "front" | "back" | "top" | "bottom";
 interface Rect { x: number; y: number; w: number; h: number }
 interface View { x: number; y: number; z: number }
 interface Layout { pos: Record<string, Pt>; links: [string, string][] }
-type EdgeMode = "all" | "picked";
+type EdgeMode = "picked" | "group" | "all";
 
 export type BoardFocus = { kind: "cat" | "term" | "fit"; id: string; seq: number } | null;
 
@@ -33,7 +33,8 @@ const TONES = ["var(--accent)", "var(--warm)", "#8a63d2", "#2f7fc1"];
 const DIR: Record<Side, Pt> = { front: { x: -1, y: 0 }, back: { x: 1, y: 0 }, top: { x: 0, y: -1 }, bottom: { x: 0, y: 1 } };
 const KEY_LAYOUT = "wic-board-layout-v1";
 const KEY_VIEW = "wic-board-view-v1";
-const KEY_EDGES = "wic-board-edges-v1";
+const KEY_EDGES = "wic-board-edges-v2"; // v2: 기본이 "고른 것만" 으로 바뀌었다
+const FAR_Z = 0.45; // 이보다 작게 보면 글씨 대신 카테고리 이름만 크게 (멀리 보기)
 
 // ── 처음 자리: 카테고리 상자를 네 줄 벽돌쌓기로, 상자 안은 두 칸씩 ──
 function defaultLayout(terms: Term[], categories: Category[]): Layout {
@@ -147,7 +148,11 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
   const [size, setSize] = useState({ w: 0, h: 0 });
   const [sel, setSel] = useState<Set<string>>(() => new Set(activeId ? [activeId] : []));
   const [selLink, setSelLink] = useState<string | null>(null);
-  const [edgeMode, setEdgeMode] = useState<EdgeMode>(() => (readJson(KEY_EDGES) === "picked" ? "picked" : "all"));
+  const [edgeMode, setEdgeMode] = useState<EdgeMode>(() => {
+    const m = readJson(KEY_EDGES);
+    return m === "group" || m === "all" ? m : "picked";
+  });
+  const [hover, setHover] = useState<string | null>(null);
   const [draft, setDraft] = useState<{ from: string; side: Side; cur: Pt; target: string | null } | null>(null);
   const [marquee, setMarquee] = useState<Rect | null>(null);
   const [dragging, setDragging] = useState<"" | "pan" | "move">("");
@@ -240,10 +245,12 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
   };
   const toWorld = (p: Pt): Pt => { const v = viewRef.current!; return { x: (p.x - v.x) / v.z, y: (p.y - v.y) / v.z }; };
   const usableW = () => Math.max(160, size.w - insetRight);
-  const viewFor = (r: Rect, maxZ: number, pad = 40): View => {
-    const w = usableW(), h = size.h || 400;
+  // 위쪽 도구 막대(TOP)와 아래 안내 줄(BOTTOM)을 피해서 맞춘다
+  const TOP = 52, BOTTOM = 24;
+  const viewFor = (r: Rect, maxZ: number, pad = 28): View => {
+    const w = usableW(), h = Math.max(120, (size.h || 400) - TOP - BOTTOM);
     const z = clamp(Math.min((w - pad * 2) / Math.max(r.w, 1), (h - pad * 2) / Math.max(r.h, 1)), Z_MIN, maxZ);
-    return { z, x: w / 2 - (r.x + r.w / 2) * z, y: h / 2 - (r.y + r.h / 2) * z };
+    return { z, x: w / 2 - (r.x + r.w / 2) * z, y: TOP + h / 2 - (r.y + r.h / 2) * z };
   };
   const flyTo = (target: View) => {
     cancelAnimationFrame(anim.current);
@@ -566,6 +573,10 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
 
   // ── 그리기 ──
   // 판을 옮기거나 확대할 때는 아래 그림을 다시 만들지 않고 바깥 transform 만 바꾼다
+  // 멀리 보기 - 글자 크기를 확대 배율로 나누므로 배율을 조금씩 끊어서(0.02 단위) 다시 그리는 횟수를 줄인다
+  const zNow = view?.z ?? 1;
+  const far = zNow < FAR_Z;
+  const farZ = far ? Math.max(Z_MIN, Math.round(zNow * 50) / 50) : 1;
   // 밝게 둘 노드 - 검색 중이면 찾은 용어(와 고른 것), 아니면 고른 노드와 그 이웃
   const lit = useMemo(() => {
     if (matches) return new Set([...matches, ...sel]);
@@ -576,10 +587,17 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
     const pos = layout.pos;
     const edgeClass = (a: string, b: string) => {
       if (sel.has(a) || sel.has(b)) return "hot";
+      if (hover === a || hover === b) return "peek";
       if (matches) return matches.has(a) && matches.has(b) ? "" : "dim";
       return sel.size ? "dim" : "";
     };
-    const shown = edgeMode === "picked" ? related.filter(([a, b]) => sel.has(a) || sel.has(b)) : related;
+    // 선이 많으면(348개, 그중 절반이 카테고리를 넘나든다) 판이 실타래가 된다 - 기본은 고르거나 마우스를 올린 노드의 선만
+    const touches = (a: string, b: string) => sel.has(a) || sel.has(b) || hover === a || hover === b;
+    const shown = related.filter(([a, b]) => {
+      if (edgeMode === "all" || touches(a, b)) return true;
+      if (matches && matches.has(a) && matches.has(b)) return true;
+      return edgeMode === "group" && termById.get(a)?.category === termById.get(b)?.category;
+    });
     const relatedPaths = shown.map(([a, b]) => (
       <path key={`r-${a}-${b}`} className={`tb-edge ${edgeClass(a, b)}`} d={edgeD(pos[a], pos[b])} />
     ));
@@ -592,19 +610,14 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
         </g>
       );
     });
-    const used = new Set<string>();
-    for (const [a, b] of [...shown, ...layout.links]) {
-      const [sa, sb] = anchors(pos[a], pos[b]);
-      used.add(`${a}:${sa}`); used.add(`${b}:${sb}`);
-    }
     return (
       <>
         {groups.map((g) => (
           <g key={g.cat.id} className={`tb-group ${lit && !(catTerms.get(g.cat.id) ?? []).some((id) => lit.has(id)) ? "dim" : ""}`} style={{ "--tone": g.tone } as React.CSSProperties}>
             <rect className="tb-group-body" x={g.rect.x} y={g.rect.y} width={g.rect.w} height={g.rect.h} rx={12} />
             <path className="tb-group-head" data-group={g.cat.id} d={headPath(g.rect)} />
-            <text className="tb-group-title" x={g.rect.x + 14} y={g.rect.y + 19}>{fit(g.cat.name, g.rect.w - 70, 1.08)}</text>
-            <text className="tb-group-count" x={g.rect.x + g.rect.w - 14} y={g.rect.y + 19} textAnchor="end">{catTerms.get(g.cat.id)?.length ?? 0}</text>
+            {!far && <text className="tb-group-title" x={g.rect.x + 14} y={g.rect.y + 19}>{fit(g.cat.name, g.rect.w - 70, 1.08)}</text>}
+            {!far && <text className="tb-group-count" x={g.rect.x + g.rect.w - 14} y={g.rect.y + 19} textAnchor="end">{catTerms.get(g.cat.id)?.length ?? 0}</text>}
           </g>
         ))}
         <g>{relatedPaths}</g>
@@ -614,8 +627,18 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
           const r = rectOfNode(p);
           const on = sel.has(t.id);
           const cls = ["tb-node", on ? "on" : "", activeId === t.id ? "open" : "", lit && !lit.has(t.id) ? "dim" : "", matches?.has(t.id) ? "match" : "", draft?.target === t.id ? "target" : ""].join(" ");
+          if (far) {
+            return (
+              <g key={t.id} className={cls}>
+                <rect className="tb-node-box" data-node={t.id} x={r.x} y={r.y} width={r.w} height={r.h} rx={9} />
+                {on && <path className="tb-sel" d={brackets(r)} />}
+              </g>
+            );
+          }
           return (
-            <g key={t.id} className={cls}>
+            <g key={t.id} className={cls}
+              onPointerEnter={(e) => { if (e.pointerType === "mouse" && !e.buttons) setHover(t.id); }}
+              onPointerLeave={() => setHover((h) => (h === t.id ? null : h))}>
               <rect className="tb-node-box" data-node={t.id} x={r.x} y={r.y} width={r.w} height={r.h} rx={9} />
               <text className="tb-node-name" x={r.x + 12} y={r.y + 19}>{fit(t.name, NODE_W - (t.demo ? 40 : 24), 1.04)}</text>
               <text className="tb-node-en" x={r.x + 12} y={r.y + 35}>{fit(t.en, NODE_W - 24, 0.8)}</text>
@@ -625,7 +648,7 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
                 return (
                   <g key={s}>
                     <circle className="tb-port-hit" data-port={`${t.id}:${s}`} cx={q.x} cy={q.y} r={coarse ? 14 : 9} />
-                    <circle className={`tb-port ${s === "top" || s === "bottom" ? "tb" : ""} ${used.has(`${t.id}:${s}`) ? "used" : ""}`} cx={q.x} cy={q.y} r={4} />
+                    <circle className="tb-port" cx={q.x} cy={q.y} r={4} />
                   </g>
                 );
               })}
@@ -633,9 +656,18 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
             </g>
           );
         })}
+        {/* 멀리 보기: 카테고리 이름을 화면에서 읽히는 크기로 상자 가운데에 */}
+        {far && groups.map((g) => (
+          <g key={`far-${g.cat.id}`} className={`tb-far ${lit && !(catTerms.get(g.cat.id) ?? []).some((id) => lit.has(id)) ? "dim" : ""}`} style={{ "--tone": g.tone } as React.CSSProperties}>
+            <text className="tb-far-name" x={g.rect.x + g.rect.w / 2} y={g.rect.y + g.rect.h / 2} textAnchor="middle"
+              style={{ fontSize: 17 / farZ, strokeWidth: 5 / farZ }}>{g.cat.name}</text>
+            <text className="tb-far-count" x={g.rect.x + g.rect.w / 2} y={g.rect.y + g.rect.h / 2 + 20 / farZ} textAnchor="middle"
+              style={{ fontSize: 12 / farZ, strokeWidth: 4 / farZ }}>{`용어 ${catTerms.get(g.cat.id)?.length ?? 0}개`}</text>
+          </g>
+        ))}
       </>
     );
-  }, [layout, related, groups, terms, sel, selLink, matches, lit, activeId, draft?.target, edgeMode, catTerms, coarse]);
+  }, [layout, related, groups, terms, termById, sel, selLink, matches, lit, activeId, draft?.target, edgeMode, catTerms, coarse, hover, far, farZ]);
 
   const draftD = (() => {
     if (!draft) return null;
@@ -674,8 +706,12 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
             <button type="button" className="txt" onClick={fitAll}>전체</button>
           </div>
           <div className="tb-pill" role="radiogroup" aria-label="선 보기">
-            <button type="button" role="radio" aria-checked={edgeMode === "all"} className={`txt ${edgeMode === "all" ? "on" : ""}`} onClick={() => setEdgeMode("all")}>모든 선</button>
-            <button type="button" role="radio" aria-checked={edgeMode === "picked"} className={`txt ${edgeMode === "picked" ? "on" : ""}`} onClick={() => setEdgeMode("picked")}>고른 것만</button>
+            <span className="tb-pill-label">선</span>
+            {([["picked", "고른 것만"], ["group", "묶음 안"], ["all", "모두"]] as const).map(([k, name]) => (
+              <button key={k} type="button" role="radio" aria-checked={edgeMode === k} className={`txt ${edgeMode === k ? "on" : ""}`}
+                title={k === "picked" ? "고르거나 마우스를 올린 용어의 선만" : k === "group" ? "같은 카테고리 안의 선까지" : "관련 용어 선 전부"}
+                onClick={() => setEdgeMode(k)}>{name}</button>
+            ))}
           </div>
           <div className="tb-pill">
             <button type="button" aria-label="되돌리기" title="되돌리기 (Ctrl+Z)" disabled={!past.current.length} onClick={undo}>↶</button>
