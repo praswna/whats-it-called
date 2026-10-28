@@ -304,6 +304,15 @@ a { color: var(--accent); }
 .board-panel .detail { height: 100%; overflow-y: auto; overscroll-behavior: contain; border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); }
 .board-panel .detail-body { padding: 18px 22px 24px; }
 .board-panel .detail-name { font-size: 24px; }
+/* 휴대폰 보드의 설명 시트 (아래 56%) */
+.board-sheet { position: absolute; left: 0; right: 0; bottom: 0; height: 56%; z-index: 6; display: flex; flex-direction: column; background: var(--surface); border-radius: 16px 16px 0 0; border-top: 1px solid var(--line); box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.25); animation: sheet-up 180ms ease-out; transition: transform 160ms ease-out; }
+.board-sheet-grip { flex: none; height: 18px; display: grid; place-items: center; touch-action: none; cursor: grab; }
+.board-sheet-grip span { width: 40px; height: 4px; border-radius: 2px; background: var(--line); }
+.board-sheet .detail { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; border-radius: 0; background: transparent; }
+.board-sheet .detail-body { padding: 0 16px calc(24px + env(safe-area-inset-bottom, 0px)); }
+.board-sheet .detail-top { margin-bottom: 4px; }
+.board-sheet .detail-name { font-size: 24px; }
+@keyframes sheet-up { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
 
 /* ── 푸터 ── */
 .foot { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 14px 24px calc(14px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); }
@@ -339,11 +348,9 @@ a { color: var(--accent); }
   .search { order: 3; }
   .view-switch { margin-left: auto; }
   .view-switch button { padding: 6px 10px; font-size: 13px; }
-  .app.board-mode .top { padding-bottom: 10px; }
-  .app.board-mode .tagline { display: none; }
-  .app.board-mode .body { grid-template-rows: auto minmax(0, 1fr); }
-  .app.board-mode .foot { padding-block: 6px calc(6px + env(safe-area-inset-bottom, 0px)); }
-  .app.board-mode .foot > span:first-child { display: none; }
+  /* 휴대폰 보드: 머리말·카테고리 줄·푸터 없이 판이 화면 전체 (도구와 빌드 표시는 판 위 막대·⋯ 메뉴로) */
+  .app.board-mode .top, .app.board-mode .side, .app.board-mode .foot { display: none; }
+  .app.board-mode .body { grid-template-rows: minmax(0, 1fr); }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }

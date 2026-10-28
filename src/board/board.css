@@ -94,3 +94,65 @@
   .tb-mini { display: none; }
   .tb-peek { bottom: 30px; }
 }
+
+/* ── 휴대폰 보드 (목업 A~E): 판이 화면 전체, 도구는 떠 있다. 여백은 최소로 ── */
+.tbm-bar { position: absolute; left: 6px; right: 6px; top: calc(6px + env(safe-area-inset-top, 0px)); height: 34px; box-sizing: border-box; display: flex; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18); z-index: 4; cursor: default; }
+.tbm-bar.searching { border-color: var(--accent); }
+.tb-compact .tb-board:focus-visible { box-shadow: none; }
+.tbm-ib { position: relative; flex: none; width: 38px; height: 32px; border: none; background: transparent; color: var(--fg); border-radius: 8px; display: grid; place-items: center; padding: 0; cursor: pointer; }
+.tbm-ib::after { content: ""; position: absolute; inset: -6px -1px; } /* 보이는 크기는 작게, 누르는 영역은 넓게 */
+.tbm-ib:active, .tbm-ib[aria-expanded="true"] { background: var(--surface-2); }
+.tbm-cat { position: relative; flex: 1; min-width: 0; height: 32px; border: none; background: transparent; color: var(--fg); display: flex; align-items: center; gap: 7px; padding: 0 8px; font: inherit; font-size: 14px; font-weight: 700; border-radius: 8px; cursor: pointer; }
+.tbm-cat::after { content: ""; position: absolute; inset: -6px 0; }
+.tbm-cat svg { flex: none; color: var(--muted); }
+.tbm-sw { width: 9px; height: 9px; border-radius: 3px; flex: none; }
+.tbm-cat-name { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.tbm-q { flex: 1; min-width: 0; height: 32px; border: none; background: transparent; color: var(--fg); font: inherit; font-size: 16px; outline: none; padding: 0; }
+.tbm-q::-webkit-search-cancel-button { display: none; }
+.tbm-found { position: absolute; left: 6px; top: calc(46px + env(safe-area-inset-top, 0px)); height: 32px; box-sizing: border-box; display: flex; align-items: center; padding: 0 2px 0 10px; gap: 2px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; font-size: 13px; z-index: 4; cursor: default; }
+.tbm-found b { color: var(--accent); padding-right: 4px; }
+.tbm-found .mono { font-size: 12px; color: var(--muted); padding: 0 2px; }
+.tbm-found .tbm-ib { width: 32px; height: 28px; }
+.tbm-link { padding: 0 2px; }
+.tbm-txt { height: 28px; border: none; background: transparent; color: var(--fg); font: inherit; font-size: 13px; padding: 0 8px; border-radius: 7px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
+.tbm-txt.danger { color: var(--danger); }
+.tbm-txt.bordered { height: 34px; border: 1px solid var(--line); padding: 0 10px; }
+.tbm-stack { position: absolute; right: 6px; width: 38px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18); z-index: 3; cursor: default; }
+.tbm-stack .tbm-ib { width: 36px; height: 34px; }
+.tbm-stack .tbm-ib::after { inset: -1px -4px; }
+.tbm-pct { font-size: 10px; color: var(--muted); }
+.tbm-rule { width: 24px; height: 1px; background: var(--line); }
+.tbm-peek { position: absolute; left: 6px; right: 6px; bottom: calc(6px + env(safe-area-inset-bottom, 0px)); height: 54px; box-sizing: border-box; display: flex; align-items: center; gap: 8px; padding: 0 5px 0 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 2px 12px rgba(0, 0, 0, 0.22); z-index: 3; cursor: default; animation: tbm-up 140ms ease-out; }
+.tbm-peek-text { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.35; }
+.tbm-peek-head, .tbm-peek-sum { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tbm-peek-head b { font-size: 15px; }
+.tbm-peek-head .mono { font-size: 11px; color: var(--muted); }
+.tbm-peek-sum { font-size: 12.5px; color: var(--muted); }
+.tbm-open { flex: none; height: 42px; padding: 0 16px; border: none; border-radius: 8px; background: var(--accent); color: var(--accent-fg); font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
+.tbm-scrim { position: absolute; inset: 0; z-index: 5; cursor: default; }
+.tbm-scrim.dark { background: rgba(0, 0, 0, 0.45); }
+.tbm-menu { position: absolute; right: 6px; top: calc(46px + env(safe-area-inset-top, 0px)); width: min(264px, calc(100% - 12px)); box-sizing: border-box; z-index: 6; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); padding: 6px; display: flex; flex-direction: column; gap: 2px; cursor: default; animation: tbm-drop 120ms ease-out; }
+.tbm-menu-label { font-size: 11.5px; color: var(--muted); padding: 4px 10px 2px; }
+.tbm-seg { display: flex; gap: 2px; padding: 3px; margin: 0 4px; background: var(--bg); border-radius: 9px; }
+.tbm-seg button { flex: 1; height: 32px; border: none; border-radius: 7px; background: transparent; color: var(--fg); font: inherit; font-size: 12.5px; cursor: pointer; }
+.tbm-seg button.on { background: var(--accent-soft); color: var(--accent); font-weight: 700; }
+.tbm-row { display: flex; }
+.tbm-row .tbm-mi { flex: 1; }
+.tbm-mi { height: 38px; width: 100%; box-sizing: border-box; border: none; background: transparent; color: var(--fg); font: inherit; font-size: 14px; display: flex; align-items: center; gap: 10px; padding: 0 10px; border-radius: 8px; text-align: left; cursor: pointer; }
+.tbm-mi:disabled { opacity: 0.4; cursor: default; }
+.tbm-mi:active:not(:disabled) { background: var(--surface-2); }
+.tbm-mi-static { cursor: default; height: 30px; }
+.tbm-sep { height: 1px; background: var(--line); margin: 4px; }
+.tbm-help { font-size: 11.5px; color: var(--muted); line-height: 1.55; margin: 0 10px 4px; }
+.tbm-stamp { padding: 2px 10px 4px; font-size: 11px; }
+.tbm-sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 6; box-sizing: border-box; background: var(--surface); border-radius: 16px 16px 0 0; border-top: 1px solid var(--line); padding: 6px 12px calc(14px + env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; gap: 10px; cursor: default; animation: tbm-up 180ms ease-out; max-height: 85%; overflow-y: auto; }
+.tbm-grip { align-self: center; width: 40px; height: 4px; border-radius: 2px; background: var(--line); }
+.tbm-sheet-head { display: flex; align-items: center; justify-content: space-between; }
+.tbm-sheet-head h2 { font-family: var(--font-body); font-size: 16px; }
+.tbm-cats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.tbm-cats button { height: 42px; min-width: 0; box-sizing: border-box; padding: 0 10px; border: 1px solid var(--line); border-radius: 9px; background: var(--bg); color: var(--fg); font: inherit; font-size: 13.5px; display: flex; align-items: center; gap: 7px; cursor: pointer; text-align: left; }
+.tbm-cats button .tbm-cat-name { flex: 1; }
+.tbm-cats button .mono { font-size: 11px; color: var(--muted); }
+.tbm-cats button.on { border-color: var(--accent); background: var(--accent-soft); font-weight: 700; }
+@keyframes tbm-up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+@keyframes tbm-drop { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }

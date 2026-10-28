@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { Category, CategoryId, Term } from "../data/types";
 import "./board.css";
 
@@ -132,9 +132,40 @@ interface Props {
   onOpen: (id: string) => void;
   focus: BoardFocus;           // 바깥(카테고리 색인 등)에서 "여기로 가 줘"
   insetRight: number;          // 오른쪽을 가리는 설명 창 폭 - 가운데 맞출 때 그만큼 비켜 준다
+  // 휴대폰: 머리말 없이 판이 화면 전체를 쓰고, 도구는 판 위에 떠 있다 (목업 A~E)
+  compact?: boolean;
+  sheetOpen?: boolean;         // 아래 절반을 설명 시트가 가린다 (목업 F1)
+  query?: string;
+  onQuery?: (q: string) => void;
+  onList?: () => void;
+  onBackgroundTap?: () => void;
+  stamp?: ReactNode;           // 빌드 시각·커밋 - 휴대폰에서는 ⋯ 메뉴 안에
 }
 
-export function TermBoard({ terms, categories, matches, activeId, onOpen, focus, insetRight }: Props) {
+const SHEET_RATIO = 0.56;
+
+// 휴대폰 도구 아이콘 (선 아이콘, 글자색)
+function Icon({ d, size = 18 }: { d: string; size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={d} /></svg>
+  );
+}
+const I = {
+  down: "M6 9l6 6 6-6",
+  back: "M15 6l-6 6 6 6",
+  next: "M9 6l6 6-6 6",
+  search: "M11 4a7 7 0 100 14 7 7 0 000-14zM20 20l-3.5-3.5",
+  grid: "M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z",
+  close: "M6 6l12 12M18 6L6 18",
+  plus: "M12 5v14M5 12h14",
+  minus: "M5 12h14",
+  fit: "M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5",
+  undo: "M9 14L4 9l5-5M4 9h10a6 6 0 010 12h-3",
+  redo: "M15 14l5-5-5-5M20 9H10a6 6 0 000 12h3",
+  help: "M12 3a9 9 0 100 18 9 9 0 000-18zM9.5 9.5a2.5 2.5 0 114 2c-.9.6-1.5 1.1-1.5 2.2M12 17h.01",
+};
+
+export function TermBoard({ terms, categories, matches, activeId, onOpen, focus, insetRight, compact = false, sheetOpen = false, query = "", onQuery, onList, onBackgroundTap, stamp }: Props) {
   const boardRef = useRef<HTMLDivElement>(null);
   const termById = useMemo(() => new Map(terms.map((t) => [t.id, t])), [terms]);
   const def = useMemo(() => defaultLayout(terms, categories), [terms, categories]);
@@ -156,6 +187,12 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
   const [draft, setDraft] = useState<{ from: string; side: Side; cur: Pt; target: string | null } | null>(null);
   const [marquee, setMarquee] = useState<Rect | null>(null);
   const [dragging, setDragging] = useState<"" | "pan" | "move">("");
+  // 휴대폰 도구: 검색칸 · ⋯ 메뉴 · 카테고리 시트 · 찾은 용어 중 몇 번째
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [catOpen, setCatOpen] = useState(false);
+  const [matchAt, setMatchAt] = useState(-1);
+  const searchRef = useRef<HTMLInputElement>(null);
   const [, setTick] = useState(0);
   const past = useRef<Layout[]>([]);
   const future = useRef<Layout[]>([]);
@@ -245,12 +282,20 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
   };
   const toWorld = (p: Pt): Pt => { const v = viewRef.current!; return { x: (p.x - v.x) / v.z, y: (p.y - v.y) / v.z }; };
   const usableW = () => Math.max(160, size.w - insetRight);
+  const insetBottom = sheetOpen ? Math.round(size.h * SHEET_RATIO) : 0;
+  const usableH = () => Math.max(120, (size.h || 400) - insetBottom);
   // 위쪽 도구 막대(TOP)와 아래 안내 줄(BOTTOM)을 피해서 맞춘다
-  const TOP = 52, BOTTOM = 24;
+  const TOP = compact ? 46 : 52, BOTTOM = compact ? 12 : 24;
   const viewFor = (r: Rect, maxZ: number, pad = 28): View => {
-    const w = usableW(), h = Math.max(120, (size.h || 400) - TOP - BOTTOM);
+    const w = usableW(), h = Math.max(120, usableH() - TOP - BOTTOM);
     const z = clamp(Math.min((w - pad * 2) / Math.max(r.w, 1), (h - pad * 2) / Math.max(r.h, 1)), Z_MIN, maxZ);
     return { z, x: w / 2 - (r.x + r.w / 2) * z, y: TOP + h / 2 - (r.y + r.h / 2) * z };
+  };
+  // 휴대폰: 상자를 가운데가 아니라 위 막대 바로 아래에 붙인다 (위쪽 빈 공간 없이)
+  const viewTop = (r: Rect, maxZ: number): View => {
+    const w = usableW();
+    const z = clamp(Math.min(maxZ, (w - 16) / Math.max(r.w, 1)), Z_MIN, maxZ);
+    return { z, x: w / 2 - (r.x + r.w / 2) * z, y: TOP + 6 - r.y * z };
   };
   const flyTo = (target: View) => {
     cancelAnimationFrame(anim.current);
@@ -271,16 +316,17 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
     const nz = clamp(z, Z_MIN, Z_MAX);
     setView({ z: nz, x: px - (px - v.x) * (nz / v.z), y: py - (py - v.y) * (nz / v.z) });
   };
-  const zoomCenter = (z: number) => zoomAt(z, usableW() / 2, size.h / 2);
+  const zoomCenter = (z: number) => zoomAt(z, usableW() / 2, usableH() / 2);
   const fitAll = () => flyTo(viewFor(world, 1));
   const showTerm = (id: string, always = false) => {
     const p = layoutRef.current.pos[id], v = viewRef.current;
     if (!p || !v) return;
     const sx = p.x * v.z + v.x, sy = p.y * v.z + v.y;
-    const seen = sx >= 16 && sy >= 16 && sx + NODE_W * v.z <= usableW() - 16 && sy + NODE_H * v.z <= size.h - 16;
+    const seen = sx >= 16 && sy >= TOP && sx + NODE_W * v.z <= usableW() - 16 && sy + NODE_H * v.z <= usableH() - 16;
     if (seen && !always && v.z >= 0.5) return;
     const z = Math.max(v.z, 0.9);
-    flyTo({ z, x: usableW() / 2 - (p.x + NODE_W / 2) * z, y: size.h / 2 - (p.y + NODE_H / 2) * z });
+    const midY = compact ? TOP + (usableH() - TOP) / 2 : usableH() / 2;
+    flyTo({ z, x: usableW() / 2 - (p.x + NODE_W / 2) * z, y: midY - (p.y + NODE_H / 2) * z });
   };
 
   // 판 크기 - 숨겨져 있다가(휴대폰에서 설명을 읽는 동안) 다시 보일 때도 잡힌다
@@ -294,7 +340,7 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
   // 처음 열 때 저장한 화면이 없으면 전체가 보이게
   useLayoutEffect(() => {
     // 휴대폰처럼 좁으면 전체는 글자가 안 보이므로 첫 카테고리 상자부터
-    if (!viewRef.current && size.w > 0 && size.h > 0) setView(size.w < 600 && groups[0] ? viewFor(groups[0].rect, 0.9, 16) : viewFor(world, 1));
+    if (!viewRef.current && size.w > 0 && size.h > 0) setView(size.w < 600 && groups[0] ? viewTop(groups[0].rect, 0.9) : viewFor(world, 1));
   }); // eslint-disable-line react-hooks/exhaustive-deps
 
   // 바깥에서 고른 용어(관련 용어 칩·이전/다음)는 골라 두고, 화면 밖이면 데려온다
@@ -529,6 +575,7 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
     } else if (g.t === "pan" && !g.moved) {
       setSel(new Set()); setSelLink(null);
       lastTap.current = null;
+      onBackgroundTap?.();
     }
   };
 
@@ -681,9 +728,49 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
   while (grid * v.z < 14) grid *= 2;
   const selOne = sel.size === 1 ? termById.get([...sel][0]) : undefined;
   const matchCount = matches?.size ?? 0;
+  const gatherMatches = () => {
+    if (!matches) return;
+    const r = bounds([...matches].map((id) => rectOfNode(layout.pos[id])));
+    if (r) flyTo(viewFor(r, 1.1, 60));
+  };
+  const stop = (e: React.PointerEvent) => e.stopPropagation();
+
+  // ── 휴대폰 도구 ──
+  // 찾은 용어를 사전 순서대로 하나씩 넘겨 본다
+  const matchList = useMemo(() => (matches ? terms.filter((t) => matches.has(t.id)).map((t) => t.id) : []), [matches, terms]);
+  useEffect(() => { setMatchAt(-1); }, [matches]);
+  const goMatch = (dir: 1 | -1) => {
+    if (!matchList.length) return;
+    const i = matchAt < 0 ? (dir > 0 ? 0 : matchList.length - 1) : (matchAt + dir + matchList.length) % matchList.length;
+    setMatchAt(i);
+    setSel(new Set([matchList[i]]));
+    showTerm(matchList[i], true);
+  };
+  const searching = compact && (searchOpen || !!query);
+  useEffect(() => { if (searchOpen) searchRef.current?.focus(); }, [searchOpen]);
+  const closeSearch = () => { setSearchOpen(false); onQuery?.(""); boardRef.current?.focus({ preventScroll: true }); };
+  // 위 막대에 보일 카테고리 - 화면 가운데에 있는 상자 (없으면 가장 가까운 상자)
+  const here = (() => {
+    if (!compact || !groups.length) return groups[0];
+    const c = { x: (usableW() / 2 - v.x) / v.z, y: (TOP + (usableH() - TOP) / 2 - v.y) / v.z };
+    const inside = groups.filter((g) => inRect(g.rect, c));
+    const pool = inside.length ? inside : groups;
+    let best = pool[0], dist = Infinity;
+    for (const g of pool) {
+      const d = Math.hypot(g.rect.x + g.rect.w / 2 - c.x, g.rect.y + g.rect.h / 2 - c.y);
+      if (d < dist) { dist = d; best = g; }
+    }
+    return best;
+  })();
+  const goGroup = (id: CategoryId) => {
+    setCatOpen(false);
+    const g = groups.find((x) => x.cat.id === id);
+    if (g) flyTo(compact ? viewTop(g.rect, 0.9) : viewFor(g.rect, 1.1));
+  };
+  const peek = !!selOne && !activeId;
 
   return (
-    <div className="tb">
+    <div className={`tb ${compact ? "tb-compact" : ""}`}>
       <div ref={boardRef} tabIndex={0} role="application"
         aria-label={`용어 보드. 용어 ${terms.length}개가 카테고리 상자에 들어 있고, 같이 보면 좋은 말끼리 선으로 이어져 있습니다. 노드를 두 번 누르거나 고른 뒤 Enter 로 설명을 엽니다.`}
         className={`tb-board ${dragging === "pan" ? "panning" : ""} ${dragging === "move" ? "moving" : ""} ${draft ? "linking" : ""}`}
@@ -698,62 +785,180 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
           </g>
         </svg>
 
-        <div className="tb-tools" style={{ right: 12 + insetRight }} onPointerDown={(e) => e.stopPropagation()}>
-          <div className="tb-pill">
-            <button type="button" aria-label="축소" onClick={() => zoomCenter(v.z / 1.25)}>−</button>
-            <span className="mono tb-pct">{Math.round(v.z * 100)}%</span>
-            <button type="button" aria-label="확대" onClick={() => zoomCenter(v.z * 1.25)}>+</button>
-            <button type="button" className="txt" onClick={fitAll}>전체</button>
-          </div>
-          <div className="tb-pill" role="radiogroup" aria-label="선 보기">
-            <span className="tb-pill-label">선</span>
-            {([["picked", "고른 것만"], ["group", "묶음 안"], ["all", "모두"]] as const).map(([k, name]) => (
-              <button key={k} type="button" role="radio" aria-checked={edgeMode === k} className={`txt ${edgeMode === k ? "on" : ""}`}
-                title={k === "picked" ? "고르거나 마우스를 올린 용어의 선만" : k === "group" ? "같은 카테고리 안의 선까지" : "관련 용어 선 전부"}
-                onClick={() => setEdgeMode(k)}>{name}</button>
-            ))}
-          </div>
-          <div className="tb-pill">
-            <button type="button" aria-label="되돌리기" title="되돌리기 (Ctrl+Z)" disabled={!past.current.length} onClick={undo}>↶</button>
-            <button type="button" aria-label="다시 하기" title="다시 하기 (Ctrl+Y)" disabled={!future.current.length} onClick={redo}>↷</button>
-            <button type="button" className="txt" onClick={resetLayout}>처음 배치</button>
-          </div>
-          {selLink && (
-            <div className="tb-pill">
-              <button type="button" className="txt danger" onClick={removeLink}>이은 선 지우기</button>
-            </div>
-          )}
-          {matches && (
-            <div className="tb-pill">
-              <span className="tb-found">{matchCount ? `찾은 용어 ${matchCount}개` : "찾은 용어 없음"}</span>
-              {matchCount > 0 && (
-                <button type="button" className="txt" onClick={() => {
-                  const r = bounds([...matches].map((id) => rectOfNode(layout.pos[id])));
-                  if (r) flyTo(viewFor(r, 1.1, 60));
-                }}>모아 보기</button>
+        {!compact && (
+          <>
+            <div className="tb-tools" style={{ right: 12 + insetRight }} onPointerDown={stop}>
+              <div className="tb-pill">
+                <button type="button" aria-label="축소" onClick={() => zoomCenter(v.z / 1.25)}>−</button>
+                <span className="mono tb-pct">{Math.round(v.z * 100)}%</span>
+                <button type="button" aria-label="확대" onClick={() => zoomCenter(v.z * 1.25)}>+</button>
+                <button type="button" className="txt" onClick={fitAll}>전체</button>
+              </div>
+              <div className="tb-pill" role="radiogroup" aria-label="선 보기">
+                <span className="tb-pill-label">선</span>
+                {([["picked", "고른 것만"], ["group", "묶음 안"], ["all", "모두"]] as const).map(([k, name]) => (
+                  <button key={k} type="button" role="radio" aria-checked={edgeMode === k} className={`txt ${edgeMode === k ? "on" : ""}`}
+                    title={k === "picked" ? "고르거나 마우스를 올린 용어의 선만" : k === "group" ? "같은 카테고리 안의 선까지" : "관련 용어 선 전부"}
+                    onClick={() => setEdgeMode(k)}>{name}</button>
+                ))}
+              </div>
+              <div className="tb-pill">
+                <button type="button" aria-label="되돌리기" title="되돌리기 (Ctrl+Z)" disabled={!past.current.length} onClick={undo}>↶</button>
+                <button type="button" aria-label="다시 하기" title="다시 하기 (Ctrl+Y)" disabled={!future.current.length} onClick={redo}>↷</button>
+                <button type="button" className="txt" onClick={resetLayout}>처음 배치</button>
+              </div>
+              {selLink && (
+                <div className="tb-pill">
+                  <button type="button" className="txt danger" onClick={removeLink}>이은 선 지우기</button>
+                </div>
+              )}
+              {matches && (
+                <div className="tb-pill">
+                  <span className="tb-found">{matchCount ? `찾은 용어 ${matchCount}개` : "찾은 용어 없음"}</span>
+                  {matchCount > 0 && <button type="button" className="txt" onClick={gatherMatches}>모아 보기</button>}
+                </div>
               )}
             </div>
-          )}
-        </div>
 
-        {selOne && !activeId && (
-          <div className="tb-peek" onPointerDown={(e) => e.stopPropagation()}>
-            <div className="tb-peek-text">
-              <b>{selOne.name}</b> <span className="mono muted">{selOne.en}</span>
-              <p>{selOne.summary}</p>
-            </div>
-            <button type="button" className="btn small primary" onClick={() => onOpen(selOne.id)}>설명 보기</button>
-          </div>
+            {peek && (
+              <div className="tb-peek" onPointerDown={stop}>
+                <div className="tb-peek-text">
+                  <b>{selOne.name}</b> <span className="mono muted">{selOne.en}</span>
+                  <p>{selOne.summary}</p>
+                </div>
+                <button type="button" className="btn small primary" onClick={() => onOpen(selOne.id)}>설명 보기</button>
+              </div>
+            )}
+
+            <MiniMap world={world} groups={groups} view={v} size={{ w: usableW(), h: size.h }} matches={matches} pos={layout.pos}
+              onJump={(p) => { cancelAnimationFrame(anim.current); setView({ ...v, x: usableW() / 2 - p.x * v.z, y: size.h / 2 - p.y * v.z }); }} />
+
+            <p className="tb-hint">
+              {coarse
+                ? "끌어서 판 옮기기 · 두 손가락 확대 · 길게 눌러 노드 옮기기 · 점을 끌어 잇기 · 두 번 눌러 열기"
+                : "빈 곳 끌기·휠: 판 옮기기 · Ctrl+휠: 확대 · 노드 끌어 옮기기 · 노드 옆 점을 끌어 잇기 · Shift+끌기: 여러 개 고르기 · 두 번 눌러 열기"}
+            </p>
+          </>
         )}
 
-        <MiniMap world={world} groups={groups} view={v} size={{ w: usableW(), h: size.h }} matches={matches} pos={layout.pos}
-          onJump={(p) => { cancelAnimationFrame(anim.current); setView({ ...v, x: usableW() / 2 - p.x * v.z, y: size.h / 2 - p.y * v.z }); }} />
+        {compact && (
+          <>
+            {/* 위: 떠 있는 막대 한 줄 (목업 A) - 검색 중에는 검색칸 (목업 C) */}
+            <div className={`tbm-bar ${searching ? "searching" : ""}`} onPointerDown={stop}>
+              {searching ? (
+                <>
+                  <button type="button" className="tbm-ib" aria-label="검색 닫기" onClick={closeSearch}><Icon d={I.back} /></button>
+                  <input ref={searchRef} className="tbm-q" type="search" value={query} placeholder="용어 찾기" aria-label="용어 찾기" autoComplete="off"
+                    onChange={(e) => onQuery?.(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === "Escape") { e.preventDefault(); closeSearch(); } else if (e.key === "Enter") { e.preventDefault(); goMatch(1); } }} />
+                  {query && <button type="button" className="tbm-ib" aria-label="지우기" onClick={() => { onQuery?.(""); searchRef.current?.focus(); }}><Icon d={I.close} /></button>}
+                </>
+              ) : (
+                <>
+                  <button type="button" className="tbm-cat" aria-haspopup="dialog" onClick={() => { setMenuOpen(false); setCatOpen(true); }}>
+                    {here && <span className="tbm-sw" style={{ background: here.tone }} />}
+                    <span className="tbm-cat-name">{here?.cat.name ?? "카테고리"}</span>
+                    <Icon d={I.down} size={15} />
+                  </button>
+                  <button type="button" className="tbm-ib" aria-label="검색" onClick={() => { setMenuOpen(false); setSearchOpen(true); }}><Icon d={I.search} /></button>
+                  <button type="button" className="tbm-ib" aria-label="목록으로" onClick={onList}><Icon d={I.grid} /></button>
+                  <button type="button" className="tbm-ib" aria-label="더보기" aria-expanded={menuOpen} onClick={() => setMenuOpen((m) => !m)}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8" /><circle cx="12" cy="12" r="1.8" /><circle cx="19" cy="12" r="1.8" /></svg>
+                  </button>
+                </>
+              )}
+            </div>
 
-        <p className="tb-hint">
-          {coarse
-            ? "끌어서 판 옮기기 · 두 손가락 확대 · 길게 눌러 노드 옮기기 · 점을 끌어 잇기 · 두 번 눌러 열기"
-            : "빈 곳 끌기·휠: 판 옮기기 · Ctrl+휠: 확대 · 노드 끌어 옮기기 · 노드 옆 점을 끌어 잇기 · Shift+끌기: 여러 개 고르기 · 두 번 눌러 열기"}
-        </p>
+            {searching && query.trim() && (
+              <div className="tbm-found" onPointerDown={stop} aria-live="polite">
+                <b>{matchCount ? `${matchCount}개 찾음` : "찾은 용어 없음"}</b>
+                {matchCount > 0 && (
+                  <>
+                    <span className="mono">{matchAt >= 0 ? `${matchAt + 1}/${matchCount}` : `–/${matchCount}`}</span>
+                    <button type="button" className="tbm-ib" aria-label="이전 찾은 용어" onClick={() => goMatch(-1)}><Icon d={I.back} /></button>
+                    <button type="button" className="tbm-ib" aria-label="다음 찾은 용어" onClick={() => goMatch(1)}><Icon d={I.next} /></button>
+                    <button type="button" className="tbm-txt" onClick={gatherMatches}>모아 보기</button>
+                  </>
+                )}
+              </div>
+            )}
+
+            {selLink && !sheetOpen && (
+              <div className="tbm-found tbm-link" onPointerDown={stop}>
+                <button type="button" className="tbm-txt danger" onClick={removeLink}>이은 선 지우기</button>
+              </div>
+            )}
+
+            {/* 오른쪽 아래: 확대 세로 막대 - 미리보기가 뜨면 그 위로 비킨다. 설명 시트가 열리면 숨는다 */}
+            {!sheetOpen && (
+              <div className="tbm-stack" style={{ bottom: peek ? 68 : 8 }} onPointerDown={stop}>
+                <button type="button" className="tbm-ib" aria-label="확대" onClick={() => zoomCenter(v.z * 1.25)}><Icon d={I.plus} /></button>
+                <span className="tbm-pct mono">{Math.round(v.z * 100)}%</span>
+                <button type="button" className="tbm-ib" aria-label="축소" onClick={() => zoomCenter(v.z / 1.25)}><Icon d={I.minus} /></button>
+                <span className="tbm-rule" />
+                <button type="button" className="tbm-ib" aria-label="전체 보기" onClick={fitAll}><Icon d={I.fit} /></button>
+              </div>
+            )}
+
+            {/* 노드를 눌렀을 때: 두 줄 미리보기 (목업 B) */}
+            {peek && (
+              <div className="tbm-peek" onPointerDown={stop}>
+                <div className="tbm-peek-text">
+                  <span className="tbm-peek-head"><b>{selOne.name}</b> <span className="mono">{selOne.en}</span></span>
+                  <span className="tbm-peek-sum">{selOne.summary}</span>
+                </div>
+                <button type="button" className="tbm-open" onClick={() => onOpen(selOne.id)}>열기</button>
+              </div>
+            )}
+
+            {/* ⋯ 메뉴 (목업 E): 선 보기 · 되돌리기 · 처음 배치 · 조작법 · 빌드 표시 */}
+            {menuOpen && (
+              <>
+                <div className="tbm-scrim" onPointerDown={(e) => { e.stopPropagation(); setMenuOpen(false); }} />
+                <div className="tbm-menu" role="menu" aria-label="보드 메뉴" onPointerDown={stop}>
+                  <span className="tbm-menu-label">선 보기</span>
+                  <div className="tbm-seg" role="radiogroup" aria-label="선 보기">
+                    {([["picked", "고른 것만"], ["group", "묶음 안"], ["all", "모두"]] as const).map(([k, name]) => (
+                      <button key={k} type="button" role="radio" aria-checked={edgeMode === k} className={edgeMode === k ? "on" : ""} onClick={() => setEdgeMode(k)}>{name}</button>
+                    ))}
+                  </div>
+                  <span className="tbm-sep" />
+                  <div className="tbm-row">
+                    <button type="button" className="tbm-mi" disabled={!past.current.length} onClick={undo}><Icon d={I.undo} />되돌리기</button>
+                    <button type="button" className="tbm-mi" disabled={!future.current.length} onClick={redo}><Icon d={I.redo} />다시 하기</button>
+                  </div>
+                  <button type="button" className="tbm-mi" onClick={() => { setMenuOpen(false); resetLayout(); }}><Icon d={I.grid} />노드 자리 처음 배치로</button>
+                  <span className="tbm-mi tbm-mi-static"><Icon d={I.help} />조작법</span>
+                  <p className="tbm-help">끌어서 판 옮기기 · 두 손가락 확대 · 길게 눌러 노드 옮기기 · 점을 끌어 잇기 · 두 번 눌러 열기</p>
+                  {stamp && <><span className="tbm-sep" /><div className="tbm-stamp">{stamp}</div></>}
+                </div>
+              </>
+            )}
+
+            {/* 카테고리로 가기 (목업 D) */}
+            {catOpen && (
+              <>
+                <div className="tbm-scrim dark" onPointerDown={(e) => { e.stopPropagation(); setCatOpen(false); }} />
+                <div className="tbm-sheet" role="dialog" aria-label="카테고리로 가기" onPointerDown={stop}>
+                  <span className="tbm-grip" />
+                  <div className="tbm-sheet-head">
+                    <h2>카테고리로 가기</h2>
+                    <button type="button" className="tbm-txt bordered" onClick={() => { setCatOpen(false); fitAll(); }}><Icon d={I.fit} size={15} />전체 보기</button>
+                  </div>
+                  <div className="tbm-cats">
+                    {groups.map((g) => (
+                      <button key={g.cat.id} type="button" className={here?.cat.id === g.cat.id ? "on" : ""} onClick={() => goGroup(g.cat.id)}>
+                        <span className="tbm-sw" style={{ background: g.tone }} />
+                        <span className="tbm-cat-name">{g.cat.name}</span>
+                        <span className="mono">{catTerms.get(g.cat.id)?.length ?? 0}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+          </>
+        )}
       </div>
     </div>
   );

@@ -50,6 +50,8 @@ export default function App() {
   };
   const onBoard = mode === "board";
   const floating = useMedia(FLOAT);
+  // 휴대폰 보드: 머리말 없이 판이 화면 전체, 설명은 판 위 절반 시트로 (목업 F1)
+  const compact = onBoard && !floating;
   const still = useMedia("(prefers-reduced-motion: reduce)");
   const searchRef = useRef<HTMLInputElement>(null);
   const topRef = useRef<HTMLElement>(null);
@@ -92,12 +94,12 @@ export default function App() {
   useLayoutEffect(() => {
     const was = prevOpen.current; prevOpen.current = openId;
     if (was === openId) return;
-    if (floating) {
+    if (floating || compact) {
       paneRef.current?.scrollTo(0, 0);
     } else {
       window.scrollTo(0, openId ? 0 : listScroll.current);
     }
-  }, [openId, floating]);
+  }, [openId, floating, compact]);
 
   // 떠 있는 창 자리 잡기: 카드 오른쪽에 자리가 있으면 오른쪽, 없으면 왼쪽, 둘 다 없으면 카드 아래
   const measure = () => {
@@ -221,7 +223,7 @@ export default function App() {
   const detail = current && (
     <article className="detail-body" key={current.id}>
       <div className="detail-top">
-        <button type="button" className="link" onClick={close}>{floating ? "✕ 닫기" : onBoard ? "← 보드로" : "← 목록으로"}</button>
+        <button type="button" className="link" onClick={close}>{floating || compact ? "✕ 닫기" : "← 목록으로"}</button>
         <span className="muted tabular detail-pos">{idx >= 0 ? `${idx + 1} / ${ordered.length}` : ""}</span>
       </div>
       <p className="eyebrow">{catName(current.category)}</p>
@@ -269,7 +271,7 @@ export default function App() {
   );
 
   return (
-    <div className={`app ${current && !floating ? "reading" : ""} ${onBoard && !(current && !floating) ? "board-mode" : ""}`} ref={appRef}>
+    <div className={`app ${current && !floating && !onBoard ? "reading" : ""} ${onBoard ? "board-mode" : ""}`} ref={appRef}>
       <header className="top" ref={topRef}>
         <div className="brand">
           <h1><a href="./" onClick={(e) => { e.preventDefault(); if (current) close(); setQuery(""); window.scrollTo(0, 0); }}>이거 뭐라고 하지</a></h1>
@@ -287,7 +289,7 @@ export default function App() {
         </div>
       </header>
 
-      <div className={`body ${current && !floating ? "has-detail" : ""}`}>
+      <div className={`body ${current && !floating && !onBoard ? "has-detail" : ""}`}>
         <nav className="side" aria-label="카테고리">
           <ul>
             {categories.map((c) => {
@@ -307,7 +309,17 @@ export default function App() {
         <main className={`main ${onBoard ? "on-board" : ""}`}>
           {onBoard && (
             <TermBoard terms={terms} categories={categories} matches={matches} activeId={openId} onOpen={open}
-              focus={boardFocus} insetRight={floating && current ? Math.min(POP_W, window.innerWidth - 32) + 24 : 0} />
+              focus={boardFocus} insetRight={floating && current ? Math.min(POP_W, window.innerWidth - 32) + 24 : 0}
+              compact={compact} sheetOpen={compact && !!current} query={query} onQuery={setQuery}
+              onList={() => setMode("list")} onBackgroundTap={() => { if (compact && openRef.current) close(); }}
+              stamp={<BuildStamp />} />
+          )}
+          {compact && current && (
+            <BoardSheet label={`${current.name} 설명`} onClose={close}>
+              <aside className="detail" ref={paneRef}>
+                <SwipeNav prevId={prev?.id} nextId={next?.id} onGo={open}>{detail}</SwipeNav>
+              </aside>
+            </BoardSheet>
           )}
           {onBoard && current && floating && (
             <div className="board-panel" role="dialog" aria-label={`${current.name} 설명`}>
@@ -337,7 +349,7 @@ export default function App() {
           })}
         </main>
 
-        {current && !floating && (
+        {current && !floating && !onBoard && (
           <aside className="detail" ref={paneRef} aria-label={`${current.name} 설명`}>
             <SwipeNav prevId={prev?.id} nextId={next?.id} onGo={open}>{detail}</SwipeNav>
           </aside>
@@ -432,6 +444,31 @@ function SwipeNav({ prevId, nextId, onGo, children }: { prevId?: string; nextId?
   return (
     <div className="swipe" onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onEnd} onPointerCancel={onCancel}
       style={{ transform: dx ? `translateX(${dx}px)` : undefined, transition: anim ? "transform 180ms ease-out" : "none", opacity: anim && Math.abs(dx) > 200 ? 0.4 : 1 }}>
+      {children}
+    </div>
+  );
+}
+
+// 휴대폰 보드의 설명 시트: 아래 절반을 덮고 위쪽엔 판이 그대로 보인다.
+// 손잡이를 아래로 끌면 닫힌다 (안쪽 글은 시트 안에서 스크롤)
+function BoardSheet({ label, onClose, children }: { label: string; onClose: () => void; children: React.ReactNode }) {
+  const [dy, setDy] = useState(0);
+  const start = useRef<number | null>(null);
+  const onDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    start.current = e.clientY;
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+  const onMove = (e: React.PointerEvent) => { if (start.current !== null) setDy(Math.max(0, e.clientY - start.current)); };
+  const onUp = () => {
+    if (start.current === null) return;
+    start.current = null;
+    if (dy > 80) onClose();
+    setDy(0);
+  };
+  return (
+    <div className="board-sheet" role="dialog" aria-label={label}
+      style={{ transform: dy ? `translateY(${dy}px)` : undefined, transition: dy ? "none" : undefined }}>
+      <div className="board-sheet-grip" onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp} aria-hidden="true"><span /></div>
       {children}
     </div>
   );
