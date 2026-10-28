@@ -293,6 +293,18 @@ a { color: var(--accent); }
 /* % 를 레인 폭 기준으로 쓰려고 transform 대신 left 를 움직인다 (translate 의 % 는 공 자신 기준) */
 @keyframes slide { to { left: calc(100% - 26px); } }
 
+/* ── 보드 보기: 머리말 아래를 판이 채운다 (페이지는 스크롤하지 않는다) ── */
+.view-switch { flex: none; align-self: center; }
+.view-switch button { padding: 7px 14px; font-size: 14px; }
+.app.board-mode { height: 100vh; height: 100dvh; min-height: 0; overflow: hidden; }
+.app.board-mode .body { min-height: 0; grid-template-rows: minmax(0, 1fr); }
+.app.board-mode .side { position: static; max-height: none; min-height: 0; }
+.main.on-board { padding: 0; position: relative; min-height: 0; overflow: hidden; }
+.board-panel { position: absolute; top: 12px; right: 12px; bottom: 12px; width: min(560px, calc(100% - 24px)); z-index: 3; animation: pop-in 140ms ease-out; }
+.board-panel .detail { height: 100%; overflow-y: auto; overscroll-behavior: contain; border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); }
+.board-panel .detail-body { padding: 18px 22px 24px; }
+.board-panel .detail-name { font-size: 24px; }
+
 /* ── 푸터 ── */
 .foot { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 14px 24px calc(14px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); }
 .build { color: var(--muted); text-decoration: none; opacity: 0.8; }
@@ -322,6 +334,16 @@ a { color: var(--accent); }
   .detail-name { font-size: 24px; }
   .popup-slider { left: 0; right: auto; top: 100%; transform: none; margin: 6px 0 0; }
   .foot { padding-inline: 16px; }
+  /* 휴대폰: 목록/보드 전환을 제목 옆에, 검색은 그 아래 한 줄 */
+  .top { row-gap: 12px; }
+  .search { order: 3; }
+  .view-switch { margin-left: auto; }
+  .view-switch button { padding: 6px 10px; font-size: 13px; }
+  .app.board-mode .top { padding-bottom: 10px; }
+  .app.board-mode .tagline { display: none; }
+  .app.board-mode .body { grid-template-rows: auto minmax(0, 1fr); }
+  .app.board-mode .foot { padding-block: 6px calc(6px + env(safe-area-inset-bottom, 0px)); }
+  .app.board-mode .foot > span:first-child { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }

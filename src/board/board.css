@@ -1,0 +1,90 @@
+/* 용어 보드 */
+.tb { position: absolute; inset: 0; }
+.tb-board {
+  position: absolute; inset: 0; overflow: hidden; outline: none; touch-action: none; user-select: none; -webkit-user-select: none;
+  background-color: var(--bg); background-image: radial-gradient(circle, var(--line) 1px, transparent 1.3px);
+  cursor: grab;
+}
+.tb-board:focus-visible { box-shadow: inset 0 0 0 2px var(--accent); }
+.tb-board.panning { cursor: grabbing; }
+.tb-board.moving, .tb-board.moving * { cursor: move !important; }
+.tb-board.linking, .tb-board.linking * { cursor: crosshair !important; }
+.tb-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.tb-svg text { font-family: var(--font-body); pointer-events: none; }
+
+/* 그룹 상자 = 카테고리 */
+.tb-group-body { fill: var(--tone); fill-opacity: 0.06; stroke: var(--tone); stroke-opacity: 0.4; stroke-width: 1.2; pointer-events: none; }
+.tb-group-head { fill: var(--tone); fill-opacity: 0.14; cursor: move; }
+.tb-group-head:hover { fill-opacity: 0.22; }
+.tb-svg .tb-group-title { font-size: 14px; font-weight: 700; fill: var(--tone); }
+.tb-svg .tb-group-count { font-size: 12px; fill: var(--tone); opacity: 0.8; font-family: var(--font-mono); }
+.tb-group { transition: opacity 160ms; }
+.tb-group.dim { opacity: 0.45; }
+
+/* 노드 = 용어 */
+.tb-node { transition: opacity 160ms; }
+.tb-node.dim { opacity: 0.28; }
+.tb-node-box { fill: var(--surface); stroke: var(--line); stroke-width: 1.2; cursor: pointer; }
+.tb-node-box:hover { stroke: var(--accent); }
+.tb-node.match .tb-node-box { stroke: var(--accent); stroke-width: 2; }
+.tb-node.on .tb-node-box { stroke: var(--accent); stroke-width: 1.6; }
+.tb-node.open .tb-node-box { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2; }
+.tb-node.target .tb-node-box { fill: var(--accent-soft); stroke: var(--accent); stroke-dasharray: 5 3; }
+.tb-svg .tb-node-name { font-size: 13.5px; font-weight: 600; fill: var(--fg); }
+.tb-svg .tb-node-en { font-size: 10.5px; fill: var(--muted); font-family: var(--font-mono); }
+.tb-svg .tb-node-demo { font-size: 10px; fill: var(--warm); }
+.tb-sel { fill: none; stroke: var(--accent); stroke-width: 2.2; pointer-events: none; }
+
+/* 연결점 - 왼쪽·오른쪽은 늘, 위·아래는 노드에 올리거나 선이 붙어 있을 때만 */
+.tb-port { fill: var(--surface); stroke: var(--muted); stroke-width: 1.2; pointer-events: none; opacity: 0; transition: opacity 120ms; }
+.tb-node:hover .tb-port, .tb-node.on .tb-port, .tb-board.linking .tb-port { opacity: 1; }
+.tb-port.used { opacity: 0.55; fill: var(--muted); }
+.tb-node.dim .tb-port.used { opacity: 0; }
+.tb-port-hit { fill: transparent; cursor: crosshair; }
+.tb-port-hit:hover + .tb-port { opacity: 1; fill: var(--accent); stroke: var(--accent); }
+
+/* 선 - 관련 용어는 옅은 실선, 내가 이은 선은 주황 점선 */
+.tb-edge { fill: none; stroke: var(--muted); stroke-opacity: 0.35; stroke-width: 1.3; vector-effect: non-scaling-stroke; pointer-events: none; transition: stroke-opacity 160ms; }
+.tb-edge.hot { stroke: var(--accent); stroke-opacity: 0.95; stroke-width: 2; }
+.tb-edge.dim { stroke-opacity: 0.06; }
+.tb-link { fill: none; stroke: var(--warm); stroke-width: 2; stroke-dasharray: 6 4; vector-effect: non-scaling-stroke; pointer-events: none; }
+.tb-link.dim { stroke-opacity: 0.2; }
+.tb-link.on { stroke-width: 3.2; stroke-dasharray: none; }
+.tb-link-hit { fill: none; stroke: transparent; stroke-width: 14; vector-effect: non-scaling-stroke; pointer-events: stroke; cursor: pointer; }
+.tb-link-hit:hover + .tb-link { stroke-width: 3; }
+.tb-draft { fill: none; stroke: var(--warm); stroke-width: 2; stroke-dasharray: 6 4; vector-effect: non-scaling-stroke; pointer-events: none; }
+.tb-marquee { fill: var(--accent); fill-opacity: 0.08; stroke: var(--accent); stroke-dasharray: 4 3; vector-effect: non-scaling-stroke; pointer-events: none; }
+
+/* 판 위 도구 */
+.tb-tools { position: absolute; left: 12px; top: 12px; right: 12px; display: flex; flex-wrap: wrap; gap: 8px; pointer-events: none; }
+.tb-pill { pointer-events: auto; display: inline-flex; align-items: center; gap: 2px; padding: 3px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1); cursor: default; }
+.tb-pill button { min-width: 30px; height: 30px; border: none; background: transparent; border-radius: 7px; cursor: pointer; font-size: 15px; padding: 0 6px; }
+.tb-pill button.txt { font-size: 13px; padding: 0 10px; }
+.tb-pill button:hover:not(:disabled) { background: var(--surface-2); }
+.tb-pill button.on { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.tb-pill button.danger { color: var(--danger); }
+.tb-pill button:disabled { opacity: 0.35; cursor: default; }
+.tb-pct { font-size: 12px; min-width: 3.4em; text-align: center; color: var(--muted); }
+.tb-found { font-size: 13px; padding: 0 8px; color: var(--accent); font-weight: 600; }
+
+/* 고른 용어 한 줄 미리보기 */
+.tb-peek { position: absolute; left: 50%; bottom: 40px; transform: translateX(-50%); width: min(520px, calc(100% - 24px)); display: flex; gap: 12px; align-items: center; padding: 10px 12px 10px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); cursor: default; animation: tb-up 140ms ease-out; }
+.tb-peek-text { flex: 1; min-width: 0; font-size: 14px; }
+.tb-peek-text .mono { font-size: 12px; }
+.tb-peek-text p { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.tb-peek .btn { flex: none; }
+@keyframes tb-up { from { opacity: 0; transform: translate(-50%, 6px); } to { opacity: 1; transform: translateX(-50%); } }
+
+/* 미니맵 */
+.tb-mini { position: absolute; left: 12px; bottom: 34px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1); cursor: pointer; touch-action: none; }
+.tb-mini-group { fill-opacity: 0.25; }
+.tb-mini-hit { fill: var(--accent); }
+.tb-mini-view { fill: var(--accent); fill-opacity: 0.08; stroke: var(--accent); stroke-width: 1.2; }
+
+.tb-hint { position: absolute; left: 12px; bottom: 8px; max-width: calc(100% - 24px); padding: 1px 8px; border-radius: 6px; background: var(--bg); font-size: 11.5px; color: var(--muted); pointer-events: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+@media (max-width: 760px) {
+  .tb-tools { left: 8px; top: 8px; right: 8px; gap: 6px; }
+  .tb-mini { display: none; }
+  .tb-peek { bottom: 30px; }
+}

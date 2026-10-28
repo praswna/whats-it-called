@@ -5,6 +5,7 @@ import type { CategoryId, Term } from "./data/types";
 import { demos } from "./demos";
 import { searchTerms } from "./search";
 import { thumbs } from "./data/thumbs";
+import { TermBoard, type BoardFocus } from "./board/TermBoard";
 
 const byId = new Map(terms.map((t) => [t.id, t]));
 const catName = (id: CategoryId) => categories.find((c) => c.id === id)?.name ?? id;
@@ -17,6 +18,12 @@ function readHash(): string | null {
 // 이 폭 이상이면 카드 옆에 떠 있는 창으로, 그보다 좁으면 목록 자리에 한 페이지로 보여 준다
 const FLOAT = "(min-width: 760px)";
 const POP_W = 560;
+
+type Mode = "list" | "board";
+const MODE_KEY = "wic-mode";
+function readMode(): Mode {
+  try { return localStorage.getItem(MODE_KEY) === "board" ? "board" : "list"; } catch { return "list"; }
+}
 
 type Place = { top: number; left: number; side: "right" | "left" | "below"; arrow: number };
 
@@ -34,6 +41,14 @@ function useMedia(query: string): boolean {
 export default function App() {
   const [query, setQuery] = useState("");
   const [openId, setOpenId] = useState<string | null>(readHash);
+  // 목록(카드) 또는 보드(노드). 고른 쪽은 이 기기에 기억한다
+  const [mode, setModeState] = useState<Mode>(readMode);
+  const [boardFocus, setBoardFocus] = useState<BoardFocus>(null);
+  const setMode = (m: Mode) => {
+    setModeState(m);
+    try { localStorage.setItem(MODE_KEY, m); } catch { /* 저장이 막혀도 이번 화면에서는 바뀐다 */ }
+  };
+  const onBoard = mode === "board";
   const floating = useMedia(FLOAT);
   const still = useMedia("(prefers-reduced-motion: reduce)");
   const searchRef = useRef<HTMLInputElement>(null);
@@ -49,6 +64,7 @@ export default function App() {
 
   const results = useMemo(() => searchTerms(terms, query), [query]);
   const searching = query.trim().length > 0;
+  const matches = useMemo(() => (searching ? new Set(results.map((t) => t.id)) : null), [searching, results]);
   const demoCount = terms.filter((t) => t.demo).length;
   // 화면에 보이는 순서대로 (이전/다음 버튼용)
   const ordered = useMemo(() => {
@@ -116,12 +132,12 @@ export default function App() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anchorId, place === null]);
   useLayoutEffect(() => {
-    if (!floating || !openId) { setPlace(null); return; }
+    if (!floating || !openId || onBoard) { setPlace(null); return; }
     measure();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [floating, openId, anchorId]);
+  }, [floating, openId, anchorId, onBoard]);
   useEffect(() => {
-    if (!floating || !openId) return;
+    if (!floating || !openId || onBoard) return;
     const onResize = () => measure();
     window.addEventListener("resize", onResize);
     // 예시를 만지다 창 높이가 바뀌어도 자리를 다시 잡는다
@@ -132,15 +148,15 @@ export default function App() {
   }, [floating, openId, anchorId]);
   // 주소로 바로 들어왔을 때: 그 카드를 화면 가운데로 가져온 뒤 창을 붙인다
   useEffect(() => {
-    if (openId && floating) {
+    if (openId && floating && !onBoard) {
       document.getElementById(`card-${openId}`)?.scrollIntoView({ block: "center" });
       requestAnimationFrame(measure);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  // 창 바깥(다른 카드 말고)을 누르면 닫는다
+  // 창 바깥(다른 카드 말고)을 누르면 닫는다. 보드에서는 노드를 누르는 대로 창이 따라가므로 닫지 않는다
   useEffect(() => {
-    if (!floating || !openId) return;
+    if (!floating || !openId || onBoard) return;
     const onDown = (e: PointerEvent) => {
       const t = e.target as Element | null;
       if (!t || popRef.current?.contains(t) || t.closest(".card")) return;
@@ -193,6 +209,11 @@ export default function App() {
   const next = idx >= 0 && idx < ordered.length - 1 ? ordered[idx + 1] : undefined;
 
   const goCategory = (id: CategoryId) => {
+    if (onBoard) {
+      if (current && !floating) close();
+      setBoardFocus({ kind: "cat", id, seq: Date.now() });
+      return;
+    }
     const jump = () => document.getElementById(`cat-${id}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
     if (current) { close(); requestAnimationFrame(jump); } else jump();
   };
@@ -200,7 +221,7 @@ export default function App() {
   const detail = current && (
     <article className="detail-body" key={current.id}>
       <div className="detail-top">
-        <button type="button" className="link" onClick={close}>{floating ? "✕ 닫기" : "← 목록으로"}</button>
+        <button type="button" className="link" onClick={close}>{floating ? "✕ 닫기" : onBoard ? "← 보드로" : "← 목록으로"}</button>
         <span className="muted tabular detail-pos">{idx >= 0 ? `${idx + 1} / ${ordered.length}` : ""}</span>
       </div>
       <p className="eyebrow">{catName(current.category)}</p>
@@ -248,7 +269,7 @@ export default function App() {
   );
 
   return (
-    <div className={`app ${current && !floating ? "reading" : ""}`} ref={appRef}>
+    <div className={`app ${current && !floating ? "reading" : ""} ${onBoard && !(current && !floating) ? "board-mode" : ""}`} ref={appRef}>
       <header className="top" ref={topRef}>
         <div className="brand">
           <h1><a href="./" onClick={(e) => { e.preventDefault(); if (current) close(); setQuery(""); window.scrollTo(0, 0); }}>이거 뭐라고 하지</a></h1>
@@ -259,6 +280,10 @@ export default function App() {
             onChange={(e) => { setQuery(e.target.value); if (current && !floating) close(); }}
             placeholder="동작을 말로 적어 보세요. 예: 누르고 끌면, 회색 뼈대, 되돌리기" autoComplete="off" />
           {!query && <kbd aria-hidden="true">/</kbd>}
+        </div>
+        <div className="segmented view-switch" role="radiogroup" aria-label="보기 방식">
+          <button type="button" role="radio" aria-checked={!onBoard} className={!onBoard ? "on" : ""} onClick={() => setMode("list")}>▦ 목록</button>
+          <button type="button" role="radio" aria-checked={onBoard} className={onBoard ? "on" : ""} onClick={() => setMode("board")}>◇ 보드</button>
         </div>
       </header>
 
@@ -279,14 +304,23 @@ export default function App() {
           </ul>
         </nav>
 
-        <main className="main">
-          {searching && results.length === 0 && (
+        <main className={`main ${onBoard ? "on-board" : ""}`}>
+          {onBoard && (
+            <TermBoard terms={terms} categories={categories} matches={matches} activeId={openId} onOpen={open}
+              focus={boardFocus} insetRight={floating && current ? Math.min(POP_W, window.innerWidth - 32) + 24 : 0} />
+          )}
+          {onBoard && current && floating && (
+            <div className="board-panel" role="dialog" aria-label={`${current.name} 설명`}>
+              <aside className="detail" ref={paneRef}>{detail}</aside>
+            </div>
+          )}
+          {!onBoard && searching && results.length === 0 && (
             <div className="empty">
               <b>찾지 못했어요.</b>
               <p>다른 말로 적어 보세요. 생김새(둥근, 회색), 동작(끌면, 누르면), 어디서 봤는지(유튜브, 포토샵)로도 찾을 수 있습니다.</p>
             </div>
           )}
-          {categories.map((c) => {
+          {!onBoard && categories.map((c) => {
             const list = (searching ? results : terms).filter((t) => t.category === c.id);
             if (list.length === 0) return null;
             return (
@@ -310,7 +344,7 @@ export default function App() {
         )}
       </div>
 
-      {current && floating && (
+      {current && floating && !onBoard && (
         <div ref={popRef} role="dialog" aria-label={`${current.name} 설명`}
           className={`pop pop-${place?.side ?? "right"}`}
           style={{ top: place?.top ?? 0, left: place?.left ?? 0, visibility: place ? "visible" : "hidden", ["--arrow" as string]: `${place?.arrow ?? 24}px` }}>
