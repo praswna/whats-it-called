@@ -12,6 +12,8 @@ import { CropDemo, ResponsiveImageDemo, AltTextDemo, PipDemo, DoubleTapSeekDemo,
 import { DurationDemo, MicroInteractionDemo, SharedElementDemo, MorphingDemo, InterruptibleDemo, ReducedMotionDemo, ScrollAnimationDemo, LayoutShiftDemo } from "./motion";
 import { AlwaysOnTopDemo, OverlayDemo, TrayDemo, GlobalHotkeyDemo, ShortcutRecorderDemo, DockingDemo, WindowSnapDemo, QuickLookDemo, DpiScalingDemo } from "./desk";
 import { LazyLoadDemo, PrefetchDemo, CacheDemo, MemoDemo, IdempotencyDemo, RaceConditionDemo, TransportDemo, RealtimeSyncDemo, RetryBackoffDemo, RateLimitDemo, OfflineFirstDemo, RoutingDemo, DeepLinkDemo, HotReloadDemo, FeatureFlagDemo, AbTestDemo, RolloutDemo, SemverDemo, LintDemo, I18nDemo, FuzzySearchDemo } from "./sim";
+import { TreeShakingDemo, CompressionDemo, CdnDemo, CriticalCssDemo, FontLoadingDemo, RenderingModesDemo, RequestDedupDemo, OverfetchingDemo, NPlusOneDemo, DbIndexDemo } from "./load";
+import { ReflowRepaintDemo, GpuCompositingDemo, WebWorkerDemo, FrameBudgetDemo, EventDelegationDemo, CoreWebVitalsDemo, ProfilingDemo, MemoryLeakDemo, BundleAnalysisDemo } from "./render";
 import { terms } from "../data/terms";
 
 const commandNames = terms.map((t) => `${t.name} (${t.en})`);
@@ -157,4 +159,23 @@ export const demos: Record<string, ComponentType> = {
   lint: LintDemo,
   i18n: I18nDemo,
   fuzzySearch: FuzzySearchDemo,
+  treeShaking: TreeShakingDemo,
+  compression: CompressionDemo,
+  cdn: CdnDemo,
+  criticalCss: CriticalCssDemo,
+  fontLoading: FontLoadingDemo,
+  renderingModes: RenderingModesDemo,
+  reflowRepaint: ReflowRepaintDemo,
+  gpuCompositing: GpuCompositingDemo,
+  webWorker: WebWorkerDemo,
+  frameBudget: FrameBudgetDemo,
+  eventDelegation: EventDelegationDemo,
+  coreWebVitals: CoreWebVitalsDemo,
+  profiling: ProfilingDemo,
+  memoryLeak: MemoryLeakDemo,
+  bundleAnalysis: BundleAnalysisDemo,
+  requestDedup: RequestDedupDemo,
+  overfetching: OverfetchingDemo,
+  nPlusOne: NPlusOneDemo,
+  dbIndex: DbIndexDemo,
 };

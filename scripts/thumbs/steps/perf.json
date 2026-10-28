@@ -1,0 +1,547 @@
+{
+  "tree-shaking": [
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "click",
+      "sel": "button.pf-fn:has-text(\"deepClone\")"
+    },
+    {
+      "do": "wait",
+      "ms": 300
+    },
+    {
+      "do": "click",
+      "sel": "button.pf-fn:has-text(\"parseCSV\")"
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    },
+    {
+      "do": "click",
+      "sel": "[role=switch]"
+    },
+    {
+      "do": "wait",
+      "ms": 900
+    },
+    {
+      "do": "click",
+      "sel": "[role=switch]"
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "poster"
+    }
+  ],
+  "compression": [
+    {
+      "do": "wait",
+      "ms": 500
+    },
+    {
+      "do": "click",
+      "sel": "[role=radio]:has-text(\"미니파이\")"
+    },
+    {
+      "do": "wait",
+      "ms": 800
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"JSON 응답\")"
+    },
+    {
+      "do": "wait",
+      "ms": 900
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "click",
+      "sel": "[role=radio]:has-text(\"원본\")"
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    }
+  ],
+  "cdn": [
+    {
+      "do": "click",
+      "sel": "button.btn.primary"
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "click",
+      "sel": "button.btn.primary"
+    },
+    {
+      "do": "wait",
+      "ms": 500
+    },
+    {
+      "do": "click",
+      "sel": "[role=switch]"
+    },
+    {
+      "do": "click",
+      "sel": "button.btn.primary"
+    },
+    {
+      "do": "wait",
+      "ms": 1000
+    },
+    {
+      "do": "poster"
+    }
+  ],
+  "critical-css": [
+    {
+      "do": "click",
+      "sel": "button.btn.primary"
+    },
+    {
+      "do": "wait",
+      "ms": 2100
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"첫 화면 CSS 먼저\")"
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 1400
+    }
+  ],
+  "font-loading": [
+    {
+      "do": "click",
+      "sel": "button:has-text(\"글꼴 캐시 비우기\")"
+    },
+    {
+      "do": "click",
+      "sel": "button.btn.primary"
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 1200
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"글꼴 캐시 비우기\")"
+    },
+    {
+      "do": "click",
+      "sel": "[role=radio]:has-text(\"block\")"
+    },
+    {
+      "do": "wait",
+      "ms": 2000
+    }
+  ],
+  "rendering-modes": [
+    {
+      "do": "click",
+      "sel": "button.btn.primary"
+    },
+    {
+      "do": "wait",
+      "ms": 2000
+    },
+    {
+      "do": "click",
+      "sel": "[role=radio]:has-text(\"SSG\")"
+    },
+    {
+      "do": "wait",
+      "ms": 1000
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"장바구니 담기\")"
+    },
+    {
+      "do": "wait",
+      "ms": 600
+    },
+    {
+      "do": "poster"
+    }
+  ],
+  "reflow-repaint": [
+    {
+      "do": "click",
+      "sel": "button:has-text(\"너비 바꾸기\")"
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"색 바꾸기\")"
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"transform 으로 옮기기\")"
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"실제로 재기\")"
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "poster"
+    }
+  ],
+  "gpu-compositing": [
+    {
+      "do": "wait",
+      "ms": 900
+    },
+    {
+      "do": "click",
+      "sel": "button.btn.primary"
+    },
+    {
+      "do": "wait",
+      "ms": 800
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "wait",
+      "ms": 1200
+    }
+  ],
+  "web-worker": [
+    {
+      "do": "click",
+      "sel": "button.btn.primary"
+    },
+    {
+      "do": "wait",
+      "ms": 1900
+    },
+    {
+      "do": "click",
+      "sel": "[role=radio]:has-text(\"웹 워커에서\")"
+    },
+    {
+      "do": "click",
+      "sel": "button.btn.primary"
+    },
+    {
+      "do": "wait",
+      "ms": 1900
+    },
+    {
+      "do": "poster"
+    }
+  ],
+  "frame-budget": [
+    {
+      "do": "wait",
+      "ms": 900
+    },
+    {
+      "do": "drag",
+      "sel": "input[type=range]",
+      "from": [
+        0.02,
+        0.5
+      ],
+      "to": [
+        0.7,
+        0.5
+      ],
+      "ms": 500
+    },
+    {
+      "do": "wait",
+      "ms": 1600
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "drag",
+      "sel": "input[type=range]",
+      "from": [
+        0.7,
+        0.5
+      ],
+      "to": [
+        0,
+        0.5
+      ],
+      "ms": 400
+    },
+    {
+      "do": "wait",
+      "ms": 900
+    }
+  ],
+  "event-delegation": [
+    {
+      "do": "click",
+      "sel": "button:has-text(\"우유 사기\")"
+    },
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"항목 추가\")"
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"운동 30분\")"
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "click",
+      "sel": "[role=radio]:has-text(\"위임\")"
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"항목 추가\")"
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"운동 30분\")"
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "poster"
+    }
+  ],
+  "core-web-vitals": [
+    {
+      "do": "click",
+      "sel": "button:has-text(\"새로고침\")"
+    },
+    {
+      "do": "wait",
+      "ms": 4700
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"장바구니 담기\")"
+    },
+    {
+      "do": "wait",
+      "ms": 900
+    },
+    {
+      "do": "poster"
+    }
+  ],
+  "profiling": [
+    {
+      "do": "click",
+      "sel": "button.btn.primary"
+    },
+    {
+      "do": "wait",
+      "ms": 1200
+    },
+    {
+      "do": "click",
+      "sel": ".pf-flame-bar.hot"
+    },
+    {
+      "do": "wait",
+      "ms": 800
+    },
+    {
+      "do": "poster"
+    }
+  ],
+  "memory-leak": [
+    {
+      "do": "click",
+      "sel": "button:has-text(\"10번 열고 닫기\")"
+    },
+    {
+      "do": "wait",
+      "ms": 3400
+    },
+    {
+      "do": "poster"
+    }
+  ],
+  "bundle-analysis": [
+    {
+      "do": "wait",
+      "ms": 400
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"dayjs 로 바꾸기\")"
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "click",
+      "sel": "button[aria-label^=\"chart.js\"]"
+    },
+    {
+      "do": "click",
+      "sel": "button:has-text(\"통계 화면에서만\")"
+    },
+    {
+      "do": "wait",
+      "ms": 900
+    },
+    {
+      "do": "poster"
+    }
+  ],
+  "request-dedup": [
+    {
+      "do": "click",
+      "sel": "button.btn.primary"
+    },
+    {
+      "do": "wait",
+      "ms": 900
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "click",
+      "sel": "[role=radio]:has-text(\"한 번에 묶기\")"
+    },
+    {
+      "do": "click",
+      "sel": "button.btn.primary"
+    },
+    {
+      "do": "wait",
+      "ms": 900
+    }
+  ],
+  "overfetching": [
+    {
+      "do": "wait",
+      "ms": 700
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "click",
+      "sel": "[role=radio]:has-text(\"모자라서 더 받기\")"
+    },
+    {
+      "do": "wait",
+      "ms": 900
+    },
+    {
+      "do": "click",
+      "sel": "[role=radio]:has-text(\"필요한 필드만\")"
+    },
+    {
+      "do": "wait",
+      "ms": 900
+    }
+  ],
+  "n-plus-one": [
+    {
+      "do": "click",
+      "sel": "button.btn.primary"
+    },
+    {
+      "do": "wait",
+      "ms": 800
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "click",
+      "sel": "[role=radio]:has-text(\"JOIN\")"
+    },
+    {
+      "do": "click",
+      "sel": "button.btn.primary"
+    },
+    {
+      "do": "wait",
+      "ms": 700
+    }
+  ],
+  "db-index": [
+    {
+      "do": "click",
+      "sel": "button.btn.primary"
+    },
+    {
+      "do": "wait",
+      "ms": 1500
+    },
+    {
+      "do": "poster"
+    },
+    {
+      "do": "click",
+      "sel": "[role=switch]"
+    },
+    {
+      "do": "click",
+      "sel": "button.btn.primary"
+    },
+    {
+      "do": "wait",
+      "ms": 1100
+    }
+  ]
+}

@@ -6,7 +6,7 @@ import "./sim.css";
 /* ───────── 공통 도우미 ───────── */
 
 /* 언마운트 때 한꺼번에 정리되는 setTimeout 묶음 */
-function useLater() {
+export function useLater() {
   const ids = useRef(new Set<number>());
   useEffect(() => {
     const s = ids.current;
@@ -22,7 +22,7 @@ function useLater() {
   }), []);
 }
 
-function Seg<T extends string>({ value, options, onChange, label }: { value: T; options: [T, string][]; onChange: (v: T) => void; label: string }) {
+export function Seg<T extends string>({ value, options, onChange, label }: { value: T; options: [T, string][]; onChange: (v: T) => void; label: string }) {
   return (
     <div className="segmented sim-seg" role="radiogroup" aria-label={label}>
       {options.map(([v, text]) => (
@@ -32,7 +32,7 @@ function Seg<T extends string>({ value, options, onChange, label }: { value: T; 
   );
 }
 
-function Switch({ on, onChange, label }: { on: boolean; onChange: (v: boolean) => void; label: string }) {
+export function Switch({ on, onChange, label }: { on: boolean; onChange: (v: boolean) => void; label: string }) {
   return (
     <label className="row sim-switch">
       <button type="button" role="switch" aria-checked={on} className={`switch ${on ? "on" : ""}`} onClick={() => onChange(!on)}><span /></button>

@@ -15,6 +15,7 @@ export const categories: Category[] = [
   { id: "desktop", name: "데스크톱 앱", blurb: "창, 트레이, 단축키처럼 윈도우·맥 앱에서 보는 것들" },
   { id: "a11y", name: "접근성·키보드", blurb: "마우스 없이, 또는 화면을 못 보고도 쓸 수 있게 하는 장치" },
   { id: "perf", name: "성능·동작 패턴", blurb: "빠르게 느껴지게 만드는 코드 쪽 기법" },
+  { id: "render", name: "렌더링·성능 측정", blurb: "화면을 매끄럽게 그리는 법과 느린 곳을 찾아내는 도구" },
   { id: "data", name: "데이터·네트워크", blurb: "서버와 주고받을 때 쓰는 방식과 약속" },
   { id: "devflow", name: "개발 흐름·배포", blurb: "코드를 고치고 내보내는 과정에서 쓰는 말" },
 ];
