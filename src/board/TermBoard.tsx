@@ -581,66 +581,80 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
   const handles = (() => {
     if (!sel.size || sel.size > 3 || far || !size.w) return [];
     const W = usableW();
-    const left = 6, right = W - (compact ? 50 : 6), top = TOP + 4; // 휴대폰은 오른쪽 확대 막대를 비켜서
+    const left = 6, right = W - 6, top = TOP + 4;
     const bottom = usableH() - (compact ? (peek ? 74 : 12) + safeB : peek ? 96 : 30);
     const HH = 22, GAP = 4;
-    type H = { id: string; x: number; y: number; w: number; angle: number; edge: "l" | "r" | "t" | "b" };
-    const out: H[] = [];
+    type Box = { x: number; y: number; w: number; h: number };
+    const hits = (a: Box, b: Box) => a.x < b.x + b.w + GAP && b.x < a.x + a.w + GAP && a.y < b.y + b.h + GAP && b.y < a.y + a.h + GAP;
+    // 가리면 안 되는 것: 고른 노드들
+    const blocks: Box[] = [];
+    for (const id of sel) {
+      const p = layout.pos[id];
+      if (p) blocks.push({ x: p.x * v.z + v.x - 4, y: p.y * v.z + v.y - 4, w: NODE_W * v.z + 8, h: NODE_H * v.z + 8 });
+    }
+    // 휴대폰 확대 막대 자리도 피한다 (높이는 버튼 셋 + 배율 글자 + 줄 어림)
+    if (compact && !sheetOpen) blocks.push({ x: W - 46, y: size.h - (peek ? 68 : 8) - safeB - 126, w: 46, h: 126 });
+    // 화면 가장자리 둘레 위의 자리 - 폭 w 인 핸들을 둘레 거리 s 에 놓은 상자 (위 → 오른쪽 → 아래 → 왼쪽 순서로 한 바퀴)
+    const ring = (w: number) => {
+      const lt = Math.max(0, right - w - left), lr = Math.max(0, bottom - HH - top);
+      const total = 2 * (lt + lr);
+      const at = (s: number): Box => {
+        s = ((s % total) + total) % total;
+        if (s < lt) return { x: left + s, y: top, w, h: HH };
+        s -= lt;
+        if (s < lr) return { x: right - w, y: top + s, w, h: HH };
+        s -= lr;
+        if (s < lt) return { x: right - w - s, y: bottom - HH, w, h: HH };
+        s -= lt;
+        return { x: left, y: bottom - HH - s, w, h: HH };
+      };
+      const of = (x: number, y: number, edge: string) =>
+        edge === "t" ? clamp(x - left, 0, lt)
+        : edge === "r" ? lt + clamp(y - top, 0, lr)
+        : edge === "b" ? lt + lr + clamp(right - w - x, 0, lt)
+        : 2 * lt + lr + clamp(bottom - HH - y, 0, lr);
+      return { at, of, total };
+    };
+    const out: (Box & { id: string; angle: number })[] = [];
     for (const id of sel) {
       const p = layout.pos[id];
       if (!p) continue;
       const ax = clamp((p.x + NODE_W / 2) * v.z + v.x, left, right), ay = clamp((p.y + NODE_H / 2) * v.z + v.y, top, bottom);
-      // 고른 노드의 화면 자리 - 핸들이 그 위에 얹히면 띄우지 않는다
-      const self = { x: p.x * v.z + v.x - 36, y: p.y * v.z + v.y - 36, w: NODE_W * v.z + 72, h: NODE_H * v.z + 72 };
       for (const n of neighbors.get(id) ?? []) {
         if (sel.has(n) || out.some((h) => h.id === n)) continue;
         const q = layout.pos[n];
         if (!q) continue;
         const rx = q.x * v.z + v.x, ry = q.y * v.z + v.y, rw = NODE_W * v.z, rh = NODE_H * v.z;
-        // 조금이라도 보이는 노드는 핸들 없음 (실제 화면 끝으로 본다)
-        if (rx + rw > 0 && rx < W && ry + rh > TOP && ry < usableH()) continue;
+        // 화면 안에 제대로(가로·세로 24px 넘게) 보이는 노드만 핸들 없이 둔다 - 끝에 몇 픽셀 걸친 것은 안 보이는 것으로 친다
+        const seenW = Math.min(rx + rw, W) - Math.max(rx, 0), seenH = Math.min(ry + rh, usableH()) - Math.max(ry, TOP);
+        if (seenW > 24 && seenH > 24) continue;
         const dx = rx + rw / 2 - ax, dy = ry + rh / 2 - ay;
-        let t = 1, edge: H["edge"] = "r";
-        const hit = (k: number, e: H["edge"]) => { if (k < t) { t = k; edge = e; } };
+        let t = 1, edge = "r";
+        const hit = (k: number, e: string) => { if (k < t) { t = k; edge = e; } };
         if (dx > 0) hit((right - ax) / dx, "r");
         if (dx < 0) hit((left - ax) / dx, "l");
         if (dy > 0) hit((bottom - ay) / dy, "b");
         if (dy < 0) hit((top - ay) / dy, "t");
         const hx = ax + dx * t, hy = ay + dy * t;
-        if (inRect(self, { x: hx, y: hy })) continue;
-        // 핸들 상자 (왼쪽 위 기준). 폭은 이름 길이로 어림 (CSS max-width 112px)
+        // 폭은 이름 길이로 어림 (CSS max-width 112px)
         const name = termById.get(n)?.name ?? "";
         const w = Math.min(112, Math.round(textWidth(name, 11 / 13.5) + 30));
-        out.push({ id: n, x: clamp(hx - w / 2, left, right - w), y: clamp(hy - HH / 2, top, bottom - HH), w, angle: Math.atan2(dy, dx), edge });
+        // 선이 가장자리와 만나는 자리에서 시작해 둘레를 따라 양쪽으로 넓혀 가며 빈자리를 찾는다
+        const r = ring(w);
+        const s0 = r.of(hx - w / 2, hy - HH / 2, edge);
+        let box: Box | null = null;
+        for (let k = 0; k <= r.total; k += 6) {
+          for (const s of k ? [s0 + k, s0 - k] : [s0]) {
+            const b = r.at(s);
+            if (!blocks.some((x) => hits(b, x)) && !out.some((x) => hits(b, x))) { box = b; break; }
+          }
+          if (box) break;
+        }
+        if (!box) box = r.at(s0); // 둘레에 빈자리가 하나도 없을 때만 겹친다
+        out.push({ ...box, id: n, angle: Math.atan2(dy, dx) });
       }
     }
-    // 같은 가장자리에 붙은 것끼리 그 가장자리를 따라 나란히 비켜 놓는다 (위·아래는 옆으로, 왼쪽·오른쪽은 위아래로)
-    for (const edge of ["t", "b", "l", "r"] as const) {
-      const row = out.filter((h) => h.edge === edge);
-      if (row.length < 2) continue;
-      if (edge === "t" || edge === "b") {
-        row.sort((a, b) => a.x - b.x);
-        for (let k = 1; k < row.length; k++) row[k].x = Math.max(row[k].x, row[k - 1].x + row[k - 1].w + GAP);
-        for (let k = row.length - 1; k >= 0; k--) {
-          const lim = k === row.length - 1 ? right : row[k + 1].x - GAP;
-          row[k].x = Math.max(left, Math.min(row[k].x, lim - row[k].w));
-        }
-      } else {
-        row.sort((a, b) => a.y - b.y);
-        for (let k = 1; k < row.length; k++) row[k].y = Math.max(row[k].y, row[k - 1].y + HH + GAP);
-        for (let k = row.length - 1; k >= 0; k--) {
-          const lim = k === row.length - 1 ? bottom : row[k + 1].y - GAP;
-          row[k].y = Math.max(top, Math.min(row[k].y, lim - HH));
-        }
-      }
-    }
-    // 모서리 근처에서 서로 다른 가장자리 것끼리 겹치면 하나는 뺀다 (가리느니 덜 보이는 게 낫다)
-    const keep: H[] = [];
-    for (const h of out) {
-      if (keep.some((k) => h.x < k.x + k.w + GAP && k.x < h.x + h.w + GAP && h.y < k.y + HH + GAP && k.y < h.y + HH + GAP)) continue;
-      keep.push(h);
-    }
-    return keep;
+    return out;
   })();
   const goHandle = (id: string) => {
     setSel(new Set([id]));
@@ -726,7 +740,10 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
         {compact && (
           <>
             {/* 위: 떠 있는 막대 한 줄 (목업 A) - 검색 중에는 검색칸 (목업 C) */}
-            <div className={`tbm-bar ${searching ? "searching" : ""}`} onPointerDown={stop}>
+            {/* 위 막대는 화면 맨 위에 붙은 고정 띠 안에 둔다 - 아이폰 Safari(iOS 26)는 상태 표시줄 밑으로 지나가는
+                내용을 흐리게 덮는데, 맨 위에 붙은 고정 요소는 흐리지 않고 그 색으로 상태 표시줄을 칠한다 */}
+            <div className="tbm-top" onPointerDown={stop}>
+            <div className={`tbm-bar ${searching ? "searching" : ""}`}>
               {searching ? (
                 <>
                   <button type="button" className="tbm-ib" aria-label="검색 닫기" onClick={closeSearch}><Icon d={I.back} /></button>
@@ -749,6 +766,8 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
                   </button>
                 </>
               )}
+            </div>
+
             </div>
 
             {searching && query.trim() && (

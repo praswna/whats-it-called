@@ -312,6 +312,8 @@ a { color: var(--accent); }
 .board-sheet .detail-body { padding: 0 16px calc(24px + env(safe-area-inset-bottom, 0px)); }
 .board-sheet .detail-top { margin-bottom: 4px; }
 .board-sheet .detail-name { font-size: 24px; }
+.demo-top { margin: 4px 0 16px; }
+.demo-top .demo { margin-top: 0; }
 @keyframes sheet-up { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
 
 /* ── 푸터 ── */

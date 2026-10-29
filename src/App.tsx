@@ -220,6 +220,12 @@ export default function App() {
     if (current) { close(); requestAnimationFrame(jump); } else jump();
   };
 
+  const demoBlock = current?.demo && demos[current.demo] ? (
+    <section className="demo">
+      <h3>직접 해 보기</h3>
+      <DemoHost demoKey={current.demo} />
+    </section>
+  ) : null;
   const detail = current && (
     <article className="detail-body" key={current.id}>
       <div className="detail-top">
@@ -229,17 +235,14 @@ export default function App() {
       <p className="eyebrow">{catName(current.category)}</p>
       <h2 className="detail-name">{current.name}</h2>
       <p className="detail-en mono">{current.en}</p>
+      {/* 보드에서 노드를 열면 직접 해 보기를 맨 위에 (이름 바로 아래) */}
+      {onBoard && demoBlock && <div className="demo-top">{demoBlock}</div>}
       {current.aliases.length > 0 && (
         <p className="aliases">{current.aliases.map((a) => <span key={a} className="chip">{a}</span>)}</p>
       )}
       <p className="detail-summary">{current.summary}</p>
       <p className="detail-desc">{current.description}</p>
-      {current.demo && demos[current.demo] && (
-        <section className="demo">
-          <h3>직접 해 보기</h3>
-          <DemoHost demoKey={current.demo} />
-        </section>
-      )}
+      {!onBoard && demoBlock}
       <section>
         <h3>이런 곳에서 봤을 거예요</h3>
         <ul className="examples">{current.examples.map((e) => <li key={e}>{e}</li>)}</ul>
