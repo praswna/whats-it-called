@@ -156,3 +156,10 @@
 .tbm-cats button.on { border-color: var(--accent); background: var(--accent-soft); font-weight: 700; }
 @keyframes tbm-up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
 @keyframes tbm-drop { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+
+/* 스티키 핸들 - 화면 밖으로 나간 이어진 노드의 이름표, 화면 가장자리에 붙어 따라온다 */
+.tb-handle { position: absolute; z-index: 3; display: flex; align-items: center; gap: 5px; max-width: 150px; height: 28px; box-sizing: border-box; padding: 0 10px 0 7px; border: 1px solid var(--accent); border-radius: 999px; background: var(--surface); color: var(--fg); font: inherit; font-size: 12px; font-weight: 600; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22); cursor: pointer; white-space: nowrap; }
+.tb-handle span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.tb-handle svg { flex: none; color: var(--accent); }
+.tb-handle:hover { background: var(--accent-soft); }
+.tb-handle::after { content: ""; position: absolute; inset: -6px -2px; }

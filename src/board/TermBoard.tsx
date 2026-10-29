@@ -769,6 +769,50 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
   };
   const peek = !!selOne && !activeId;
 
+  // 스티키 핸들: 고른 노드와 이어진 노드가 화면 밖이면, 두 노드를 잇는 줄이 화면 가장자리와 만나는 곳에 이름표를 붙인다.
+  // 판을 옮기면 가장자리를 따라 움직이고, 누르면 그 노드로 간다
+  const handles = (() => {
+    if (!sel.size || sel.size > 3 || far || !size.w) return [];
+    const W = usableW();
+    const left = 6, right = W - (compact ? 50 : 6), top = TOP + 4; // 휴대폰은 오른쪽 확대 막대를 비켜서
+    const bottom = usableH() - (compact ? (peek ? 70 : 10) : peek ? 96 : 30);
+    const out: { id: string; x: number; y: number; angle: number }[] = [];
+    for (const id of sel) {
+      const p = layout.pos[id];
+      if (!p) continue;
+      const ax = clamp((p.x + NODE_W / 2) * v.z + v.x, left, right), ay = clamp((p.y + NODE_H / 2) * v.z + v.y, top, bottom);
+      for (const n of neighbors.get(id) ?? []) {
+        if (sel.has(n) || out.some((h) => h.id === n)) continue;
+        const q = layout.pos[n];
+        if (!q) continue;
+        const rx = q.x * v.z + v.x, ry = q.y * v.z + v.y, rw = NODE_W * v.z, rh = NODE_H * v.z;
+        if (rx + rw > left && rx < right && ry + rh > top && ry < bottom) continue; // 보이는 노드는 핸들 없음
+        const dx = rx + rw / 2 - ax, dy = ry + rh / 2 - ay;
+        let t = 1;
+        if (dx > 0) t = Math.min(t, (right - ax) / dx);
+        if (dx < 0) t = Math.min(t, (left - ax) / dx);
+        if (dy > 0) t = Math.min(t, (bottom - ay) / dy);
+        if (dy < 0) t = Math.min(t, (top - ay) / dy);
+        out.push({ id: n, x: ax + dx * t, y: ay + dy * t, angle: Math.atan2(dy, dx) });
+      }
+    }
+    // 같은 가장자리에서 겹치면 조금씩 비켜 놓는다
+    out.sort((a, b) => a.y - b.y || a.x - b.x);
+    for (let i = 1; i < out.length; i++) {
+      for (let j = 0; j < i; j++) {
+        if (Math.abs(out[i].x - out[j].x) < 120 && Math.abs(out[i].y - out[j].y) < 30) {
+          out[i].y = Math.min(bottom, out[j].y + 30);
+        }
+      }
+    }
+    return out.map((h) => ({ ...h, px: ((h.x - left) / Math.max(1, right - left)) * 100, py: ((h.y - top) / Math.max(1, bottom - top)) * 100 }));
+  })();
+  const goHandle = (id: string) => {
+    setSel(new Set([id]));
+    showTerm(id, true);
+    if (activeId) onOpen(id);
+  };
+
   return (
     <div className={`tb ${compact ? "tb-compact" : ""}`}>
       <div ref={boardRef} tabIndex={0} role="application"
@@ -784,6 +828,20 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
             {marquee && <rect className="tb-marquee" x={marquee.x} y={marquee.y} width={marquee.w} height={marquee.h} />}
           </g>
         </svg>
+
+        {handles.map((h) => {
+          const t = termById.get(h.id);
+          if (!t) return null;
+          return (
+            <button key={h.id} type="button" className="tb-handle" onPointerDown={stop} onClick={() => goHandle(h.id)}
+              aria-label={`화면 밖의 이어진 용어: ${t.name}. 누르면 그리로 갑니다`}
+              style={{ left: h.x, top: h.y, transform: `translate(${-h.px}%, ${-h.py}%)` }}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
+                style={{ transform: `rotate(${h.angle}rad)` }}><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+              <span>{t.name}</span>
+            </button>
+          );
+        })}
 
         {!compact && (
           <>
@@ -891,7 +949,7 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
 
             {/* 오른쪽 아래: 확대 세로 막대 - 미리보기가 뜨면 그 위로 비킨다. 설명 시트가 열리면 숨는다 */}
             {!sheetOpen && (
-              <div className="tbm-stack" style={{ bottom: peek ? 68 : 8 }} onPointerDown={stop}>
+              <div className="tbm-stack" style={{ bottom: `calc(${peek ? 68 : 8}px + env(safe-area-inset-bottom, 0px))` }} onPointerDown={stop}>
                 <button type="button" className="tbm-ib" aria-label="확대" onClick={() => zoomCenter(v.z * 1.25)}><Icon d={I.plus} /></button>
                 <span className="tbm-pct mono">{Math.round(v.z * 100)}%</span>
                 <button type="button" className="tbm-ib" aria-label="축소" onClick={() => zoomCenter(v.z / 1.25)}><Icon d={I.minus} /></button>
