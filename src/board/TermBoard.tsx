@@ -781,27 +781,32 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
       const p = layout.pos[id];
       if (!p) continue;
       const ax = clamp((p.x + NODE_W / 2) * v.z + v.x, left, right), ay = clamp((p.y + NODE_H / 2) * v.z + v.y, top, bottom);
+      // 고른 노드의 화면 자리 - 핸들이 그 위에 얹히면 띄우지 않는다
+      const self = { x: p.x * v.z + v.x - 36, y: p.y * v.z + v.y - 36, w: NODE_W * v.z + 72, h: NODE_H * v.z + 72 };
       for (const n of neighbors.get(id) ?? []) {
         if (sel.has(n) || out.some((h) => h.id === n)) continue;
         const q = layout.pos[n];
         if (!q) continue;
         const rx = q.x * v.z + v.x, ry = q.y * v.z + v.y, rw = NODE_W * v.z, rh = NODE_H * v.z;
-        if (rx + rw > left && rx < right && ry + rh > top && ry < bottom) continue; // 보이는 노드는 핸들 없음
+        // 조금이라도 보이는 노드는 핸들 없음 (실제 화면 끝으로 본다)
+        if (rx + rw > 0 && rx < W && ry + rh > TOP && ry < usableH()) continue;
         const dx = rx + rw / 2 - ax, dy = ry + rh / 2 - ay;
         let t = 1;
         if (dx > 0) t = Math.min(t, (right - ax) / dx);
         if (dx < 0) t = Math.min(t, (left - ax) / dx);
         if (dy > 0) t = Math.min(t, (bottom - ay) / dy);
         if (dy < 0) t = Math.min(t, (top - ay) / dy);
-        out.push({ id: n, x: ax + dx * t, y: ay + dy * t, angle: Math.atan2(dy, dx) });
+        const hx = ax + dx * t, hy = ay + dy * t;
+        if (inRect(self, { x: hx, y: hy })) continue;
+        out.push({ id: n, x: hx, y: hy, angle: Math.atan2(dy, dx) });
       }
     }
     // 같은 가장자리에서 겹치면 조금씩 비켜 놓는다
     out.sort((a, b) => a.y - b.y || a.x - b.x);
     for (let i = 1; i < out.length; i++) {
       for (let j = 0; j < i; j++) {
-        if (Math.abs(out[i].x - out[j].x) < 120 && Math.abs(out[i].y - out[j].y) < 30) {
-          out[i].y = Math.min(bottom, out[j].y + 30);
+        if (Math.abs(out[i].x - out[j].x) < 100 && Math.abs(out[i].y - out[j].y) < 24) {
+          out[i].y = Math.min(bottom, out[j].y + 24);
         }
       }
     }
@@ -836,7 +841,7 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
             <button key={h.id} type="button" className="tb-handle" onPointerDown={stop} onClick={() => goHandle(h.id)}
               aria-label={`화면 밖의 이어진 용어: ${t.name}. 누르면 그리로 갑니다`}
               style={{ left: h.x, top: h.y, transform: `translate(${-h.px}%, ${-h.py}%)` }}>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
                 style={{ transform: `rotate(${h.angle}rad)` }}><path d="M5 12h14M13 6l6 6-6 6" /></svg>
               <span>{t.name}</span>
             </button>
