@@ -583,7 +583,9 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
     const W = usableW();
     const left = 6, right = W - (compact ? 50 : 6), top = TOP + 4; // 휴대폰은 오른쪽 확대 막대를 비켜서
     const bottom = usableH() - (compact ? (peek ? 74 : 12) + safeB : peek ? 96 : 30);
-    const out: { id: string; x: number; y: number; angle: number }[] = [];
+    const HH = 22, GAP = 4;
+    type H = { id: string; x: number; y: number; w: number; angle: number; edge: "l" | "r" | "t" | "b" };
+    const out: H[] = [];
     for (const id of sel) {
       const p = layout.pos[id];
       if (!p) continue;
@@ -598,26 +600,47 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
         // 조금이라도 보이는 노드는 핸들 없음 (실제 화면 끝으로 본다)
         if (rx + rw > 0 && rx < W && ry + rh > TOP && ry < usableH()) continue;
         const dx = rx + rw / 2 - ax, dy = ry + rh / 2 - ay;
-        let t = 1;
-        if (dx > 0) t = Math.min(t, (right - ax) / dx);
-        if (dx < 0) t = Math.min(t, (left - ax) / dx);
-        if (dy > 0) t = Math.min(t, (bottom - ay) / dy);
-        if (dy < 0) t = Math.min(t, (top - ay) / dy);
+        let t = 1, edge: H["edge"] = "r";
+        const hit = (k: number, e: H["edge"]) => { if (k < t) { t = k; edge = e; } };
+        if (dx > 0) hit((right - ax) / dx, "r");
+        if (dx < 0) hit((left - ax) / dx, "l");
+        if (dy > 0) hit((bottom - ay) / dy, "b");
+        if (dy < 0) hit((top - ay) / dy, "t");
         const hx = ax + dx * t, hy = ay + dy * t;
         if (inRect(self, { x: hx, y: hy })) continue;
-        out.push({ id: n, x: hx, y: hy, angle: Math.atan2(dy, dx) });
+        // 핸들 상자 (왼쪽 위 기준). 폭은 이름 길이로 어림 (CSS max-width 112px)
+        const name = termById.get(n)?.name ?? "";
+        const w = Math.min(112, Math.round(textWidth(name, 11 / 13.5) + 30));
+        out.push({ id: n, x: clamp(hx - w / 2, left, right - w), y: clamp(hy - HH / 2, top, bottom - HH), w, angle: Math.atan2(dy, dx), edge });
       }
     }
-    // 같은 가장자리에서 겹치면 조금씩 비켜 놓는다
-    out.sort((a, b) => a.y - b.y || a.x - b.x);
-    for (let i = 1; i < out.length; i++) {
-      for (let j = 0; j < i; j++) {
-        if (Math.abs(out[i].x - out[j].x) < 100 && Math.abs(out[i].y - out[j].y) < 24) {
-          out[i].y = Math.min(bottom, out[j].y + 24);
+    // 같은 가장자리에 붙은 것끼리 그 가장자리를 따라 나란히 비켜 놓는다 (위·아래는 옆으로, 왼쪽·오른쪽은 위아래로)
+    for (const edge of ["t", "b", "l", "r"] as const) {
+      const row = out.filter((h) => h.edge === edge);
+      if (row.length < 2) continue;
+      if (edge === "t" || edge === "b") {
+        row.sort((a, b) => a.x - b.x);
+        for (let k = 1; k < row.length; k++) row[k].x = Math.max(row[k].x, row[k - 1].x + row[k - 1].w + GAP);
+        for (let k = row.length - 1; k >= 0; k--) {
+          const lim = k === row.length - 1 ? right : row[k + 1].x - GAP;
+          row[k].x = Math.max(left, Math.min(row[k].x, lim - row[k].w));
+        }
+      } else {
+        row.sort((a, b) => a.y - b.y);
+        for (let k = 1; k < row.length; k++) row[k].y = Math.max(row[k].y, row[k - 1].y + HH + GAP);
+        for (let k = row.length - 1; k >= 0; k--) {
+          const lim = k === row.length - 1 ? bottom : row[k + 1].y - GAP;
+          row[k].y = Math.max(top, Math.min(row[k].y, lim - HH));
         }
       }
     }
-    return out.map((h) => ({ ...h, px: ((h.x - left) / Math.max(1, right - left)) * 100, py: ((h.y - top) / Math.max(1, bottom - top)) * 100 }));
+    // 모서리 근처에서 서로 다른 가장자리 것끼리 겹치면 하나는 뺀다 (가리느니 덜 보이는 게 낫다)
+    const keep: H[] = [];
+    for (const h of out) {
+      if (keep.some((k) => h.x < k.x + k.w + GAP && k.x < h.x + h.w + GAP && h.y < k.y + HH + GAP && k.y < h.y + HH + GAP)) continue;
+      keep.push(h);
+    }
+    return keep;
   })();
   const goHandle = (id: string) => {
     setSel(new Set([id]));
@@ -646,7 +669,7 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
           return (
             <button key={h.id} type="button" className="tb-handle" onPointerDown={stop} onClick={() => goHandle(h.id)}
               aria-label={`화면 밖의 이어진 용어: ${t.name}. 누르면 그리로 갑니다`}
-              style={{ left: h.x, top: h.y, transform: `translate(${-h.px}%, ${-h.py}%)` }}>
+              style={{ left: h.x, top: h.y, maxWidth: h.w }}>
               <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
                 style={{ transform: `rotate(${h.angle}rad)` }}><path d="M5 12h14M13 6l6 6-6 6" /></svg>
               <span>{t.name}</span>
