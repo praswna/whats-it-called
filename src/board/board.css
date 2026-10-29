@@ -7,8 +7,6 @@
 }
 .tb-board:focus-visible { box-shadow: inset 0 0 0 2px var(--accent); }
 .tb-board.panning { cursor: grabbing; }
-.tb-board.moving, .tb-board.moving * { cursor: move !important; }
-.tb-board.linking, .tb-board.linking * { cursor: crosshair !important; }
 .tb-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .tb-svg text { font-family: var(--font-body); pointer-events: none; }
 
@@ -29,30 +27,17 @@
 .tb-node.match .tb-node-box { stroke: var(--accent); stroke-width: 2; }
 .tb-node.on .tb-node-box { stroke: var(--accent); stroke-width: 1.6; }
 .tb-node.open .tb-node-box { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2; }
-.tb-node.target .tb-node-box { fill: var(--accent-soft); stroke: var(--accent); stroke-dasharray: 5 3; }
 .tb-svg .tb-node-name { font-size: 13.5px; font-weight: 600; fill: var(--fg); }
 .tb-svg .tb-node-en { font-size: 10.5px; fill: var(--muted); font-family: var(--font-mono); }
 .tb-svg .tb-node-demo { font-size: 10px; fill: var(--warm); }
 .tb-sel { fill: none; stroke: var(--accent); stroke-width: 2.2; pointer-events: none; }
 
-/* 연결점 - 왼쪽·오른쪽은 늘, 위·아래는 노드에 올리거나 선이 붙어 있을 때만 */
-.tb-port { fill: var(--surface); stroke: var(--muted); stroke-width: 1.2; pointer-events: none; opacity: 0; transition: opacity 120ms; }
-.tb-node:hover .tb-port, .tb-node.on .tb-port, .tb-board.linking .tb-port { opacity: 1; }
-.tb-port-hit { fill: transparent; cursor: crosshair; }
-.tb-port-hit:hover + .tb-port { opacity: 1; fill: var(--accent); stroke: var(--accent); }
 
-/* 선 - 관련 용어는 옅은 실선, 내가 이은 선은 주황 점선 */
+/* 선 - 관련 용어 */
 .tb-edge { fill: none; stroke: var(--muted); stroke-opacity: 0.35; stroke-width: 1.3; vector-effect: non-scaling-stroke; pointer-events: none; transition: stroke-opacity 160ms; }
 .tb-edge.hot { stroke: var(--accent); stroke-opacity: 0.95; stroke-width: 2; }
 .tb-edge.peek { stroke: var(--accent); stroke-opacity: 0.5; stroke-width: 1.6; }
 .tb-edge.dim { stroke-opacity: 0.06; }
-.tb-link { fill: none; stroke: var(--warm); stroke-width: 2; stroke-dasharray: 6 4; vector-effect: non-scaling-stroke; pointer-events: none; }
-.tb-link.dim { stroke-opacity: 0.2; }
-.tb-link.on { stroke-width: 3.2; stroke-dasharray: none; }
-.tb-link-hit { fill: none; stroke: transparent; stroke-width: 14; vector-effect: non-scaling-stroke; pointer-events: stroke; cursor: pointer; }
-.tb-link-hit:hover + .tb-link { stroke-width: 3; }
-.tb-draft { fill: none; stroke: var(--warm); stroke-width: 2; stroke-dasharray: 6 4; vector-effect: non-scaling-stroke; pointer-events: none; }
-.tb-marquee { fill: var(--accent); fill-opacity: 0.08; stroke: var(--accent); stroke-dasharray: 4 3; vector-effect: non-scaling-stroke; pointer-events: none; }
 
 /* 멀리 보기 - 카테고리 이름 */
 .tb-far { pointer-events: none; transition: opacity 160ms; }
@@ -113,7 +98,6 @@
 .tbm-found b { color: var(--accent); padding-right: 4px; }
 .tbm-found .mono { font-size: 12px; color: var(--muted); padding: 0 2px; }
 .tbm-found .tbm-ib { width: 32px; height: 28px; }
-.tbm-link { padding: 0 2px; }
 .tbm-txt { height: 28px; border: none; background: transparent; color: var(--fg); font: inherit; font-size: 13px; padding: 0 8px; border-radius: 7px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
 .tbm-txt.danger { color: var(--danger); }
 .tbm-txt.bordered { height: 34px; border: 1px solid var(--line); padding: 0 10px; }
@@ -163,3 +147,6 @@
 .tb-handle svg { flex: none; color: var(--accent); }
 .tb-handle:hover { background: var(--accent-soft); }
 .tb-handle::after { content: ""; position: absolute; inset: -8px -2px; }
+
+/* 홈 바 높이를 재는 보이지 않는 칸 */
+.tb-probe { position: absolute; left: 0; top: 0; width: 0; height: 0; padding-bottom: env(safe-area-inset-bottom, 0px); visibility: hidden; pointer-events: none; }

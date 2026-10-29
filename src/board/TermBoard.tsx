@@ -3,24 +3,22 @@ import type { Category, CategoryId, Term } from "../data/types";
 import "./board.css";
 
 /* 용어 보드: 용어 하나가 노드 하나, 카테고리가 그룹 상자, "같이 보면 좋은 말"이 선.
-   학습노트(study-note)의 보드처럼 판을 옮기고 확대하고, 노드를 끌어 놓고, 연결점을 끌어 직접 잇는다.
-   보드에 담기는 것은 "어느 용어가 어디에 있고, 내가 무엇을 이었는가" 뿐이고 용어 데이터는 건드리지 않는다.
-   자리와 내가 이은 선은 이 기기(localStorage)에만 둔다. */
+   학습노트(study-note)의 보드처럼 판을 옮기고 확대하며 둘러본다.
+   보기 전용이다 - 노드 자리와 선은 코드(defaultLayout, terms.ts 의 related)로만 정하고 화면에서는 고칠 수 없다
+   (사용자 지시 2026-10-29: "편집 불가능하게, 클로드로만 편집"). */
 
 type Pt = { x: number; y: number };
 type Side = "front" | "back" | "top" | "bottom";
 interface Rect { x: number; y: number; w: number; h: number }
 interface View { x: number; y: number; z: number }
-interface Layout { pos: Record<string, Pt>; links: [string, string][] }
+interface Layout { pos: Record<string, Pt> }
 type EdgeMode = "picked" | "group" | "all";
 
 export type BoardFocus = { kind: "cat" | "term" | "fit"; id: string; seq: number } | null;
 
+// tap: 노드("node:id")나 그룹 머리("group:id")에서 시작했으면 그것 - 안 움직이고 떼면 누른 것으로 본다
 type Gesture =
-  | { t: "pan"; sx: number; sy: number; vx: number; vy: number; moved: boolean }
-  | { t: "marquee"; start: Pt; base: Set<string>; moved: boolean }
-  | { t: "move"; sx: number; sy: number; vx: number; vy: number; before: Layout; ids: string[]; moved: boolean; id: string | null; additive: boolean; touch?: { timer: number; picked: boolean } }
-  | { t: "link"; from: string; side: Side; sx: number; sy: number }
+  | { t: "pan"; sx: number; sy: number; vx: number; vy: number; moved: boolean; tap?: string }
   | { t: "pinch"; d0: number; z0: number; wx: number; wy: number };
 
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
@@ -31,7 +29,6 @@ const GROUP_W = PAD * 2 + GROUP_COLS * NODE_W + (GROUP_COLS - 1) * GAP_X;
 const Z_MIN = 0.12, Z_MAX = 2;
 const TONES = ["var(--accent)", "var(--warm)", "#8a63d2", "#2f7fc1"];
 const DIR: Record<Side, Pt> = { front: { x: -1, y: 0 }, back: { x: 1, y: 0 }, top: { x: 0, y: -1 }, bottom: { x: 0, y: 1 } };
-const KEY_LAYOUT = "wic-board-layout-v1";
 const KEY_VIEW = "wic-board-view-v1";
 const KEY_EDGES = "wic-board-edges-v2"; // v2: 기본이 "고른 것만" 으로 바뀌었다
 const FAR_Z = 0.45; // 이보다 작게 보면 글씨 대신 카테고리 이름만 크게 (멀리 보기)
@@ -51,7 +48,7 @@ function defaultLayout(terms: Term[], categories: Category[]): Layout {
     });
     colH[col] = gy + HEAD + rows * (NODE_H + GAP_Y) - GAP_Y + PAD + ROW_GAP;
   }
-  return { pos, links: [] };
+  return { pos };
 }
 function readJson(key: string): unknown {
   try { return JSON.parse(localStorage.getItem(key) ?? "null"); } catch { return null; }
@@ -60,17 +57,6 @@ function writeJson(key: string, value: unknown) {
   try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* 저장이 막힌 브라우저 - 이번 화면에서만 유지 */ }
 }
 const isPt = (p: unknown): p is Pt => !!p && typeof (p as Pt).x === "number" && typeof (p as Pt).y === "number" && isFinite((p as Pt).x) && isFinite((p as Pt).y);
-function loadLayout(def: Layout): Layout {
-  const raw = readJson(KEY_LAYOUT) as Partial<Layout> | null;
-  if (!raw || typeof raw !== "object") return def;
-  const pos = { ...def.pos };
-  // 새로 생긴 용어는 처음 자리, 없어진 용어는 버린다
-  for (const [id, p] of Object.entries(raw.pos ?? {})) if (id in pos && isPt(p)) pos[id] = { x: p.x, y: p.y };
-  const links = Array.isArray(raw.links)
-    ? raw.links.filter((l): l is [string, string] => Array.isArray(l) && l.length === 2 && l[0] in pos && l[1] in pos)
-    : [];
-  return { pos, links };
-}
 
 // ── 모양 ──
 const WIDE = /[ᄀ-ᇿ㄰-㆏가-힯一-鿿]/;
@@ -88,7 +74,6 @@ function fit(s: string, max: number, k = 1): string {
 const pairKey = (a: string, b: string) => (a < b ? `${a}|${b}` : `${b}|${a}`);
 const rectOfNode = (p: Pt): Rect => ({ x: p.x, y: p.y, w: NODE_W, h: NODE_H });
 const inRect = (r: Rect, p: Pt, pad = 0) => p.x >= r.x - pad && p.x <= r.x + r.w + pad && p.y >= r.y - pad && p.y <= r.y + r.h + pad;
-const overlaps = (a: Rect, b: Rect) => a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h;
 function bounds(rects: Rect[]): Rect | null {
   if (!rects.length) return null;
   let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
@@ -169,8 +154,7 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
   const boardRef = useRef<HTMLDivElement>(null);
   const termById = useMemo(() => new Map(terms.map((t) => [t.id, t])), [terms]);
   const def = useMemo(() => defaultLayout(terms, categories), [terms, categories]);
-  const [layout, setLayoutState] = useState<Layout>(() => loadLayout(def));
-  const layoutRef = useRef(layout);
+  const layout = def;
   const [view, setViewState] = useState<View | null>(() => {
     const v = readJson(KEY_VIEW) as View | null;
     return v && isPt(v) && typeof v.z === "number" && v.z >= Z_MIN && v.z <= Z_MAX ? v : null;
@@ -178,24 +162,21 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
   const viewRef = useRef(view);
   const [size, setSize] = useState({ w: 0, h: 0 });
   const [sel, setSel] = useState<Set<string>>(() => new Set(activeId ? [activeId] : []));
-  const [selLink, setSelLink] = useState<string | null>(null);
   const [edgeMode, setEdgeMode] = useState<EdgeMode>(() => {
     const m = readJson(KEY_EDGES);
     return m === "group" || m === "all" ? m : "picked";
   });
   const [hover, setHover] = useState<string | null>(null);
-  const [draft, setDraft] = useState<{ from: string; side: Side; cur: Pt; target: string | null } | null>(null);
-  const [marquee, setMarquee] = useState<Rect | null>(null);
-  const [dragging, setDragging] = useState<"" | "pan" | "move">("");
+  const [dragging, setDragging] = useState(false);
+  // 휴대폰 아래 홈 바 높이 (env(safe-area-inset-bottom)) - 아래 미리보기가 그만큼 올라가 있다
+  const probeRef = useRef<HTMLDivElement>(null);
+  const [safeB, setSafeB] = useState(0);
   // 휴대폰 도구: 검색칸 · ⋯ 메뉴 · 카테고리 시트 · 찾은 용어 중 몇 번째
   const [searchOpen, setSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [catOpen, setCatOpen] = useState(false);
   const [matchAt, setMatchAt] = useState(-1);
   const searchRef = useRef<HTMLInputElement>(null);
-  const [, setTick] = useState(0);
-  const past = useRef<Layout[]>([]);
-  const future = useRef<Layout[]>([]);
   const gesture = useRef<Gesture | null>(null);
   const pointers = useRef(new Map<number, Pt>());
   const lastTap = useRef<{ t: number; x: number; y: number; key: string } | null>(null);
@@ -205,42 +186,16 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
 
   // ── 상태 고치기 ──
   const setView = (v: View) => { viewRef.current = v; setViewState(v); };
-  const apply = (next: Layout, record = true) => {
-    if (record) {
-      past.current.push(layoutRef.current);
-      if (past.current.length > 80) past.current.shift();
-      future.current = [];
-      setTick((t) => t + 1);
-    }
-    layoutRef.current = next;
-    setLayoutState(next);
-  };
-  const undo = () => {
-    const prev = past.current.pop();
-    if (!prev) return;
-    future.current.push(layoutRef.current);
-    layoutRef.current = prev; setLayoutState(prev); setSelLink(null); setTick((t) => t + 1);
-  };
-  const redo = () => {
-    const next = future.current.pop();
-    if (!next) return;
-    past.current.push(layoutRef.current);
-    layoutRef.current = next; setLayoutState(next); setSelLink(null); setTick((t) => t + 1);
-  };
 
-  // 자리·화면은 손을 멈추고 잠시 뒤에 저장한다 (끄는 동안 매번 쓰지 않게)
-  const firstSave = useRef(true);
-  useEffect(() => {
-    if (firstSave.current) { firstSave.current = false; return; }
-    const t = window.setTimeout(() => writeJson(KEY_LAYOUT, layout), 300);
-    return () => window.clearTimeout(t);
-  }, [layout]);
+  // 보던 화면은 손을 멈추고 잠시 뒤에 저장한다 (다음에 열면 그 자리)
   useEffect(() => {
     if (!view) return;
     const t = window.setTimeout(() => writeJson(KEY_VIEW, view), 400);
     return () => window.clearTimeout(t);
   }, [view]);
   useEffect(() => { writeJson(KEY_EDGES, edgeMode); }, [edgeMode]);
+  // 예전에 화면에서 옮긴 노드 자리·이은 선 기록은 더 쓰지 않는다
+  useEffect(() => { try { localStorage.removeItem("wic-board-layout-v1"); } catch { /* 무시 */ } }, []);
 
   // ── 데이터에서 나오는 것 ──
   const related = useMemo(() => {
@@ -254,13 +209,12 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
     }
     return out;
   }, [terms, termById]);
-  const relatedKeys = useMemo(() => new Set(related.map(([a, b]) => pairKey(a, b))), [related]);
   const neighbors = useMemo(() => {
     const m = new Map<string, Set<string>>();
     const add = (a: string, b: string) => { if (!m.has(a)) m.set(a, new Set()); m.get(a)!.add(b); };
-    for (const [a, b] of [...related, ...layout.links]) { add(a, b); add(b, a); }
+    for (const [a, b] of related) { add(a, b); add(b, a); }
     return m;
-  }, [related, layout.links]);
+  }, [related]);
   const catTerms = useMemo(() => {
     const m = new Map<CategoryId, string[]>();
     for (const t of terms) { if (!m.has(t.category)) m.set(t.category, []); m.get(t.category)!.push(t.id); }
@@ -280,7 +234,6 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
     const r = boardRef.current!.getBoundingClientRect();
     return { x: e.clientX - r.left, y: e.clientY - r.top };
   };
-  const toWorld = (p: Pt): Pt => { const v = viewRef.current!; return { x: (p.x - v.x) / v.z, y: (p.y - v.y) / v.z }; };
   const usableW = () => Math.max(160, size.w - insetRight);
   const insetBottom = sheetOpen ? Math.round(size.h * SHEET_RATIO) : 0;
   const usableH = () => Math.max(120, (size.h || 400) - insetBottom);
@@ -319,7 +272,7 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
   const zoomCenter = (z: number) => zoomAt(z, usableW() / 2, usableH() / 2);
   const fitAll = () => flyTo(viewFor(world, 1));
   const showTerm = (id: string, always = false) => {
-    const p = layoutRef.current.pos[id], v = viewRef.current;
+    const p = layout.pos[id], v = viewRef.current;
     if (!p || !v) return;
     const sx = p.x * v.z + v.x, sy = p.y * v.z + v.y;
     const seen = sx >= 16 && sy >= TOP && sx + NODE_W * v.z <= usableW() - 16 && sy + NODE_H * v.z <= usableH() - 16;
@@ -333,7 +286,7 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
   useLayoutEffect(() => {
     const el = boardRef.current;
     if (!el) return;
-    const ro = new ResizeObserver(() => setSize({ w: el.clientWidth, h: el.clientHeight }));
+    const ro = new ResizeObserver(() => { setSize({ w: el.clientWidth, h: el.clientHeight }); setSafeB(probeRef.current?.offsetHeight ?? 0); });
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
@@ -391,14 +344,6 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
   useEffect(() => () => cancelAnimationFrame(anim.current), []);
 
   // ── 손동작 ──
-  const nodeAt = (p: Pt, pad = 0): string | undefined => {
-    const pos = layoutRef.current.pos;
-    for (let i = terms.length - 1; i >= 0; i--) {
-      const id = terms[i].id;
-      if (inRect(rectOfNode(pos[id]), p, pad)) return id;
-    }
-    return undefined;
-  };
   const tap = (key: string, p: Pt) => {
     const now = performance.now();
     const l = lastTap.current;
@@ -412,16 +357,14 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
     return false;
   };
   const startPinch = () => {
-    const g = gesture.current;
-    if (g?.t === "move" && g.touch) window.clearTimeout(g.touch.timer);
     const [a, b] = [...pointers.current.values()];
     const v = viewRef.current!;
     const mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
     gesture.current = { t: "pinch", d0: Math.hypot(a.x - b.x, a.y - b.y) || 1, z0: v.z, wx: (mid.x - v.x) / v.z, wy: (mid.y - v.y) / v.z };
-    setDraft(null); setMarquee(null); setDragging("");
+    setDragging(false);
   };
-  const moveIds = (picked: Set<string>) => [...picked].filter((id) => id in layoutRef.current.pos);
 
+  // 손동작은 판 옮기기·확대와 누르기뿐이다 (노드·그룹을 옮기거나 잇지 않는다)
   const onDown = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!viewRef.current) return;
     if (e.pointerType === "mouse" && e.button !== 0 && e.button !== 1) return;
@@ -433,64 +376,12 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
     pointers.current.set(e.pointerId, p);
     if (pointers.current.size >= 2) { startPinch(); return; }
     const v = viewRef.current;
-    const target = e.target as Element;
-    if (e.button === 1) {
-      e.preventDefault();
-      gesture.current = { t: "pan", sx: p.x, sy: p.y, vx: v.x, vy: v.y, moved: true };
-      setDragging("pan");
-      return;
-    }
-    const port = target.closest("[data-port]");
-    if (port) {
-      const [id, side] = port.getAttribute("data-port")!.split(":") as [string, Side];
-      gesture.current = { t: "link", from: id, side, sx: p.x, sy: p.y };
-      setDraft({ from: id, side, cur: toWorld(p), target: null });
-      setSelLink(null);
-      return;
-    }
-    const link = target.closest("[data-link]");
-    if (link) {
-      setSelLink(link.getAttribute("data-link")); setSel(new Set());
-      gesture.current = null;
-      return;
-    }
-    const item = target.closest("[data-node],[data-group]");
-    if (item) {
-      const node = item.getAttribute("data-node");
-      const cat = item.getAttribute("data-group") as CategoryId | null;
-      const additive = e.shiftKey || e.metaKey || e.ctrlKey;
-      let ids: string[];
-      if (node) {
-        let picked = sel;
-        if (additive) { picked = new Set(sel); if (picked.has(node)) picked.delete(node); else picked.add(node); }
-        else if (!sel.has(node)) picked = new Set([node]);
-        // 손가락은 길게 눌러 집기 전까지 고르지 않는다 (그냥 끌면 판이 움직인다)
-        if (e.pointerType !== "touch") setSel(picked);
-        ids = picked.has(node) ? moveIds(picked) : [];
-      } else ids = catTerms.get(cat!) ?? [];
-      setSelLink(null);
-      const g: Gesture = { t: "move", sx: p.x, sy: p.y, vx: v.x, vy: v.y, before: layoutRef.current, ids, moved: false, id: node ? `node:${node}` : `group:${cat}`, additive };
-      if (e.pointerType === "touch") {
-        g.touch = {
-          picked: false,
-          timer: window.setTimeout(() => {
-            if (gesture.current !== g || g.moved) return;
-            g.touch!.picked = true;
-            navigator.vibrate?.(12);
-            if (node) { const s = additive ? new Set(sel).add(node) : new Set([node]); setSel(s); g.ids = moveIds(s); }
-            setDragging("move");
-          }, 420),
-        };
-      }
-      gesture.current = g;
-      return;
-    }
-    if (e.shiftKey) {
-      gesture.current = { t: "marquee", start: toWorld(p), base: new Set(sel), moved: false };
-      setSelLink(null);
-      return;
-    }
-    gesture.current = { t: "pan", sx: p.x, sy: p.y, vx: v.x, vy: v.y, moved: false };
+    const item = (e.target as Element).closest("[data-node],[data-group]");
+    const node = item?.getAttribute("data-node");
+    const cat = item?.getAttribute("data-group");
+    const tapKey = e.button === 1 ? undefined : node ? `node:${node}` : cat ? `group:${cat}` : undefined;
+    gesture.current = { t: "pan", sx: p.x, sy: p.y, vx: v.x, vy: v.y, moved: e.button === 1, tap: tapKey };
+    if (e.button === 1) { e.preventDefault(); setDragging(true); }
   };
 
   const onMove = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -508,40 +399,12 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
       setView({ z, x: mid.x - g.wx * z, y: mid.y - g.wy * z });
       return;
     }
-    const far = (sx: number, sy: number, d = 3) => Math.hypot(p.x - sx, p.y - sy) >= d;
-    if (g.t === "pan") {
-      if (!g.moved) { if (!far(g.sx, g.sy)) return; g.moved = true; setDragging("pan"); }
-      setView({ ...v, x: g.vx + p.x - g.sx, y: g.vy + p.y - g.sy });
-    } else if (g.t === "move") {
-      if (g.touch && !g.touch.picked) {
-        // 집기 전에 손가락이 움직이면 판 옮기기로 바꾼다
-        if (!far(g.sx, g.sy, 8)) return;
-        window.clearTimeout(g.touch.timer);
-        gesture.current = { t: "pan", sx: g.sx, sy: g.sy, vx: g.vx, vy: g.vy, moved: true };
-        setDragging("pan");
-        setView({ ...v, x: g.vx + p.x - g.sx, y: g.vy + p.y - g.sy });
-        return;
-      }
-      if (!g.ids.length) return;
-      const first = !g.moved;
-      if (first) { if (!far(g.sx, g.sy)) return; g.moved = true; setDragging("move"); }
-      const dx = (p.x - g.sx) / v.z, dy = (p.y - g.sy) / v.z;
-      const pos = { ...g.before.pos };
-      for (const id of g.ids) { const o = g.before.pos[id]; pos[id] = { x: Math.round(o.x + dx), y: Math.round(o.y + dy) }; }
-      apply({ ...g.before, pos }, first);
-    } else if (g.t === "link") {
-      const w = toWorld(p);
-      const hit = nodeAt(w, 8);
-      setDraft({ from: g.from, side: g.side, cur: w, target: hit && hit !== g.from ? hit : null });
-    } else if (g.t === "marquee") {
-      g.moved = true;
-      const w = toWorld(p);
-      const r = { x: Math.min(g.start.x, w.x), y: Math.min(g.start.y, w.y), w: Math.abs(g.start.x - w.x), h: Math.abs(g.start.y - w.y) };
-      setMarquee(r);
-      const s = new Set(g.base);
-      for (const t of terms) if (overlaps(r, rectOfNode(layoutRef.current.pos[t.id]))) s.add(t.id);
-      setSel(s);
+    if (!g.moved) {
+      // 손가락은 조금 흔들려도 누르기로 본다
+      if (Math.hypot(p.x - g.sx, p.y - g.sy) < (e.pointerType === "touch" ? 8 : 3)) return;
+      g.moved = true; setDragging(true);
     }
+    setView({ ...v, x: g.vx + p.x - g.sx, y: g.vy + p.y - g.sy });
   };
 
   const onUp = (e: React.PointerEvent<HTMLDivElement>, cancel = false) => {
@@ -556,61 +419,30 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
     }
     if (pointers.current.size) return;
     gesture.current = null;
-    setDragging(""); setMarquee(null); setDraft(null);
-    if (g?.t === "move" && g.touch) window.clearTimeout(g.touch.timer);
-    if (!g || cancel) return;
+    setDragging(false);
+    if (!g || cancel || g.moved) return;
     const p = local(e);
-    if (g.t === "link") {
-      const hit = nodeAt(toWorld(p), 8);
-      if (hit && hit !== g.from) {
-        const k = pairKey(g.from, hit);
-        const cur = layoutRef.current;
-        if (!relatedKeys.has(k) && !cur.links.some(([a, b]) => pairKey(a, b) === k)) apply({ ...cur, links: [...cur.links, [g.from, hit]] });
-        setSel(new Set([g.from, hit]));
-      }
-    } else if (g.t === "move" && !g.moved) {
-      const node = g.id?.startsWith("node:") ? g.id.slice(5) : null;
-      if (node && !g.additive && !(g.touch?.picked)) setSel(new Set([node]));
-      if (g.id && !tap(g.id, p) && node && activeId && !g.additive && !g.touch?.picked) onOpen(node); // 설명 창이 열려 있으면 누르는 대로 따라간다
-    } else if (g.t === "pan" && !g.moved) {
-      setSel(new Set()); setSelLink(null);
+    if (g.tap?.startsWith("node:")) {
+      const node = g.tap.slice(5);
+      setSel(new Set([node]));
+      if (!tap(g.tap, p) && activeId) onOpen(node); // 설명 창이 열려 있으면 누르는 대로 따라간다
+    } else if (g.tap) {
+      tap(g.tap, p);
+    } else {
+      setSel(new Set());
       lastTap.current = null;
       onBackgroundTap?.();
     }
   };
 
-  const removeLink = () => {
-    if (!selLink) return;
-    const cur = layoutRef.current;
-    apply({ ...cur, links: cur.links.filter(([a, b]) => pairKey(a, b) !== selLink) });
-    setSelLink(null);
-  };
-  const resetLayout = () => {
-    if (!window.confirm("노드 자리를 처음 배치로 되돌릴까요? 직접 이은 선은 남겨 둡니다.")) return;
-    apply({ pos: def.pos, links: layoutRef.current.links });
-    setView(viewFor(bounds(Object.values(def.pos).map(rectOfNode)) ?? world, 1));
-  };
-
   const onKey = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.target !== e.currentTarget || !viewRef.current) return;
-    const mod = e.ctrlKey || e.metaKey;
     const k = e.key.toLowerCase();
     const arrows: Record<string, Pt> = { arrowleft: { x: -1, y: 0 }, arrowright: { x: 1, y: 0 }, arrowup: { x: 0, y: -1 }, arrowdown: { x: 0, y: 1 } };
     let handled = true;
-    if (mod && k === "z") { if (e.shiftKey) redo(); else undo(); }
-    else if (mod && k === "y") redo();
-    else if (k === "delete" || k === "backspace") removeLink();
-    else if (k === "escape") { setSel(new Set()); setSelLink(null); }
+    if (k === "escape") setSel(new Set());
     else if (k === "enter" && sel.size === 1) onOpen([...sel][0]);
-    else if (arrows[k]) {
-      const a = arrows[k];
-      if (sel.size) {
-        const step = e.shiftKey ? 1 : 10;
-        const cur = layoutRef.current, pos = { ...cur.pos };
-        for (const id of sel) pos[id] = { x: pos[id].x + a.x * step, y: pos[id].y + a.y * step };
-        apply({ ...cur, pos });
-      } else { const v = viewRef.current; setView({ ...v, x: v.x - a.x * 60, y: v.y - a.y * 60 }); }
-    }
+    else if (arrows[k]) { const v = viewRef.current, a = arrows[k]; setView({ ...v, x: v.x - a.x * 60, y: v.y - a.y * 60 }); }
     else if (k === "+" || k === "=") zoomCenter(viewRef.current.z * 1.25);
     else if (k === "-") zoomCenter(viewRef.current.z / 1.25);
     else if (k === "0") fitAll();
@@ -648,15 +480,6 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
     const relatedPaths = shown.map(([a, b]) => (
       <path key={`r-${a}-${b}`} className={`tb-edge ${edgeClass(a, b)}`} d={edgeD(pos[a], pos[b])} />
     ));
-    const myLinks = layout.links.map(([a, b]) => {
-      const k = pairKey(a, b), d = edgeD(pos[a], pos[b]);
-      return (
-        <g key={`m-${k}`}>
-          <path className="tb-link-hit" data-link={k} d={d} />
-          <path className={`tb-link ${edgeClass(a, b)} ${selLink === k ? "on" : ""}`} d={d} />
-        </g>
-      );
-    });
     return (
       <>
         {groups.map((g) => (
@@ -668,12 +491,11 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
           </g>
         ))}
         <g>{relatedPaths}</g>
-        <g>{myLinks}</g>
         {terms.map((t) => {
           const p = pos[t.id];
           const r = rectOfNode(p);
           const on = sel.has(t.id);
-          const cls = ["tb-node", on ? "on" : "", activeId === t.id ? "open" : "", lit && !lit.has(t.id) ? "dim" : "", matches?.has(t.id) ? "match" : "", draft?.target === t.id ? "target" : ""].join(" ");
+          const cls = ["tb-node", on ? "on" : "", activeId === t.id ? "open" : "", lit && !lit.has(t.id) ? "dim" : "", matches?.has(t.id) ? "match" : ""].join(" ");
           if (far) {
             return (
               <g key={t.id} className={cls}>
@@ -690,15 +512,6 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
               <text className="tb-node-name" x={r.x + 12} y={r.y + 19}>{fit(t.name, NODE_W - (t.demo ? 40 : 24), 1.04)}</text>
               <text className="tb-node-en" x={r.x + 12} y={r.y + 35}>{fit(t.en, NODE_W - 24, 0.8)}</text>
               {t.demo && <text className="tb-node-demo" x={r.x + r.w - 12} y={r.y + 19} textAnchor="end">▶</text>}
-              {(["front", "back", "top", "bottom"] as Side[]).map((s) => {
-                const q = portAt(p, s);
-                return (
-                  <g key={s}>
-                    <circle className="tb-port-hit" data-port={`${t.id}:${s}`} cx={q.x} cy={q.y} r={coarse ? 14 : 9} />
-                    <circle className="tb-port" cx={q.x} cy={q.y} r={4} />
-                  </g>
-                );
-              })}
               {on && <path className="tb-sel" d={brackets(r)} />}
             </g>
           );
@@ -714,14 +527,8 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
         ))}
       </>
     );
-  }, [layout, related, groups, terms, termById, sel, selLink, matches, lit, activeId, draft?.target, edgeMode, catTerms, coarse, hover, far, farZ]);
+  }, [layout, related, groups, terms, termById, sel, matches, lit, activeId, edgeMode, catTerms, hover, far, farZ]);
 
-  const draftD = (() => {
-    if (!draft) return null;
-    const a = layout.pos[draft.from];
-    if (draft.target) return edgeD(a, layout.pos[draft.target]);
-    return curve(portAt(a, draft.side), draft.side, draft.cur, draft.side === "back" ? "front" : draft.side === "front" ? "back" : draft.side === "top" ? "bottom" : "top");
-  })();
 
   const v = view ?? { x: 0, y: 0, z: 1 };
   let grid = 24;
@@ -775,7 +582,7 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
     if (!sel.size || sel.size > 3 || far || !size.w) return [];
     const W = usableW();
     const left = 6, right = W - (compact ? 50 : 6), top = TOP + 4; // 휴대폰은 오른쪽 확대 막대를 비켜서
-    const bottom = usableH() - (compact ? (peek ? 70 : 10) : peek ? 96 : 30);
+    const bottom = usableH() - (compact ? (peek ? 74 : 12) + safeB : peek ? 96 : 30);
     const out: { id: string; x: number; y: number; angle: number }[] = [];
     for (const id of sel) {
       const p = layout.pos[id];
@@ -822,15 +629,14 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
     <div className={`tb ${compact ? "tb-compact" : ""}`}>
       <div ref={boardRef} tabIndex={0} role="application"
         aria-label={`용어 보드. 용어 ${terms.length}개가 카테고리 상자에 들어 있고, 같이 보면 좋은 말끼리 선으로 이어져 있습니다. 노드를 두 번 누르거나 고른 뒤 Enter 로 설명을 엽니다.`}
-        className={`tb-board ${dragging === "pan" ? "panning" : ""} ${dragging === "move" ? "moving" : ""} ${draft ? "linking" : ""}`}
+        className={`tb-board ${dragging ? "panning" : ""}`}
         style={{ backgroundSize: `${grid * v.z}px ${grid * v.z}px`, backgroundPosition: `${v.x}px ${v.y}px` }}
         onPointerDown={onDown} onPointerMove={onMove} onPointerUp={(e) => onUp(e)} onPointerCancel={(e) => onUp(e, true)}
         onKeyDown={onKey} onContextMenu={(e) => e.preventDefault()}>
+        <div ref={probeRef} className="tb-probe" aria-hidden="true" />
         <svg className="tb-svg" aria-hidden="true">
           <g transform={`translate(${v.x} ${v.y}) scale(${v.z})`}>
             {content}
-            {draftD && <path className="tb-draft" d={draftD} />}
-            {marquee && <rect className="tb-marquee" x={marquee.x} y={marquee.y} width={marquee.w} height={marquee.h} />}
           </g>
         </svg>
 
@@ -865,16 +671,6 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
                     onClick={() => setEdgeMode(k)}>{name}</button>
                 ))}
               </div>
-              <div className="tb-pill">
-                <button type="button" aria-label="되돌리기" title="되돌리기 (Ctrl+Z)" disabled={!past.current.length} onClick={undo}>↶</button>
-                <button type="button" aria-label="다시 하기" title="다시 하기 (Ctrl+Y)" disabled={!future.current.length} onClick={redo}>↷</button>
-                <button type="button" className="txt" onClick={resetLayout}>처음 배치</button>
-              </div>
-              {selLink && (
-                <div className="tb-pill">
-                  <button type="button" className="txt danger" onClick={removeLink}>이은 선 지우기</button>
-                </div>
-              )}
               {matches && (
                 <div className="tb-pill">
                   <span className="tb-found">{matchCount ? `찾은 용어 ${matchCount}개` : "찾은 용어 없음"}</span>
@@ -898,8 +694,8 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
 
             <p className="tb-hint">
               {coarse
-                ? "끌어서 판 옮기기 · 두 손가락 확대 · 길게 눌러 노드 옮기기 · 점을 끌어 잇기 · 두 번 눌러 열기"
-                : "빈 곳 끌기·휠: 판 옮기기 · Ctrl+휠: 확대 · 노드 끌어 옮기기 · 노드 옆 점을 끌어 잇기 · Shift+끌기: 여러 개 고르기 · 두 번 눌러 열기"}
+                ? "끌어서 판 옮기기 · 두 손가락 확대 · 눌러서 고르기 · 두 번 눌러 열기"
+                : "끌기·휠: 판 옮기기 · Ctrl+휠: 확대 · 눌러서 고르기 · 두 번 눌러 열기"}
             </p>
           </>
         )}
@@ -946,11 +742,6 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
               </div>
             )}
 
-            {selLink && !sheetOpen && (
-              <div className="tbm-found tbm-link" onPointerDown={stop}>
-                <button type="button" className="tbm-txt danger" onClick={removeLink}>이은 선 지우기</button>
-              </div>
-            )}
 
             {/* 오른쪽 아래: 확대 세로 막대 - 미리보기가 뜨면 그 위로 비킨다. 설명 시트가 열리면 숨는다 */}
             {!sheetOpen && (
@@ -986,13 +777,8 @@ export function TermBoard({ terms, categories, matches, activeId, onOpen, focus,
                     ))}
                   </div>
                   <span className="tbm-sep" />
-                  <div className="tbm-row">
-                    <button type="button" className="tbm-mi" disabled={!past.current.length} onClick={undo}><Icon d={I.undo} />되돌리기</button>
-                    <button type="button" className="tbm-mi" disabled={!future.current.length} onClick={redo}><Icon d={I.redo} />다시 하기</button>
-                  </div>
-                  <button type="button" className="tbm-mi" onClick={() => { setMenuOpen(false); resetLayout(); }}><Icon d={I.grid} />노드 자리 처음 배치로</button>
                   <span className="tbm-mi tbm-mi-static"><Icon d={I.help} />조작법</span>
-                  <p className="tbm-help">끌어서 판 옮기기 · 두 손가락 확대 · 길게 눌러 노드 옮기기 · 점을 끌어 잇기 · 두 번 눌러 열기</p>
+                  <p className="tbm-help">끌어서 판 옮기기 · 두 손가락 확대 · 노드를 눌러 고르기 · 두 번 누르거나 "열기"로 설명</p>
                   {stamp && <><span className="tbm-sep" /><div className="tbm-stamp">{stamp}</div></>}
                 </div>
               </>
