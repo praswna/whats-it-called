@@ -20,4 +20,12 @@ export interface Term {
   examples: string[];    // 어디서 볼 수 있나
   related: string[];     // 관련 용어 id
   demo?: string;         // 데모 컴포넌트 키
+  libs?: Lib[];          // 주요 라이브러리 (src/data/libs.ts 에서 붙임)
+}
+
+export interface Lib {
+  name: string;
+  tag: string;           // 언어·플랫폼 (React, Python 등)
+  note: string;          // 한 줄 설명
+  url?: string;
 }

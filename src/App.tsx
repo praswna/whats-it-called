@@ -247,6 +247,20 @@ export default function App() {
         <h3>이런 곳에서 봤을 거예요</h3>
         <ul className="examples">{current.examples.map((e) => <li key={e}>{e}</li>)}</ul>
       </section>
+      {current.libs && current.libs.length > 0 && (
+        <section>
+          <h3>주요 라이브러리</h3>
+          <ul className="libs">
+            {current.libs.map((l) => (
+              <li key={l.name}>
+                {l.url ? <a href={l.url} target="_blank" rel="noreferrer" className="lib-name">{l.name} ↗</a> : <b className="lib-name">{l.name}</b>}
+                <span className="chip lib-tag">{l.tag}</span>
+                <span className="lib-note muted">{l.note}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
       {current.related.length > 0 && (
         <section>
           <h3>같이 보면 좋은 말</h3>

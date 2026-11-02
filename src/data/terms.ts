@@ -1,6 +1,7 @@
 import type { Term } from "./types";
+import { libs } from "./libs";
 
-export const terms: Term[] = [
+const base: Term[] = [
   // ───────── 마우스·포인터 동작 ─────────
   {
     id: "hover", name: "호버", en: "Hover", aliases: ["마우스 오버", "mouseover", "롤오버", "rollover", "커서 올리기"],
@@ -2105,3 +2106,5 @@ export const terms: Term[] = [
     related: ["map-libs", "deckgl", "lod-3d", "point-cloud", "threejs"],
   },
 ];
+
+export const terms: Term[] = base.map((t) => (libs[t.id] ? { ...t, libs: libs[t.id] } : t));

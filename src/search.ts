@@ -9,7 +9,7 @@ export function searchTerms(all: Term[], query: string): Term[] {
   const words = query.toLowerCase().split(/\s+/).filter(Boolean).map(norm);
   return all
     .map((t) => {
-      const head = [t.name, t.en, ...t.aliases].map(norm);
+      const head = [t.name, t.en, ...t.aliases, ...(t.libs ?? []).map((l) => l.name)].map(norm);
       const body = norm([t.summary, t.description, ...t.examples].join(" "));
       let score = 0;
       if (head.some((h) => h === q)) score += 100;
