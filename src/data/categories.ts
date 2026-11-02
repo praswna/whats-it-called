@@ -18,4 +18,7 @@ export const categories: Category[] = [
   { id: "render", name: "렌더링·성능 측정", blurb: "화면을 매끄럽게 그리는 법과 느린 곳을 찾아내는 도구" },
   { id: "data", name: "데이터·네트워크", blurb: "서버와 주고받을 때 쓰는 방식과 약속" },
   { id: "devflow", name: "개발 흐름·배포", blurb: "코드를 고치고 내보내는 과정에서 쓰는 말" },
+  { id: "viz3d", name: "3D 그래픽·과학 시각화", blurb: "VTK, Three.js 처럼 3D 데이터를 그리는 라이브러리와 그 안에서 쓰는 말" },
+  { id: "imaging", name: "의료 영상·이미지 처리", blurb: "ITK, DICOM, OpenCV 처럼 영상을 읽고 분할·정합하는 도구와 개념" },
+  { id: "dataviz", name: "차트·지도 시각화 라이브러리", blurb: "D3, Plotly, Leaflet 처럼 데이터를 그래프와 지도로 그리는 도구들" },
 ];
